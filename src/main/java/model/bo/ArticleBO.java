@@ -13,5 +13,11 @@ public class ArticleBO {
     public ArrayList<Article> getList(){
         return dao.getList();
     }
+    public ArrayList<String> getAuthors(String id){
+        return dao.getAuthors(id);
+    }
+    public Article getArticle(String id){
+        return dao.getArticle(id);
+    }
 
 }

@@ -8,12 +8,13 @@ public class User {
     private String name;
     private String email;
     private Date dob;
-    private int gender;
+    private boolean gender;
+    private boolean locked;
     private String roleID;
 
     // Constructors, getters, and setters
 
-    public User(String username, String password, String name, String email, Date dob, int gender, String roleID) {
+    public User(String username, String password, String name, String email, Date dob, boolean gender, String roleID, boolean locked) {
         this.username = username;
         this.password = password;
         this.name = name;
@@ -21,6 +22,7 @@ public class User {
         this.dob = dob;
         this.gender = gender;
         this.roleID = roleID;
+        this.locked = locked;
     }
 
     public String getUsername() {
@@ -63,11 +65,11 @@ public class User {
         this.dob = dob;
     }
 
-    public int getGender() {
+    public boolean isGender() {
         return gender;
     }
 
-    public void setGender(int gender) {
+    public void setGender(boolean gender) {
         this.gender = gender;
     }
 
@@ -77,5 +79,13 @@ public class User {
 
     public void setRoleID(String roleID) {
         this.roleID = roleID;
+    }
+
+    public boolean isLocked() {
+        return locked;
+    }
+
+    public void setLocked(boolean locked) {
+        this.locked = locked;
     }
 }
