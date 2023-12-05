@@ -16,8 +16,8 @@ public class DBConnection {
 
             //step:2- create a connection
 
-            conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/article_manager","root","duy432003");
-            //conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/articlemanagement","root","");
+//            conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/article_manager","root","duy432003");
+            conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/articlemanagement","root","");
             //  a ti ne
 
         } catch (Exception e) {

@@ -1,3 +1,4 @@
+<%@page import="model.bean.User"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <!DOCTYPE html>
@@ -17,7 +18,11 @@
 
 <!-- Core css -->
 <link href="assets/css/app.min.css" rel="stylesheet">
-
+<style>
+	.card {
+		box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+	}
+</style>
 </head>
 
 <body>
@@ -41,12 +46,13 @@
 							<nav class="breadcrumb breadcrumb-dash">
 								<a href="#" class="breadcrumb-item"><i
 									class="anticon anticon-home m-r-5"></i>Trang chủ</a> <a
-									class="breadcrumb-item" href="#">Quản lí người dùng</a> 
+									class="breadcrumb-item" href="../admin/manage-user?action=list-user">Quản lí người dùng</a> 
 									<span class="breadcrumb-item active">mymymy</span>
 							</nav>
 						</div>
 					</div>
 					<div class="container">
+						<% User user = (User)request.getAttribute("user"); %>
 						<div class="tab-pane fade show active">
 							<div class="card">
 								<div class="card-header">
@@ -59,36 +65,46 @@
 											<img src="assets/images/avatars/thumb-3.jpg" alt="">
 										</div>
 										<div class="m-l-20 m-r-20">
-											<h5 class="m-b-5 font-size-20">Xóa người dùng</h5>
-											<p class="text-center font-size-18">Nguyễn Thị Trà My</p>
+											<h5 class="m-b-0 font-size-20">Xóa người dùng</h5>
+											<p class="text-center m-b-0 font-size-16 text-primary"><%=user.getUsername() %></p>
+											<% if (user.getLocked() == 0) { %>
+												<p class="text-center m-b-0 font-size-16 text-success font-italic">
+												<%=user.getRoleName() %>
+												</p>
+                                        	<% } else { %>
+                                        		<p class="text-center m-b-0 font-size-16 text-danger font-italic">
+													(Đã xóa)
+												</p>
+                                        	<% } %>
 										</div>
 									</div>
 									<hr class="m-v-25">
-									<form action="" method="post">
+									<form action="../admin/manage-user?action=submit-delete" method="post">
+										<input type="hidden" name="username" value="<%=user.getUsername() %>">
 										<div class="form-row">
 											<div class="form-group col-md-6">
 												<label class="font-weight-semibold" for="email">Họ tên:</label>
 												<input type="text" class="form-control" id="name"
-													placeholder="email" value="Trà My" readonly>
+													placeholder="email" value="<%=user.getName() %>" readonly>
 											</div>
 																					
 											<div class="form-group col-md-6">
 												<label class="font-weight-semibold" for="userName">Tên người dùng:</label> 
-												<input type="text" class="form-control" id="userName"
-													placeholder="User Name" value="Marshall Nichols" readonly>
+												<input type="text" class="form-control" 
+													placeholder="User Name" value="<%=user.getUsername() %>" readonly>
 											</div>
 										</div>
 										<div class="form-row">
 											<div class="form-group col-md-6">
 												<label class="font-weight-semibold" for="email">Email:</label>
 												<input type="text" class="form-control" id="email"
-													placeholder="email" value="@marshallnich" readonly>
+													placeholder="email" value="<%=user.getEmail() %>" readonly>
 											</div>
 											
 											<div class="form-group col-md-6">
 												<label class="font-weight-semibold" for="dob">Ngày sinh:</label> 
-													<input type="text" class="form-control" id="dob"
-													placeholder="Date of Birth" readonly>
+													<input type="date" class="form-control" id="dob"
+													placeholder="Date of Birth" value="<%=user.getDob() %>" readonly>
 											</div>
 										</div>
 										
@@ -96,21 +112,33 @@
 											<div class="form-group col-md-6">
 												<label class="font-weight-semibold" for="gender">Giới tính:</label>
 												<select id="language" class="form-control" disabled="disabled">
-													<option value="1">Nam</option>
-													<option value="0">Nữ</option>
+													<% if (user.getGender() == 0) { %>
+														<option value="1">Nam</option>
+													<% } else { %>
+														<option value="0">Nữ</option>
+													<% } %>
 												</select>
 											</div>
 											
 											<div class="form-group col-md-6">
 											<label class="font-weight-semibold" for="language">Chức vụ: </label>
-											<select name="role" id="role" class="form-control" disabled="disabled">
-												<option value="R1">Quản trị viên</option>
-												<option value="R2">Độc giả</option>
+											<select name="roleID" id="role" class="form-control" disabled="disabled">
+												<% if (user.getRoleName().equals("Quản trị viên")) {%>
+													<option value="R1" selected>Quản trị viên</option>
+													<option value="R2">Độc giả</option>
+												<% } else { %>
+													<option value="R1">Quản trị viên</option>
+													<option value="R2" selected>Độc giả</option>
+												<% } %>
 											</select>
 											</div>
 										</div>
 										<div class="text-center">
-                                        	<button type="submit" class="pl-5 pr-5 btn btn-tone btn-primary">Chặn tài khoản</button>
+                                        	<% if (user.getLocked() == 0) { %>
+                                        		<button type="submit" class="pl-5 pr-5 btn btn-tone btn-danger">Xóa</button>
+                                        	<% } else { %>
+                                        		<button class="pl-5 pr-5 btn" disabled>Xóa</button>
+                                        	<% } %>
                                         </div>
 									</form>
 								</div>
