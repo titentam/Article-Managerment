@@ -70,5 +70,42 @@ public class ArticleDAO {
         }
         return record;
     }
+    public void insert(Article article){
+        String sql = "Insert into article(`ArticleID`, `Title`, `Content`) values(?,?,?)";
+        try {
+            PreparedStatement stmt = conn.prepareStatement(sql);
+            stmt.setString(1,article.getArticleID());
+            stmt.setString(2,article.getTitle());
+            stmt.setString(3,article.getContent());
+            int rs = stmt.executeUpdate();
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+    public void insertAuthors(String articleID, String authorID){
+        String sql = "Insert into authorarticle(`Username`, `ArticleID`) values(?,?)";
+        try {
+            PreparedStatement stmt = conn.prepareStatement(sql);
+            stmt.setString(1,authorID);
+            stmt.setString(2,articleID);
+            int rs = stmt.executeUpdate();
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+    public void insertCategory(String articleID, String categoryID){
+        String sql = "Insert into articlecategory(`ArticleID`, `CategoryID`) values(?,?)";
+        try {
+            PreparedStatement stmt = conn.prepareStatement(sql);
+            stmt.setString(1,articleID);
+            stmt.setString(2,categoryID);
+            int rs = stmt.executeUpdate();
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
 }

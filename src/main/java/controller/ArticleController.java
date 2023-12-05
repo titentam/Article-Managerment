@@ -7,7 +7,10 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import model.bo.ArticleBO;
+import model.bo.CategoryBO;
+import model.bo.CommentBO;
 
+import java.awt.image.CropImageFilter;
 import java.io.IOException;
 import java.util.ArrayList;
 
@@ -22,36 +25,72 @@ public class ArticleController extends HttpServlet {
                 case "detail":
                     detail(request,response);
                     break;
-
+                case "insert":
+                    insert(request,response);
+                    break;
             }
 
         }
         else{
-            var articleBO = new ArticleBO();
-            var list = articleBO.getList();
-            ArrayList<ArrayList<String>> listAuthors = new ArrayList<>();
-            for (var item :
-                    list) {
-                listAuthors.add(articleBO.getAuthors(item.getArticleID()));
-            }
-            request.setAttribute("list", list);
-            request.setAttribute("listAuthors", listAuthors);
-            ForwardUrl("/admin/article-list.jsp",request,response);
+            this.ShowList(request,response);
         }
+    }
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        String action = request.getParameter("action");
+        if(action!=null){
+            switch (action) {
+                case "submitInsert":
+                    submitInsert(request,response);
+                    break;
+
+            }
+
+        }
+    }
+
+    private void ShowList(HttpServletRequest request, HttpServletResponse response){
+        var articleBO = new ArticleBO();
+        var list = articleBO.getList();
+        ArrayList<ArrayList<String>> listAuthors = new ArrayList<>();
+        for (var item :
+                list) {
+            listAuthors.add(articleBO.getAuthors(item.getArticleID()));
+        }
+        request.setAttribute("list", list);
+        request.setAttribute("listAuthors", listAuthors);
+        ForwardUrl("/admin/article-list.jsp",request,response);
+    }
+
+    private void insert(HttpServletRequest request, HttpServletResponse response) {
+        var categoryBO = new CategoryBO();
+        var categories = categoryBO.getList();
+        request.setAttribute("categories", categories);
+        ForwardUrl("/admin/article-form.jsp",request,response);
     }
 
     private void detail(HttpServletRequest request, HttpServletResponse response) {
         String id = request.getParameter("articleID");
         var articleBO = new ArticleBO();
+        var commentBO = new CommentBO();
         var record = articleBO.getArticle(id);
+        var authors = articleBO.getAuthors(id);
+        var comments = commentBO.getCommentsArticle(id);
 
         request.setAttribute("record",record);
+        request.setAttribute("authors",authors);
+        request.setAttribute("comments",comments);
         ForwardUrl("/admin/article-detail.jsp",request,response);
     }
 
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    private void submitInsert(HttpServletRequest request, HttpServletResponse response) {
+        String title = request.getParameter("title");
+        String content = request.getParameter("content");
+        String category = request.getParameter("category");
+        var articleBO = new ArticleBO();
+        articleBO.insert(title,content,category);
 
-        doGet(request, response);
+        this.ShowList(request,response);
+
     }
 
     private void ForwardUrl(String url,HttpServletRequest request, HttpServletResponse response){

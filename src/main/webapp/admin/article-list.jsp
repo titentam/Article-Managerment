@@ -67,7 +67,7 @@
                                 </div>
                             </div>
                             <div class="col-lg-4 text-right">
-                                <a href="article-form.jsp">
+                                <a href="./article?action=insert">
                                     <button class="btn btn-primary">
                                         <i class="anticon anticon-plus-circle m-r-5"></i>
                                         <span>Thêm bài báo</span>
@@ -106,7 +106,7 @@
                                                 </span>
                                             </div>
                                         </div>
-                                        <p class="m-b-20"><%=item.getContent()%></p>
+                                        <p class="m-b-20"></p>
                                         <div class="text-right">
                                             <a class="btn btn-hover font-weight-semibold" href="./article?action=detail&articleID=<%=item.getArticleID()%>">
                                                 <span>Xem chi tiết</span>

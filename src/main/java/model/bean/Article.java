@@ -22,6 +22,11 @@ public class Article {
         this.locked = locked;
         this.time = time;
     }
+    public Article(String articleID, String title, String content) {
+        this.articleID = articleID;
+        this.title = title;
+        this.content = content;
+    }
 
     public String getArticleID() {
         return articleID;

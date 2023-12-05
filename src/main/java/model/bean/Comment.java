@@ -1,21 +1,30 @@
 package model.bean;
 
+import java.sql.Timestamp;
 import java.text.DateFormat;
 import java.util.Date;
 
 public class Comment {
+    private int commentID;
     private String username;
     private String articleID;
+    private Timestamp time;
     private String content;
-    private Date time;
 
-    // Constructors, getters, and setters
-
-    public Comment(String username, String articleID, String content, Date time) {
+    public Comment(int commentID, String username, String articleID, Timestamp time, String content) {
+        this.commentID = commentID;
         this.username = username;
         this.articleID = articleID;
-        this.content = content;
         this.time = time;
+        this.content = content;
+    }
+
+    public int getCommentID() {
+        return commentID;
+    }
+
+    public void setCommentID(int commentID) {
+        this.commentID = commentID;
     }
 
     public String getUsername() {
@@ -34,19 +43,19 @@ public class Comment {
         this.articleID = articleID;
     }
 
+    public Timestamp getTime() {
+        return time;
+    }
+
+    public void setTime(Timestamp time) {
+        this.time = time;
+    }
+
     public String getContent() {
         return content;
     }
 
     public void setContent(String content) {
         this.content = content;
-    }
-
-    public Date getTime() {
-        return time;
-    }
-
-    public void setTime(Date time) {
-        this.time = time;
     }
 }

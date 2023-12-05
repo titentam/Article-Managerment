@@ -1,4 +1,8 @@
 <%@ page import="model.bean.Article" %>
+<%@ page import="java.util.ArrayList" %>
+<%@ page import="java.util.Arrays" %>
+<%@ page import="java.text.SimpleDateFormat" %>
+<%@ page import="model.bean.CommentView" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
          pageEncoding="UTF-8"%>
 <!DOCTYPE html>
@@ -22,6 +26,8 @@
 <body>
 <%
     var record = (Article)request.getAttribute("record");
+    var authors = (ArrayList<String>)request.getAttribute("authors");
+    var comments = (ArrayList<CommentView>)request.getAttribute("comments");
 %>
     <div class="app">
         <div class="layout">
@@ -115,14 +121,22 @@
                                         </li>
                                     </ul>
                                 </div>
-                                <h2 class="font-weight-normal m-b-10"><%=record.getTitle()%>></h2>
+                                <h2 class="font-weight-normal m-b-10"><%=record.getTitle()%></h2>
                                 <div class="d-flex m-b-30">
                                     <div class="avatar avatar-cyan avatar-img">
                                         <img src="assets/images/avatars/thumb-6.jpg" alt="">
                                     </div>
                                     <div class="m-l-15">
-                                        <a href="javascript:void(0);" class="text-dark m-b-0 font-weight-semibold">Author</a>
-                                        <p class="m-b-0 text-muted font-size-13">Jan 2, 2019</p>
+                                        <a href="javascript:void(0);" class="text-dark m-b-0 font-weight-semibold">
+                                            <%=Arrays.toString(authors.toArray()).replace("[", "").replace("]", "")%>
+                                        </a>
+                                        <p class="m-b-0 text-muted font-size-13">
+                                            <%
+                                                SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy MM:HH");
+                                                String time = dateFormat.format(record.getTime());
+                                            %>
+                                            <%=time%>
+                                        </p>
                                     </div>
                                 </div>
                                 <img alt="" class="img-fluid w-100" src="assets/images/others/img-8.jpg">
@@ -150,7 +164,8 @@
                                     </ul>
                                 </div>
                                 <hr>
-                                <h5>Comments (số bình luận)</h5>
+                                <h5>Bình luận (<%=comments.size()%>)</h5>
+                                <% for (var comment: comments) {%>
                                 <div class="m-t-20">
                                     <ul class="list-group list-group-flush">
                                         <li class="list-group-item p-h-0">
@@ -160,15 +175,22 @@
                                                 </div>
                                                 <div class="media-body m-l-20">
                                                     <h6 class="m-b-0">
-                                                        <a href="" class="text-dark">Tên người dùng</a>
+                                                        <a href="" class="text-dark"><%=comment.getNameUser()%></a>
                                                     </h6>
-                                                    <span class="font-size-13 text-gray">Thời gian</span>
+                                                    <span class="font-size-13 text-gray">
+                                                        <%
+                                                            time = dateFormat.format(comment.getTime());
+                                                        %>
+                                                        <%=time%>
+                                                    </span>
                                                 </div>
                                             </div>
-                                            <span>Nội dung bình luận</span>
+                                            <span><%=comment.getContent()%></span>
                                         </li>
-                                    </ul> 
-                                </div> 
+                                    </ul>
+                                </div>
+                                <%}%>
+
                                 <div class="m-t-30">
                                     <nav>
                                         <ul class="pagination justify-content-end">
