@@ -2,6 +2,7 @@
 <%@ page import="model.bean.Article" %>
 <%@ page import="java.util.Arrays" %>
 <%@ page import="java.text.SimpleDateFormat" %>
+<%@ page import="model.bean.Category" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
          pageEncoding="UTF-8"%>
 <!DOCTYPE html>
@@ -24,6 +25,7 @@
 <body>
     <%
         var list = (ArrayList<Article>)request.getAttribute("list");
+        var categories = (ArrayList<Category>)request.getAttribute("categories");
         var listAuthors = (ArrayList<ArrayList<String>>)request.getAttribute("listAuthors");
         int i=0;
     %>
@@ -56,12 +58,11 @@
                             <div class="col-lg-8">
                                 <div class="d-md-flex">
                                     <div class="m-b-10 m-r-15">
-                                        <select id="category" class="custom-select" style="min-width: 180px;">
-                                            <option selected>Loại báo</option>
-                                            <option value="all">Tất cả</option>
-                                            <option value="homeDeco">Home Decoration</option>
-                                            <option value="eletronic">Eletronic</option>
-                                            <option value="jewellery">Jewellery</option>
+                                        <select name="category" id="category" class="custom-select" style="min-width: 180px;">
+                                            <option selected value="all">Tất cả</option>
+                                            <%for (var item : categories) {%>
+                                            <option value="<%=item.getCategoryID()%>"><%=item.getName()%></option>
+                                            <%}%>
                                         </select>
                                     </div>
                                 </div>
@@ -107,6 +108,10 @@
                                             </div>
                                         </div>
                                         <p class="m-b-20"></p>
+                                        <div class="d-flex align-items-center">
+                                            <div class="badge badge-<%=item.isLocked()?"danger":"success"%> badge-dot m-r-10"></div>
+                                            <div><%=item.isLocked()?"Không phát hành":"Phát hành"%></div>
+                                        </div>
                                         <div class="text-right">
                                             <a class="btn btn-hover font-weight-semibold" href="./article?action=detail&articleID=<%=item.getArticleID()%>">
                                                 <span>Xem chi tiết</span>

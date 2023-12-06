@@ -1,5 +1,6 @@
 <%@ page import="java.util.ArrayList" %>
 <%@ page import="model.bean.Category" %>
+<%@ page import="model.bean.Article" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
          pageEncoding="UTF-8"%>
 <!DOCTYPE html>
@@ -23,7 +24,12 @@
 
 <body>
 <%
+    String function = (String)request.getAttribute("function");
+    String action = (String)request.getAttribute("action");
     var categories = (ArrayList<Category>)request.getAttribute("categories");
+    var article = (Article)request.getAttribute("article");
+    var categoryOld = (String) request.getAttribute("categoryOld");
+
 %>
 <div class="app">
     <div class="layout">
@@ -45,24 +51,30 @@
                         <nav class="breadcrumb breadcrumb-dash">
                             <a href="#" class="breadcrumb-item"><i class="anticon anticon-home m-r-5"></i>Trang chủ</a>
                             <a class="breadcrumb-item" href="#">Quản lí bài báo</a>
-                            <span class="breadcrumb-item active">Thêm</span>
+                            <span class="breadcrumb-item active"><%=function%>></span>
                         </nav>
                     </div>
                 </div>
                 <div class="container">
 
-                    <form action="./article?action=submitInsert" method="post" onsubmit="processSubmit(event)">
+                    <form action="./article?action=<%=action%>" method="post" onsubmit="processSubmit(event)">
                         <div class="card">
                             <div class="card-body">
                                 <div class="form-group">
                                     <label class="font-weight-semibold" for="title">Title</label>
-                                    <input type="text" class="form-control" name="title" id="title" placeholder="Product Name">
+                                    <input type="text" class="form-control" name="title" id="title" placeholder="Title"
+                                           value="<%=article!=null?article.getTitle():""%>">
                                 </div>
                                 <div class="form-group">
                                     <label class="font-weight-semibold" for="category">Danh mục</label>
                                     <select class="custom-select" id="category" name="category">
                                         <%for (var item : categories) {%>
-                                        <option value="<%=item.getCategoryID()%>"><%=item.getName()%></option>
+                                        <option value="<%=item.getCategoryID()%>"
+                                        <% if(item.getCategoryID().equals(categoryOld)){%>
+                                            <%="selected"%>
+                                        <%}%>>
+                                            <%=item.getName()%>
+                                        </option>
                                         <%}%>
 
                                     </select>
@@ -70,10 +82,12 @@
                                 <div class="form-group">
                                     <label class="font-weight-semibold" for="productDescription">Nội dung</label>
                                     <div id="productDescription">
-                                        <p>Viết bài báo ở đây</p>
+                                        <%=article!=null?article.getContent():""%>
                                     </div>
                                 </div>
                                 <input type="hidden" id="content" name="content">
+                                <input type="hidden" name="articleID" value="<%=article!=null?article.getArticleID():""%>">
+                                <input type="hidden" name="categoryOld" value="<%=categoryOld!=null?categoryOld:""%>">
                                 <div class="form-group">
                                     <input type="submit" class="btn btn-primary" value="Submit">
                                 </div>

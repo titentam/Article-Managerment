@@ -20,12 +20,19 @@ public class ArticleBO {
     public Article getArticle(String id){
         return dao.getArticle(id);
     }
+    public String getCategory(String id){
+        return dao.getCategory(id);
+    }
 
     public void insert(String title, String content, String categoryID){
         String id = generateID(10);
         var record = new Article(id,title,content);
         dao.insert(record);
         dao.insertCategory(id,categoryID);
+    }
+    public void update(Article article, String categoryID, String categoryOld){
+        dao.update(article);
+        dao.updateCategory(article.getArticleID(),categoryID,categoryOld);
     }
 
     private static String generateID(int length) {

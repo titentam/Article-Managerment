@@ -70,6 +70,23 @@ public class ArticleDAO {
         }
         return record;
     }
+    public String getCategory(String id){
+        String sql = "select CategoryID from articlecategory where ArticleID=?";
+
+        try {
+            PreparedStatement stmt = conn.prepareStatement(sql);
+            stmt.setString(1,id);
+            ResultSet rs = stmt.executeQuery();
+            System.out.println(stmt);
+            if(rs.next()){
+                return rs.getString(1);
+            }
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return null;
+    }
     public void insert(Article article){
         String sql = "Insert into article(`ArticleID`, `Title`, `Content`) values(?,?,?)";
         try {
@@ -77,6 +94,19 @@ public class ArticleDAO {
             stmt.setString(1,article.getArticleID());
             stmt.setString(2,article.getTitle());
             stmt.setString(3,article.getContent());
+            int rs = stmt.executeUpdate();
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+    public void update(Article article){
+        String sql = "UPDATE article SET `Title` = ?, `Content` = ? WHERE (`ArticleID` = ?);";
+        try {
+            PreparedStatement stmt = conn.prepareStatement(sql);
+            stmt.setString(1,article.getTitle());
+            stmt.setString(2,article.getContent());
+            stmt.setString(3,article.getArticleID());
             int rs = stmt.executeUpdate();
 
         } catch (SQLException e) {
@@ -97,11 +127,30 @@ public class ArticleDAO {
     }
     public void insertCategory(String articleID, String categoryID){
         String sql = "Insert into articlecategory(`ArticleID`, `CategoryID`) values(?,?)";
+
         try {
             PreparedStatement stmt = conn.prepareStatement(sql);
             stmt.setString(1,articleID);
             stmt.setString(2,categoryID);
             int rs = stmt.executeUpdate();
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+    public void updateCategory(String articleID, String categoryID,String categoryOld){
+        String sqlDelete = "DELETE FROM articlecategory WHERE (ArticleID = ?) and (CategoryID = ?);";
+        String sqlInsert = "Insert into articlecategory(`ArticleID`, `CategoryID`) values(?,?)";
+        try {
+            PreparedStatement stmt = conn.prepareStatement(sqlDelete);
+            stmt.setString(1,articleID);
+            stmt.setString(2,categoryOld);
+            int rs = stmt.executeUpdate();
+
+            stmt = conn.prepareStatement(sqlInsert);
+            stmt.setString(1,articleID);
+            stmt.setString(2,categoryID);
+            rs = stmt.executeUpdate();
 
         } catch (SQLException e) {
             throw new RuntimeException(e);

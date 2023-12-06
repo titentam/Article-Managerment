@@ -88,7 +88,7 @@
                                             </a>
                                         </li>
                                         <li>
-                                            <a class="text-gray" href="article-form.jsp">
+                                            <a class="text-gray" href="./article?action=update&articleID=<%=record.getArticleID()%>">
                                                 <i class="anticon anticon-edit font-size-20"></i>
                                             </a>
                                         </li>

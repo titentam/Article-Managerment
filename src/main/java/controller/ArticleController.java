@@ -6,6 +6,7 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import model.bean.Article;
 import model.bo.ArticleBO;
 import model.bo.CategoryBO;
 import model.bo.CommentBO;
@@ -28,6 +29,9 @@ public class ArticleController extends HttpServlet {
                 case "insert":
                     insert(request,response);
                     break;
+                case "update":
+                    update(request,response);
+                    break;
             }
 
         }
@@ -35,6 +39,9 @@ public class ArticleController extends HttpServlet {
             this.ShowList(request,response);
         }
     }
+
+
+
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String action = request.getParameter("action");
         if(action!=null){
@@ -42,7 +49,9 @@ public class ArticleController extends HttpServlet {
                 case "submitInsert":
                     submitInsert(request,response);
                     break;
-
+                case "submitUpdate":
+                    submitUpdate(request,response);
+                    break;
             }
 
         }
@@ -50,12 +59,16 @@ public class ArticleController extends HttpServlet {
 
     private void ShowList(HttpServletRequest request, HttpServletResponse response){
         var articleBO = new ArticleBO();
+        var categoryBO = new CategoryBO();
         var list = articleBO.getList();
+        var categories = categoryBO.getList();
         ArrayList<ArrayList<String>> listAuthors = new ArrayList<>();
         for (var item :
                 list) {
             listAuthors.add(articleBO.getAuthors(item.getArticleID()));
         }
+
+        request.setAttribute("categories", categories);
         request.setAttribute("list", list);
         request.setAttribute("listAuthors", listAuthors);
         ForwardUrl("/admin/article-list.jsp",request,response);
@@ -65,6 +78,24 @@ public class ArticleController extends HttpServlet {
         var categoryBO = new CategoryBO();
         var categories = categoryBO.getList();
         request.setAttribute("categories", categories);
+        request.setAttribute("function", "Thêm");
+        request.setAttribute("action", "submitInsert");
+        ForwardUrl("/admin/article-form.jsp",request,response);
+    }
+    private void update(HttpServletRequest request, HttpServletResponse response) {
+        String id = request.getParameter("articleID");
+
+        var categoryBO = new CategoryBO();
+        var articleBO = new ArticleBO();
+        var categories = categoryBO.getList();
+        var article = articleBO.getArticle(id);
+
+        request.setAttribute("categories", categories);
+        request.setAttribute("function", "Thêm");
+        request.setAttribute("action", "submitUpdate");
+        request.setAttribute("article", article);
+        request.setAttribute("categoryOld", articleBO.getCategory(id));
+
         ForwardUrl("/admin/article-form.jsp",request,response);
     }
 
@@ -91,6 +122,17 @@ public class ArticleController extends HttpServlet {
 
         this.ShowList(request,response);
 
+    }
+    private void submitUpdate(HttpServletRequest request, HttpServletResponse response) {
+        String id = request.getParameter("articleID");
+        String title = request.getParameter("title");
+        String content = request.getParameter("content");
+        String category = request.getParameter("category");
+        String categoryOld = request.getParameter("categoryOld");
+        var articleBO = new ArticleBO();
+        articleBO.update(new Article(id,title,content),category,categoryOld);
+
+        this.ShowList(request,response);
     }
 
     private void ForwardUrl(String url,HttpServletRequest request, HttpServletResponse response){
