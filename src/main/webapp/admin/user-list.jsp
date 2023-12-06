@@ -182,10 +182,6 @@
                 </div>
                 <!-- Content Wrapper END -->
 
-                <!-- Footer START -->
-                <%@include file="component/footer.jsp"%>
-                <!-- Footer END -->
-
             </div>
             <!-- Page Container END -->
 

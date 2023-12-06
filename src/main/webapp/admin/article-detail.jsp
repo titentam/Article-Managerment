@@ -1,3 +1,8 @@
+<%@ page import="model.bean.Article" %>
+<%@ page import="java.util.ArrayList" %>
+<%@ page import="java.util.Arrays" %>
+<%@ page import="java.text.SimpleDateFormat" %>
+<%@ page import="model.bean.CommentView" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
          pageEncoding="UTF-8"%>
 <!DOCTYPE html>
@@ -19,6 +24,11 @@
 </head>
 
 <body>
+<%
+    var record = (Article)request.getAttribute("record");
+    var authors = (ArrayList<String>)request.getAttribute("authors");
+    var comments = (ArrayList<CommentView>)request.getAttribute("comments");
+%>
     <div class="app">
         <div class="layout">
             <!-- Header START -->
@@ -111,24 +121,27 @@
                                         </li>
                                     </ul>
                                 </div>
-                                <h2 class="font-weight-normal m-b-10">Title</h2>
+                                <h2 class="font-weight-normal m-b-10"><%=record.getTitle()%></h2>
                                 <div class="d-flex m-b-30">
                                     <div class="avatar avatar-cyan avatar-img">
                                         <img src="assets/images/avatars/thumb-6.jpg" alt="">
                                     </div>
                                     <div class="m-l-15">
-                                        <a href="javascript:void(0);" class="text-dark m-b-0 font-weight-semibold">Author</a>
-                                        <p class="m-b-0 text-muted font-size-13">Jan 2, 2019</p>
+                                        <a href="javascript:void(0);" class="text-dark m-b-0 font-weight-semibold">
+                                            <%=Arrays.toString(authors.toArray()).replace("[", "").replace("]", "")%>
+                                        </a>
+                                        <p class="m-b-0 text-muted font-size-13">
+                                            <%
+                                                SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy MM:HH");
+                                                String time = dateFormat.format(record.getTime());
+                                            %>
+                                            <%=time%>
+                                        </p>
                                     </div>
                                 </div>
                                 <img alt="" class="img-fluid w-100" src="assets/images/others/img-8.jpg">
                                 <div class="m-t-30">
-                                    <p>Refuse to drink water except out of someone's glass rub face on owner plays league of legends, purr when being pet or bathe private parts with tongue then lick owner's face. Refuse to drink water except out of someone's glass you have cat to be kitten me right meow yet favor packaging over toy poop in litter box, scratch the walls but intently sniff hand, for love you, then bite you. Inspect anything brought into the house purrr purr littel cat, little cat purr purr, or meoooow who's the baby poop in litter box, scratch the walls howl uncontrollably for no reason toy mouse squeak roll over. Annoy kitten brother with poking. Lick human with sandpaper tongue sit on human. Stand in doorway, unwilling to chose whether to stay in or go out. Bite nose of your human destroy the blinds for really likes hummus floof tum, tickle bum, jellybean footies curly toes. </p>
-                                    <p>I like cats because they are fat and fluffy run in circles, and weigh eight pounds but take up a full-size bed but have my breakfast spaghetti yarn eat the fat cats food, fish i must find my red catnip fishy fish milk the cow. Lick master's hand at first then bite because im moody destroy couch why must they do that, yet who's the baby, so being gorgeous with belly side up. Throwup on your pillow lay on arms while you're using the keyboard. Bleghbleghvomit my furball really tie the room together. Need to check on human, have not seen in an hour might be dead oh look, human is alive, hiss at human, feed me if it smells like fish eat as much as you wish purr and jump five feet high and sideways when a shadow moves.</p>
-                                    <blockquote class="blockquote">
-                                        <p class="mb-0">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer posuere erat a ante.</p>
-                                    </blockquote>
-                                    <p>Love me! sit on human eat from dog's food and i heard this rumor where the humans are our owners, pfft, what do they know?! ptracy. Poop in litter box, scratch the walls shove bum in owner's face like camera lens. Annoy the old grumpy cat, start a fight and then retreat to wash when i lose get suspicious of own shadow then go play with toilette paper for cough furball into food bowl then scratch owner for a new one so i cry and cry and cry unless you pet me.</p>
+                                    <p><%=record.getContent()%></p>
                                 </div>
                                 <div class="d-flex m-t-40 align-items-center">
                                     <span class="m-r-15">Share this post: </span>
@@ -151,7 +164,8 @@
                                     </ul>
                                 </div>
                                 <hr>
-                                <h5>Comments (số bình luận)</h5>
+                                <h5>Bình luận (<%=comments.size()%>)</h5>
+                                <% for (var comment: comments) {%>
                                 <div class="m-t-20">
                                     <ul class="list-group list-group-flush">
                                         <li class="list-group-item p-h-0">
@@ -161,15 +175,22 @@
                                                 </div>
                                                 <div class="media-body m-l-20">
                                                     <h6 class="m-b-0">
-                                                        <a href="" class="text-dark">Tên người dùng</a>
+                                                        <a href="" class="text-dark"><%=comment.getNameUser()%></a>
                                                     </h6>
-                                                    <span class="font-size-13 text-gray">Thời gian</span>
+                                                    <span class="font-size-13 text-gray">
+                                                        <%
+                                                            time = dateFormat.format(comment.getTime());
+                                                        %>
+                                                        <%=time%>
+                                                    </span>
                                                 </div>
                                             </div>
-                                            <span>Nội dung bình luận</span>
+                                            <span><%=comment.getContent()%></span>
                                         </li>
-                                    </ul> 
-                                </div> 
+                                    </ul>
+                                </div>
+                                <%}%>
+
                                 <div class="m-t-30">
                                     <nav>
                                         <ul class="pagination justify-content-end">

@@ -79,7 +79,7 @@ public class UserDAO {
 			String query;
 			if (action.equals("update-role"))
 				query = "update user set RoleID=? where username=?";
-			if (action.equals("delete-user"))
+			else if (action.equals("delete-user"))
 				query = "update user set Locked=1 where username=?";
 			else
 				query = "update user set name=?, email=?, dob=?,gender=?, RoleID=? where username=?";

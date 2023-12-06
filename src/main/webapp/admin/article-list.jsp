@@ -1,3 +1,7 @@
+<%@ page import="java.util.ArrayList" %>
+<%@ page import="model.bean.Article" %>
+<%@ page import="java.util.Arrays" %>
+<%@ page import="java.text.SimpleDateFormat" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
          pageEncoding="UTF-8"%>
 <!DOCTYPE html>
@@ -18,6 +22,11 @@
 </head>
 
 <body>
+    <%
+        var list = (ArrayList<Article>)request.getAttribute("list");
+        var listAuthors = (ArrayList<ArrayList<String>>)request.getAttribute("listAuthors");
+        int i=0;
+    %>
     <div class="app">
         <div class="layout">
             <!-- Header START -->
@@ -58,7 +67,7 @@
                                 </div>
                             </div>
                             <div class="col-lg-4 text-right">
-                                <a href="article-form.jsp">
+                                <a href="./article?action=insert">
                                     <button class="btn btn-primary">
                                         <i class="anticon anticon-plus-circle m-r-5"></i>
                                         <span>Thêm bài báo</span>
@@ -66,6 +75,7 @@
                                 </a>
                             </div>
                         </div>
+                        <% for (var item :list) {%>
                         <div class="card">
                             <div class="card-body">
                                 <div class="row">
@@ -73,20 +83,32 @@
                                         <img class="img-fluid" src="assets/images/others/img-2.jpg" alt="">
                                     </div>
                                     <div class="col-md-8">
-                                        <h4 class="m-b-10">Title</h4>
+                                        <h4 class="m-b-10"><%=item.getTitle()%></h4>
                                         <div class="d-flex align-items-center m-t-5 m-b-15">
-                                            <div class="avatar avatar-image avatar-sm">
-                                                <img src="assets/images/avatars/thumb-2.jpg" alt="">
-                                            </div>
                                             <div class="m-l-10">
-                                                <span class="text-gray font-weight-semibold">Author</span>
-                                                <span class="m-h-5 text-gray">|</span>
-                                                <span class="text-gray">Jan 2, 2019(ngày xuất bản)</span>
+                                                <span class="text-gray font-weight-semibold">
+                                                    Tác giả:
+                                                </span>
+                                                <span class="text-gray">
+                                                    <%=Arrays.toString(listAuthors.get(i).toArray()).replace("[", "").replace("]", "")%>
+                                                    <% i++; %>
+                                                </span>
+                                                <br>
+                                                <span class="text-gray font-weight-semibold">
+                                                    Xuất bản lúc:
+                                                </span>
+                                                <span class="text-gray">
+                                                    <%
+                                                        SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy MM:HH");
+                                                        String time = dateFormat.format(item.getTime());
+                                                    %>
+                                                    <%=time%>
+                                                </span>
                                             </div>
                                         </div>
-                                        <p class="m-b-20">2 câu đầu</p>
+                                        <p class="m-b-20"></p>
                                         <div class="text-right">
-                                            <a class="btn btn-hover font-weight-semibold" href="article-post.jsp">
+                                            <a class="btn btn-hover font-weight-semibold" href="./article?action=detail&articleID=<%=item.getArticleID()%>">
                                                 <span>Xem chi tiết</span>
                                             </a>
                                         </div>
@@ -94,34 +116,8 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="card">
-                            <div class="card-body">
-                                <div class="row">
-                                    <div class="col-md-4">
-                                        <img class="img-fluid" src="assets/images/others/img-2.jpg" alt="">
-                                    </div>
-                                    <div class="col-md-8">
-                                        <h4 class="m-b-10">Title</h4>
-                                        <div class="d-flex align-items-center m-t-5 m-b-15">
-                                            <div class="avatar avatar-image avatar-sm">
-                                                <img src="assets/images/avatars/thumb-2.jpg" alt="">
-                                            </div>
-                                            <div class="m-l-10">
-                                                <span class="text-gray font-weight-semibold">Author</span>
-                                                <span class="m-h-5 text-gray">|</span>
-                                                <span class="text-gray">Jan 2, 2019(ngày xuất bản)</span>
-                                            </div>
-                                        </div>
-                                        <p class="m-b-20">2 câu đầu</p>
-                                        <div class="text-right">
-                                            <a class="btn btn-hover font-weight-semibold" href="article-post.jsp">
-                                                <span>Xem chi tiết</span>
-                                            </a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                        <%}%>
+
                     </div>
                     <div class="m-t-30">
                         <nav>
