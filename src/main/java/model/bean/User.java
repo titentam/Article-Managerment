@@ -8,24 +8,28 @@ public class User {
     private String name;
     private String email;
     private Date dob;
-    private boolean gender;
-    private boolean locked;
+    private int gender;
+//    private boolean locked;
     private String roleID;
+    private String roleName;
+    private int locked;
 
-    // Constructors, getters, and setters
+	// Constructors, getters, and setters
+    public User() {}
+    public User(String username, String password, String name, String email, Date dob, int gender, String roleID) {
 
-    public User(String username, String password, String name, String email, Date dob, boolean gender, String roleID, boolean locked) {
+//    public User(String username, String password, String name, String email, Date dob, boolean gender, String roleID, boolean locked) {
         this.username = username;
         this.password = password;
         this.name = name;
         this.email = email;
         this.dob = dob;
-        this.gender = gender;
+        this.setGender(gender);
         this.roleID = roleID;
-        this.locked = locked;
+//        this.locked = locked;
     }
 
-    public String getUsername() {
+	public String getUsername() {
         return username;
     }
 
@@ -65,13 +69,13 @@ public class User {
         this.dob = dob;
     }
 
-    public boolean isGender() {
-        return gender;
-    }
-
-    public void setGender(boolean gender) {
-        this.gender = gender;
-    }
+//    public boolean isGender() {
+//        return gender;
+//    }
+//
+//    public void setGender(boolean gender) {
+//        this.gender = gender;
+//    }
 
     public String getRoleID() {
         return roleID;
@@ -81,11 +85,24 @@ public class User {
         this.roleID = roleID;
     }
 
-    public boolean isLocked() {
-        return locked;
-    }
+	public String getRoleName() {
+		return roleName;
+	}
 
-    public void setLocked(boolean locked) {
-        this.locked = locked;
-    }
+	public void setRoleName(String roleName) {
+		this.roleName = roleName;
+	}
+
+    public int getLocked() {
+		return locked;
+	}
+	public void setLocked(int locked) {
+		this.locked = locked;
+	}
+	public int getGender() {
+		return gender;
+	}
+	public void setGender(int gender) {
+		this.gender = gender;
+	}
 }

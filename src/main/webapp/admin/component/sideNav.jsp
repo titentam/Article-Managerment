@@ -25,7 +25,7 @@
             <li class="nav-item dropdown">
                 <a class="dropdown-toggle" href="javascript:void(0);">
                                 <span class="icon-holder">
-                                    <i class="anticon anticon-appstore"></i>
+                                    <i class="anticon anticon-user"></i>
                                 </span>
                     <span class="title">Quản lí người dùng</span>
                     <span class="arrow">
@@ -34,7 +34,7 @@
                 </a>
                 <ul class="dropdown-menu">
                     <li>
-                        <a href="app-chat.html">Danh sách</a>
+                        <a href="../admin/manage-user?action=list-user">Danh sách người dùng</a>
                     </li>
                 </ul>
             </li>
