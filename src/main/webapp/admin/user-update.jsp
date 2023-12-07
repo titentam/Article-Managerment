@@ -1,3 +1,5 @@
+<%@page import="model.bean.Role"%>
+<%@page import="java.util.ArrayList"%>
 <%@page import="model.bean.User"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
@@ -26,7 +28,10 @@
 </head>
 
 <body>
-	<% User user = (User)request.getAttribute("user"); %>
+	<% 
+		User user = (User)request.getAttribute("user"); 
+		ArrayList<Role> listRole = (ArrayList<Role>) request.getAttribute("listRole"); 
+	%>
 	<div class="app">
 		<div class="layout">
 			<!-- Header START -->
@@ -123,13 +128,13 @@
 											<div class="form-group col-md-6">
 											<label class="font-weight-semibold" for="language">Chức vụ: </label>
 											<select name="roleID" id="role" class="form-control">
-												<% if (user.getRoleName().equals("Quản trị viên")) {%>
-													<option value="R1" selected>Quản trị viên</option>
-													<option value="R2">Độc giả</option>
+											<% for (Role role : listRole) { %>
+												<% if (user.getRoleID().equals(role.getRoleID())) {%>
+													<option value="<%=role.getRoleID() %>" selected><%=role.getName() %></option>
 												<% } else { %>
-													<option value="R1">Quản trị viên</option>
-													<option value="R2" selected>Độc giả</option>
+													<option value="<%=role.getRoleID() %>"><%=role.getName() %></option>
 												<% } %>
+                                            <% } %>
 											</select>
 											</div>
 										</div>

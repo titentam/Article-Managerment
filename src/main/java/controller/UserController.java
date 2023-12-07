@@ -6,7 +6,9 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import model.bean.Role;
 import model.bean.User;
+import model.bo.RoleBO;
 import model.bo.UserBO;
 
 import java.io.IOException;
@@ -24,10 +26,8 @@ public class UserController extends HttpServlet {
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String action = request.getParameter("action") != null ? request.getParameter("action") : "";
+
 		switch (action) {
-		case "list-user":
-			getListUser(request, response);
-			break;
 		case "user-update":
 		case "user-delete":
 			getUserDetail(action, request, response);
@@ -39,24 +39,23 @@ public class UserController extends HttpServlet {
 			deleteUser(request, response);
 			break;
 		default:
-			throw new RuntimeException("Page not found");
+			getListUser(request, response);
 		}
 	}
 	
 	protected synchronized void getListUser(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		String categoryRole 
-			= request.getParameter("role-category") != null ? request.getParameter("role-category") : "all";
+		String categoryRole = request.getParameter("role-category") != null ? request.getParameter("role-category") : "all";
 		String searchText = request.getParameter("search-text");
+		int page = request.getParameter("page") != null ? Integer.parseInt(request.getParameter("page")) : 1;
 		
-		int page = 1;
-		if (request.getParameter("page") != null)
-			page = Integer.parseInt(request.getParameter("page"));
-		
-		int pageSize = 2;
+		int pageSize = 5;
 		Object[] result = userBO.getAllUser(categoryRole, searchText, page, pageSize);
 		ArrayList<User> listUser = (ArrayList<User>) result[0];
 		int numOfPage = (int) result[1];
+		ArrayList<Role> listRole = new RoleBO().getAllRole();
+		
 		request.setAttribute("listUser", listUser);
+		request.setAttribute("listRole", listRole);
 		request.setAttribute("numOfPage", numOfPage);
 		request.setAttribute("currentPage", page);
 		
@@ -69,7 +68,10 @@ public class UserController extends HttpServlet {
 		String username = request.getParameter("username");
 		User user = userBO.getUserDetail(username);
 		if (user != null) {
+			ArrayList<Role> listRole = new RoleBO().getAllRole();
+			request.setAttribute("listRole", listRole);
 			request.setAttribute("user", user);
+			
 			String url = "/admin/" + action + ".jsp";
 			RequestDispatcher rd = getServletContext().getRequestDispatcher(url);
 			rd.forward(request, response);

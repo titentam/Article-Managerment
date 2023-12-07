@@ -1,3 +1,5 @@
+<%@page import="model.bean.Role"%>
+<%@page import="java.util.ArrayList"%>
 <%@page import="model.bean.User"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
@@ -52,7 +54,10 @@
 						</div>
 					</div>
 					<div class="container">
-						<% User user = (User)request.getAttribute("user"); %>
+						<% 
+							User user = (User)request.getAttribute("user"); 
+							ArrayList<Role> listRole = (ArrayList<Role>) request.getAttribute("listRole"); 
+						%>
 						<div class="tab-pane fade show active">
 							<div class="card">
 								<div class="card-header">
@@ -79,8 +84,7 @@
 										</div>
 									</div>
 									<hr class="m-v-25">
-									<form action="../admin/manage-user?action=submit-delete" method="post">
-										<input type="hidden" name="username" value="<%=user.getUsername() %>">
+									<div>
 										<div class="form-row">
 											<div class="form-group col-md-6">
 												<label class="font-weight-semibold" for="email">Họ tên:</label>
@@ -123,24 +127,49 @@
 											<div class="form-group col-md-6">
 											<label class="font-weight-semibold" for="language">Chức vụ: </label>
 											<select name="roleID" id="role" class="form-control" disabled="disabled">
-												<% if (user.getRoleName().equals("Quản trị viên")) {%>
-													<option value="R1" selected>Quản trị viên</option>
-													<option value="R2">Độc giả</option>
+											<% for (Role role : listRole) { %>
+												<% if (user.getRoleID().equals(role.getRoleID())) {%>
+													<option value="<%=role.getRoleID() %>" selected><%=role.getName() %></option>
 												<% } else { %>
-													<option value="R1">Quản trị viên</option>
-													<option value="R2" selected>Độc giả</option>
+													<option value="<%=role.getRoleID() %>"><%=role.getName() %></option>
 												<% } %>
+                                            <% } %>
 											</select>
 											</div>
 										</div>
 										<div class="text-center">
                                         	<% if (user.getLocked() == 0) { %>
-                                        		<button type="submit" class="pl-5 pr-5 btn btn-tone btn-danger">Xóa</button>
+                                        		<button class="pl-5 pr-5 btn btn-danger text-white" data-toggle="modal" 
+                                        			data-target="#exampleModalLock">Khóa tài khoản</button>
+
+                                                <!-- Modal -->
+                                                <div class="modal fade" id="exampleModalLock">
+                                                    <div class="modal-dialog">
+                                                        <div class="modal-content">
+                                                            <div class="modal-header">
+                                                                <h5 class="modal-title">Xác nhận khóa tài khoản</h5>
+                                                                <button type="button" class="close" data-dismiss="modal">
+                                                                    <i class="anticon anticon-close"></i>
+                                                                </button>
+                                                            </div>
+                                                            <div class="modal-body">
+                                                                Bạn có muốn khóa tài khoản này không ?
+                                                            </div>
+                                                            <div class="modal-footer">
+                                                                <button type="button" class="btn btn-default" data-dismiss="modal">Hủy</button>
+                                                                <form action="../admin/manage-user?action=submit-delete" method="post">
+                                                                	<button type="submit" class="btn btn-primary">Xác nhận</button>
+                                                                	<input type="hidden" name="username" value="<%=user.getUsername() %>">
+                                                                </form>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
                                         	<% } else { %>
                                         		<button class="pl-5 pr-5 btn" disabled>Xóa</button>
                                         	<% } %>
                                         </div>
-									</form>
+									</div>
 								</div>
 							</div>
 						</div>

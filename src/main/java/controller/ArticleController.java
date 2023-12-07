@@ -30,7 +30,7 @@ public class ArticleController extends HttpServlet {
                     insert(request,response);
                     break;
                 case "update":
-                    update(request,response);
+//                    update(request,response);
                     break;
             }
         }
@@ -49,25 +49,41 @@ public class ArticleController extends HttpServlet {
                 case "submitUpdate":
                     submitUpdate(request,response);
                     break;
+                case "submitDelete":
+                    submitDelete(request,response);
+                    break;
+                case "submitLock":
+                    submitLock(request,response);
+                    break;
             }
 
         }
     }
 
     private void ShowList(HttpServletRequest request, HttpServletResponse response){
-        var articleBO = new ArticleBO();
+    	String category = request.getParameter("category") != null ? request.getParameter("category") : "all";
+    	String sortBy = request.getParameter("sort-by") != null ? request.getParameter("sort-by") : "none";
+		String searchText = request.getParameter("search-text");
+		int page = request.getParameter("page") != null ? Integer.parseInt(request.getParameter("page")) : 1;
+    	
+		int pageSize = 2;
+    	var articleBO = new ArticleBO();
         var categoryBO = new CategoryBO();
-        var list = articleBO.getList();
+        var result = articleBO.getList(category, sortBy, searchText, page, pageSize);
+		var list = (ArrayList<Article>) result[0];
+        var numOfPage = (int) result[1];
         var categories = categoryBO.getList();
+        
         ArrayList<ArrayList<String>> listAuthors = new ArrayList<>();
-        for (var item :
-                list) {
+        for (var item : list) {
             listAuthors.add(articleBO.getAuthors(item.getArticleID()));
         }
 
         request.setAttribute("categories", categories);
         request.setAttribute("list", list);
         request.setAttribute("listAuthors", listAuthors);
+        request.setAttribute("numOfPage", numOfPage);
+		request.setAttribute("currentPage", page);
         ForwardUrl("/admin/article-list.jsp",request,response);
     }
 
@@ -79,22 +95,22 @@ public class ArticleController extends HttpServlet {
         request.setAttribute("action", "submitInsert");
         ForwardUrl("/admin/article-form.jsp",request,response);
     }
-    private void update(HttpServletRequest request, HttpServletResponse response) {
-        String id = request.getParameter("articleID");
-
-        var categoryBO = new CategoryBO();
-        var articleBO = new ArticleBO();
-        var categories = categoryBO.getList();
-        var article = articleBO.getArticle(id);
-
-        request.setAttribute("categories", categories);
-        request.setAttribute("function", "Thêm");
-        request.setAttribute("action", "submitUpdate");
-        request.setAttribute("article", article);
-        request.setAttribute("categoryOld", articleBO.getCategory(id));
-
-        ForwardUrl("/admin/article-form.jsp",request,response);
-    }
+//    private void update(HttpServletRequest request, HttpServletResponse response) {
+//        String id = request.getParameter("articleID");
+//
+//        var categoryBO = new CategoryBO();
+//        var articleBO = new ArticleBO();
+//        var categories = categoryBO.getList();
+//        var article = articleBO.getArticle(id);
+//
+//        request.setAttribute("categories", categories);
+//        request.setAttribute("function", "Thêm");
+//        request.setAttribute("action", "submitUpdate");
+//        request.setAttribute("article", article);
+//        request.setAttribute("categoryOld", articleBO.getCategory(id));
+//
+//        ForwardUrl("/admin/article-form.jsp",request,response);
+//    }
 
     private void detail(HttpServletRequest request, HttpServletResponse response) {
         String id = request.getParameter("articleID");
@@ -131,7 +147,22 @@ public class ArticleController extends HttpServlet {
 
         this.ShowList(request,response);
     }
+    
+    private void submitLock(HttpServletRequest request, HttpServletResponse response) {
+        boolean locked = Boolean.parseBoolean(request.getParameter("locked"));
+    	String id = request.getParameter("articleID");
+    	new ArticleBO().updateLock(id, locked);
 
+        this.detail(request, response);
+    }
+    private void submitDelete(HttpServletRequest request, HttpServletResponse response) {
+        String articleID = request.getParameter("articleID");
+        var articleBO = new ArticleBO();
+        articleBO.deleteArticle(articleID);
+
+        this.ShowList(request,response);
+    }
+    
     private void ForwardUrl(String url,HttpServletRequest request, HttpServletResponse response){
         RequestDispatcher rd = request.getServletContext().getRequestDispatcher(url);
         try {

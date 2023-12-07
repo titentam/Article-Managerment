@@ -1,3 +1,4 @@
+<%@page import="model.bean.Role"%>
 <%@page import="java.util.Date"%>
 <%@page import="java.text.SimpleDateFormat"%>
 <%@page import="model.bean.User"%>
@@ -38,6 +39,7 @@
 	%>
 	<% 
 		ArrayList<User> listUser = (ArrayList<User>) request.getAttribute("listUser"); 
+		ArrayList<Role> listRole = (ArrayList<Role>) request.getAttribute("listRole"); 
 		int numOfPage = (int) request.getAttribute("numOfPage");
 		int currentPage = (int) request.getAttribute("currentPage");
 	%>
@@ -67,18 +69,19 @@
                     
                     <div class="card" style="min-height: 500px">
                         <div class="card-body">
-                            <div class="row m-b-10 rounded">
+                            <div class="row m-b-20 rounded">
                                 <div class="col-lg-9">
                                     <div class="d-md-flex">
                                         <div class="m-b-10 m-t-10 w-100">
                                             <form name="search-and-filter" action="../admin/manage-user" method="get" 
-                                            	class="d-flex justify-content-between" onsubmit="optimizeURL()">
+                                            	class="d-flex justify-content-between" onsubmit="c()">
                                             	<input type="hidden" name="action" value="list-user"/>
-                                            	<select class="border-dark rounded" name="role-category" onchange="roleCategoryChange()" 
+                                            	<select class="border-dark rounded" name="role-category" onchange="optimizeURL()" 
                                             		class="custom-select" style="width: 200px;">
                                                 	<option value="all" selected>Tất cả</option>
-                                                	<option value="R1">Quản trị viên</option>
-                                                	<option value="R2">Độc giả</option>
+                                                	<% for (Role role : listRole) { %>
+                                                		<option value="<%=role.getRoleID() %>"><%=role.getName() %></option>
+                                                	<% } %>
                                             	</select>
                                             	
                                             	<div class="my-2 my-lg-0 d-flex align-items-center w-60">
@@ -222,7 +225,7 @@
 		const role_category = urlParams.get('role-category');
 		const search_text = urlParams.get('search-text');
 		
-		currentHref = '?action=list-user&page=' + page;
+		currentHref = '?page=' + page;
 		if (role_category != null && role_category !== "")
         	currentHref += '&role-category=' + role_category;
 		if (search_text != null && search_text !== "")
@@ -237,7 +240,7 @@
 		const urlParams = new URLSearchParams(queryString);
 		const page = urlParams.get('page') != null ? urlParams.get('page') : 1;
 		
-		currentHref = '?action=list-user';
+		currentHref = '?';
 		if (role_select.value !== "")
         	currentHref += '&role-category=' + role_select.value;
 		if (search_input.value.trim() !== '')

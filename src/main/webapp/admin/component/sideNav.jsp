@@ -34,7 +34,7 @@
                 </a>
                 <ul class="dropdown-menu">
                     <li>
-                        <a href="../admin/manage-user?action=list-user">Danh sách người dùng</a>
+                        <a href="../admin/manage-user">Danh sách người dùng</a>
                     </li>
                 </ul>
             </li>

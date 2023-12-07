@@ -3,7 +3,9 @@ package model.bean;
 import java.sql.Timestamp;
 import java.text.DateFormat;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.ArrayList;
 
 public class Article {
     private String articleID;
@@ -11,6 +13,8 @@ public class Article {
     private String content;
     private boolean locked;
     private Timestamp time;
+    private int viewers;
+    private ArrayList<Category> categories;
 
     // Constructors, getters, and setters
 
@@ -22,7 +26,17 @@ public class Article {
         this.locked = locked;
         this.time = time;
     }
-    public Article(String articleID, String title, String content) {
+    
+    public Article(String articleID, String title, String content, boolean locked,  Timestamp time, int viewers) {
+		super();
+		this.articleID = articleID;
+		this.title = title;
+		this.content = content;
+		this.time = time;
+		this.locked = locked;
+		this.setViewers(viewers);
+	}
+	public Article(String articleID, String title, String content) {
         this.articleID = articleID;
         this.title = title;
         this.content = content;
@@ -67,4 +81,20 @@ public class Article {
     public void setTime(Timestamp time) {
         this.time = time;
     }
+
+	public int getViewers() {
+		return viewers;
+	}
+
+	public void setViewers(int viewers) {
+		this.viewers = viewers;
+	}
+
+	public ArrayList<Category> getCategories() {
+		return categories;
+	}
+
+	public void setCategories(ArrayList<Category> categories) {
+		this.categories = categories;
+	}
 }
