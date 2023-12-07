@@ -70,22 +70,22 @@ public class ArticleDAO {
         }
         return record;
     }
-    public String getCategory(String id){
+    public ArrayList<String> getCategories(String id){
         String sql = "select CategoryID from articlecategory where ArticleID=?";
-
+        ArrayList<String> res= new ArrayList<>();
         try {
             PreparedStatement stmt = conn.prepareStatement(sql);
             stmt.setString(1,id);
             ResultSet rs = stmt.executeQuery();
             System.out.println(stmt);
-            if(rs.next()){
-                return rs.getString(1);
+            while(rs.next()){
+                res.add(rs.getString(1));
             }
 
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-        return null;
+        return res;
     }
     public void insert(Article article){
         String sql = "Insert into article(`ArticleID`, `Title`, `Content`) values(?,?,?)";
@@ -138,23 +138,17 @@ public class ArticleDAO {
             throw new RuntimeException(e);
         }
     }
-    public void updateCategory(String articleID, String categoryID,String categoryOld){
-        String sqlDelete = "DELETE FROM articlecategory WHERE (ArticleID = ?) and (CategoryID = ?);";
-        String sqlInsert = "Insert into articlecategory(`ArticleID`, `CategoryID`) values(?,?)";
-        try {
-            PreparedStatement stmt = conn.prepareStatement(sqlDelete);
-            stmt.setString(1,articleID);
-            stmt.setString(2,categoryOld);
-            int rs = stmt.executeUpdate();
+    public void deleteCategory(String articleID,String categoryID){
+        String sql = "DELETE FROM articlecategory WHERE (ArticleID = ?) and (CategoryID = ?);";
 
-            stmt = conn.prepareStatement(sqlInsert);
+        try {
+            PreparedStatement stmt = conn.prepareStatement(sql);
             stmt.setString(1,articleID);
             stmt.setString(2,categoryID);
-            rs = stmt.executeUpdate();
+            int rs = stmt.executeUpdate();
 
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
     }
-
 }

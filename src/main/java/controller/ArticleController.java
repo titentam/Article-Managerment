@@ -14,6 +14,7 @@ import model.bo.CommentBO;
 import java.awt.image.CropImageFilter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 @WebServlet("/admin/article")
 public class ArticleController extends HttpServlet {
@@ -91,7 +92,7 @@ public class ArticleController extends HttpServlet {
         request.setAttribute("function", "Thêm");
         request.setAttribute("action", "submitUpdate");
         request.setAttribute("article", article);
-        request.setAttribute("categoryOld", articleBO.getCategory(id));
+        request.setAttribute("categoriesOld", articleBO.getCategoris(id));
 
         ForwardUrl("/admin/article-form.jsp",request,response);
     }
@@ -113,9 +114,10 @@ public class ArticleController extends HttpServlet {
     private void submitInsert(HttpServletRequest request, HttpServletResponse response) {
         String title = request.getParameter("title");
         String content = request.getParameter("content");
-        String category = request.getParameter("category");
+        String[] categories = request.getParameterValues("category[]");
+
         var articleBO = new ArticleBO();
-        articleBO.insert(title,content,category);
+        articleBO.insert(title,content,categories);
 
         this.ShowList(request,response);
 
@@ -124,12 +126,12 @@ public class ArticleController extends HttpServlet {
         String id = request.getParameter("articleID");
         String title = request.getParameter("title");
         String content = request.getParameter("content");
-        String category = request.getParameter("category");
-        String categoryOld = request.getParameter("categoryOld");
-        var articleBO = new ArticleBO();
-        articleBO.update(new Article(id,title,content),category,categoryOld);
+        String[] categories = request.getParameterValues("category[]");
 
-        this.ShowList(request,response);
+        var articleBO = new ArticleBO();
+        articleBO.update(new Article(id, title, content), new ArrayList<>(Arrays.asList(categories)));
+
+        this.ShowList(request, response);
     }
 
     private void ForwardUrl(String url,HttpServletRequest request, HttpServletResponse response){

@@ -20,19 +20,35 @@ public class ArticleBO {
     public Article getArticle(String id){
         return dao.getArticle(id);
     }
-    public String getCategory(String id){
-        return dao.getCategory(id);
+    public ArrayList<String> getCategoris(String id){
+        return dao.getCategories(id);
     }
 
-    public void insert(String title, String content, String categoryID){
+    public void insert(String title, String content, String[] categories){
         String id = generateID(10);
         var record = new Article(id,title,content);
         dao.insert(record);
-        dao.insertCategory(id,categoryID);
+
+        for (var categoryID:categories) {
+
+            dao.insertCategory(id,categoryID);
+        }
     }
-    public void update(Article article, String categoryID, String categoryOld){
+    public void update(Article article, ArrayList<String> categoriesNew){
         dao.update(article);
-        dao.updateCategory(article.getArticleID(),categoryID,categoryOld);
+        var id = article.getArticleID();
+        var categoriesOld =dao.getCategories(id);
+
+        for (var categoryID:categoriesNew) {
+            if(!categoriesOld.contains(categoryID)){
+                dao.insertCategory(id,categoryID);
+            }
+        }
+        for (var categoryID:categoriesOld) {
+            if(!categoriesNew.contains(categoryID)){
+                dao.deleteCategory(id,categoryID);
+            }
+        }
     }
 
     private static String generateID(int length) {
