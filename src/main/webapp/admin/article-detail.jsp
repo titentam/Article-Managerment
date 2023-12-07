@@ -1,3 +1,4 @@
+<%@page import="model.bean.Category"%>
 <%@ page import="model.bean.Article" %>
 <%@ page import="java.util.ArrayList" %>
 <%@ page import="java.util.Arrays" %>
@@ -24,6 +25,15 @@
 </head>
 
 <body>
+<%!public String arrayToString(ArrayList<Category> categories) { 
+		StringBuilder builder = new StringBuilder();
+		for (Category category1 : categories) {
+			builder.append(category1.getName()).append(", ");
+		}
+		builder.deleteCharAt(builder.length() - 2);
+		return builder.toString();
+}%>
+	
 <%
     var record = (Article)request.getAttribute("record");
     var authors = (ArrayList<String>)request.getAttribute("authors");
@@ -48,7 +58,7 @@
                         <div class="header-sub-title">
                             <nav class="breadcrumb breadcrumb-dash">
                                 <a href="#" class="breadcrumb-item"><i class="anticon anticon-home m-r-5"></i>Home</a>
-                                <a class="breadcrumb-item" href="#">Pages</a>
+                                <a class="breadcrumb-item" href="./article">List Article</a>
                                 <span class="breadcrumb-item active">Blog Post</span>
                             </nav>
                         </div>
@@ -60,11 +70,12 @@
                                 <div class="card-toolbar float-right">
                                     <ul>
                                         <li>
-                                            <a class="text-gray" href="javascript:void(0)">
-                                                <i class="anticon anticon-lock font-size-20" data-toggle="modal" data-target="#exampleModalLock"></i>
+                                            <% if (!record.isLocked()) { %>
+                                            	<a class="text-gray" href="javascript:void(0)" title="Tạm ẩn">
+                                                <i class="anticon anticon-lock font-size-20" data-toggle="modal" data-target="#modalLock"></i>
 
                                                 <!-- Modal -->
-                                                <div class="modal fade" id="exampleModalLock">
+                                                <div class="modal fade" id="modalLock">
                                                     <div class="modal-dialog">
                                                         <div class="modal-content">
                                                             <div class="modal-header">
@@ -78,7 +89,8 @@
                                                             </div>
                                                             <div class="modal-footer">
                                                                 <button type="button" class="btn btn-default" data-dismiss="modal">Hủy</button>
-                                                                <form action="#">
+                                                                <form action="./article?action=submitLock&articleID=<%=record.getArticleID()%>" method="post">
+                                                                    <input type="hidden" name="locked" value="true">
                                                                     <input type="submit" class="btn btn-primary" value="Xác nhận">
                                                                 </form>
                                                             </div>
@@ -86,6 +98,35 @@
                                                     </div>
                                                 </div>
                                             </a>
+                                            <% } else { %>
+                                            <a class="text-gray" href="javascript:void(0)" title="Mở khóa">
+                                                <i class="anticon anticon-unlock font-size-20" data-toggle="modal" data-target="#modalUnLock"></i>
+
+                                                <!-- Modal -->
+                                                <div class="modal fade" id="modalUnLock">
+                                                    <div class="modal-dialog">
+                                                        <div class="modal-content">
+                                                            <div class="modal-header">
+                                                                <h5 class="modal-title">Xác nhận mở khóa bài báo</h5>
+                                                                <button type="button" class="close" data-dismiss="modal">
+                                                                    <i class="anticon anticon-close"></i>
+                                                                </button>
+                                                            </div>
+                                                            <div class="modal-body">
+                                                                Bạn có muốn mở khóa bài báo này không ?
+                                                            </div>
+                                                            <div class="modal-footer">
+                                                                <button type="button" class="btn btn-default" data-dismiss="modal">Hủy</button>
+                                                                <form action="./article?action=submitLock&articleID=<%=record.getArticleID()%>" method="post">
+                                                                    <input type="hidden" name="locked" value="false">
+                                                                    <input type="submit" class="btn btn-primary" value="Xác nhận">
+                                                                </form>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </a>
+                                            <% } %>
                                         </li>
                                         <li>
                                             <a class="text-gray" href="./article?action=update&articleID=<%=record.getArticleID()%>">
@@ -93,10 +134,11 @@
                                             </a>
                                         </li>
                                         <li>
-                                            <a class="text-gray" href="javascript:void(0)">
-                                                <i class="anticon anticon-delete font-size-20" data-toggle="modal" data-target="#exampleModalDelete"></i>
+                                            <a class="text-gray" href="javascript:void(0)" title="Xóa">
+                                                <i class="anticon anticon-delete font-size-20" data-toggle="modal" data-target="#modalDelete"></i>
+
                                                 <!-- Modal -->
-                                                <div class="modal fade" id="exampleModalDelete">
+                                                <div class="modal fade" id="modalDelete">
                                                     <div class="modal-dialog">
                                                         <div class="modal-content">
                                                             <div class="modal-header">
@@ -106,40 +148,64 @@
                                                                 </button>
                                                             </div>
                                                             <div class="modal-body">
-                                                                Bạn có muốn xóa bài báo này không ?
+                                                                Bạn có muốn xóa vĩnh viễn bài báo này không ?
                                                             </div>
                                                             <div class="modal-footer">
                                                                 <button type="button" class="btn btn-default" data-dismiss="modal">Hủy</button>
-                                                                <form action="#">
+                                                                <form action="./article?action=submitDelete&articleID=<%=record.getArticleID()%>" method="post">
                                                                     <input type="submit" class="btn btn-primary" value="Xác nhận">
                                                                 </form>
                                                             </div>
                                                         </div>
                                                     </div>
                                                 </div>
-                                            </a>
+                                        	</a>
                                         </li>
                                     </ul>
                                 </div>
-                                <h2 class="font-weight-normal m-b-10"><%=record.getTitle()%></h2>
-                                <div class="d-flex m-b-30">
-                                    <div class="avatar avatar-cyan avatar-img">
+                                <h1 class="font-weight-normal m-b-10"><%=record.getTitle()%></h1>
+                                <div class="d-flex m-b-30 justify-content-between align-items-end">
+                                    <div class="d-flex align-items-center">
+                                    	<div class="avatar avatar-cyan avatar-img">
                                         <img src="assets/images/avatars/thumb-6.jpg" alt="">
                                     </div>
                                     <div class="m-l-15">
-                                        <a href="javascript:void(0);" class="text-dark m-b-0 font-weight-semibold">
-                                            <%=Arrays.toString(authors.toArray()).replace("[", "").replace("]", "")%>
-                                        </a>
-                                        <p class="m-b-0 text-muted font-size-13">
+                                    	<div class="d-flex align-items-center font-size-14">
+											<p class="m-b-0 text-black">
+                                                    Tác giả: 
+                                            </p>
+                                            <p class="m-b-0 ml-2 text-muted">
+                                                    <%=Arrays.toString(authors.toArray()).replace("[", "").replace("]", "")%>
+                                             </p>
+										</div>
+                                        
+                                        <div class="d-flex align-items-center font-size-14">
+											<p class="m-b-0 text-black">
+                                                    Thể loại: 
+                                            </p>
+                                            <p class="m-b-0 ml-2 text-muted">
+                                                    <%=arrayToString(record.getCategories()) %>
+                                             </p>
+										</div>
+										
+                                        <div class="m-b-0 d-flex align-items-center font-size-14">
+												<p class="m-b-0 text-black">
+                                                    Trạng thái: 
+                                            	</p>
+												<p class="m-b-0 ml-2 text-muted"><%=record.isLocked() ? "Không phát hành" : "Phát hành"%></p>
+										</div>
+                                    </div>
+                                    </div>
+                                    
+                                    <p class="m-b-0 pr-2 text-muted font-size-14 font-italic">
                                             <%
                                                 SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy MM:HH");
                                                 String time = dateFormat.format(record.getTime());
                                             %>
                                             <%=time%>
-                                        </p>
-                                    </div>
+                                    </p>
                                 </div>
-                                <img alt="" class="img-fluid w-100" src="assets/images/others/img-8.jpg">
+                                <img alt="" class="img-fluid w-100 rounded-lg" src="assets/images/others/img-8.jpg">
                                 <div class="m-t-30">
                                     <p><%=record.getContent()%></p>
                                 </div>

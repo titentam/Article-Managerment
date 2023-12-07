@@ -43,7 +43,12 @@
     String action = (String)request.getAttribute("action");
     var categories = (ArrayList<Category>)request.getAttribute("categories");
     var article = (Article)request.getAttribute("article");
-    var categoriesOld = (ArrayList<Category>)request.getAttribute("categoriesOld");
+    ArrayList<String> categoriesOld = new ArrayList<>();
+    if(article!=null){
+        for (var category:article.getCategories()) {
+            categoriesOld.add(category.getCategoryID());
+        }
+    }
 
 %>
 <div class="app">

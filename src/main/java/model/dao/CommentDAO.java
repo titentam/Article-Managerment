@@ -38,4 +38,15 @@ public class CommentDAO {
         }
         return list;
     }
+    
+    public void deleteCommentOfArticle(String articleID){
+        String sql = "Delete from comment where (`ArticleID` = ?);";
+        try {
+            PreparedStatement stmt = conn.prepareStatement(sql);
+            stmt.setString(1, articleID);
+            stmt.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
 }

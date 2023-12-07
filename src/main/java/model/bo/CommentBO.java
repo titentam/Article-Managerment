@@ -1,8 +1,6 @@
 package model.bo;
 
-import model.bean.Category;
 import model.bean.CommentView;
-import model.dao.CategoryDAO;
 import model.dao.CommentDAO;
 
 import java.util.ArrayList;
