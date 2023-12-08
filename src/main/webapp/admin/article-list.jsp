@@ -129,7 +129,7 @@
                             <div class="card-body">
                                 <div class="row">
                                     <div class="col-md-4">
-                                        <img class="img-fluid" style="border-radius: 10px" src="assets/images/others/img-2.jpg" alt="">
+                                        <img class="img-fluid" style="border-radius: 10px" src="../img/<%=item.getImage()%>" alt="Lỗi">
                                     </div>
                                     <div class="col-md-8">
                                         <h4 class="m-b-10"><%=item.getTitle()%></h4>

@@ -2,21 +2,31 @@ package controller;
 
 import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.MultipartConfig;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.Part;
 import model.bean.Article;
 import model.bo.ArticleBO;
 import model.bo.CategoryBO;
 import model.bo.CommentBO;
 
 import java.awt.image.CropImageFilter;
+import java.io.File;
 import java.io.IOException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 
 @WebServlet("/admin/article")
+@MultipartConfig(
+        fileSizeThreshold = 1024 * 1024 * 1, // 1 MB
+        maxFileSize = 1024 * 1024 * 10,      // 10 MB
+        maxRequestSize = 1024 * 1024 * 100   // 100 MB
+)
 public class ArticleController extends HttpServlet {
     private static final long serialVersionUID = 1L;
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -129,21 +139,41 @@ public class ArticleController extends HttpServlet {
         String title = request.getParameter("title");
         String content = request.getParameter("content");
         String[] categories = request.getParameterValues("category[]");
-
+        String fileName = processImageFile(request,response);
         var articleBO = new ArticleBO();
-        articleBO.insert(title,content,categories);
+        articleBO.insert(title,content,fileName,categories);
 
         this.ShowList(request,response);
 
+    }
+
+    private String processImageFile(HttpServletRequest request, HttpServletResponse response){
+        /* Receive file uploaded to the Servlet from the HTML5 form */
+        try {
+            Part filePart = request.getPart("thumbnail");
+            String fileName = filePart.getSubmittedFileName();
+            if(fileName.isEmpty()) return "default.jpg";
+
+            String tmp = request.getServletContext().getRealPath("/");
+
+            Path path = Paths.get(tmp).getParent().getParent();
+            String uploadDirectory = path.toString() +"\\src\\main\\webapp\\img\\" ;
+
+            filePart.write(uploadDirectory + fileName);
+            return fileName;
+        } catch (IOException | ServletException e) {
+            throw new RuntimeException(e);
+        }
     }
     private void submitUpdate(HttpServletRequest request, HttpServletResponse response) {
         String id = request.getParameter("articleID");
         String title = request.getParameter("title");
         String content = request.getParameter("content");
         String[] categories = request.getParameterValues("category[]");
+        String fileName = processImageFile(request,response);
 
         var articleBO = new ArticleBO();
-        articleBO.update(new Article(id, title, content), new ArrayList<>(Arrays.asList(categories)));
+        articleBO.update(new Article(id, title, content,fileName), new ArrayList<>(Arrays.asList(categories)));
 
         this.ShowList(request, response);
     }

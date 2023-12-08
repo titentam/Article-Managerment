@@ -39,9 +39,10 @@ public class ArticleBO {
         return article;
     }
 
-    public void insert(String title, String content, String[] categories){
+    public void insert(String title, String content,String fileName, String[] categories){
         String id = generateID(10);
-        var record = new Article(id,title,content);
+        var record = new Article(id,title,content,fileName);
+
         dao.insert(record);
         for (var categoryID:categories) {
             new CategoryDAO().insertCategory(id,categoryID);

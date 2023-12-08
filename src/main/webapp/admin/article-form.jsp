@@ -77,7 +77,7 @@
                 </div>
                 <div class="container">
 
-                    <form action="./article?action=<%=action%>" method="post">
+                    <form action="./article?action=<%=action%>" method="post" enctype="multipart/form-data">
                         <div class="card">
                             <div class="card-body">
                                 <div class="form-group">
@@ -107,6 +107,10 @@
                                 <div class="form-group">
                                     <label class="font-weight-semibold" for="tiny">Nội dung</label>
                                     <textarea name="content" id="tiny"></textarea>
+                                </div>
+                                <div class="form-group">
+                                    <label class="font-weight-semibold" for="thumbnail">Hình nhỏ</label>
+                                    <input type="file" id="thumbnail" name="thumbnail" value="<%=article!=null?article.getImage():""%>">
                                 </div>
                                 <input type="hidden" name="articleID" value="<%=article!=null?article.getArticleID():""%>">
                                 <div class="form-group">

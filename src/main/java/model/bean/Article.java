@@ -14,6 +14,7 @@ public class Article {
     private boolean locked;
     private Timestamp time;
     private int viewers;
+    private String image;
     private ArrayList<Category> categories;
 
     // Constructors, getters, and setters
@@ -34,12 +35,24 @@ public class Article {
 		this.content = content;
 		this.time = time;
 		this.locked = locked;
-		this.setViewers(viewers);
+		this.viewers = viewers;
 	}
-	public Article(String articleID, String title, String content) {
+
+    public Article(String articleID, String title, String content, boolean locked,  Timestamp time, String image, int viewers) {
+        super();
         this.articleID = articleID;
         this.title = title;
         this.content = content;
+        this.time = time;
+        this.locked = locked;
+        this.image = image;
+        this.viewers = viewers;
+    }
+	public Article(String articleID, String title, String content,String image) {
+        this.articleID = articleID;
+        this.title = title;
+        this.content = content;
+        this.image = image;
     }
 
     public String getArticleID() {
@@ -97,4 +110,12 @@ public class Article {
 	public void setCategories(ArrayList<Category> categories) {
 		this.categories = categories;
 	}
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
+    }
 }
