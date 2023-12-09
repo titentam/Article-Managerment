@@ -8,12 +8,15 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import model.bean.Article;
 import model.bean.Category;
+import model.bean.Comment;
 import model.bo.ArticleBO;
 import model.bo.CategoryBO;
 import model.bo.CommentBO;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 @WebServlet("/client/article")
 public class ArticleClientSideController extends HttpServlet {
@@ -26,12 +29,29 @@ public class ArticleClientSideController extends HttpServlet {
                 case "detail":
                     detail(request,response);
                     break;
+                case "category":
+                    category(request,response);
+                    break;
             }
         }
         else{
            listTop5Articles(request,response);
         }
     }
+
+    private void category(HttpServletRequest request, HttpServletResponse response) {
+        Map<Category,ArrayList<Article>> map = new HashMap<>();
+        var categoryBO = new CategoryBO();
+        var articleBO = new ArticleBO();
+        var categories = categoryBO.getList();
+        for (var category:categories) {
+            var articles = articleBO.getList(category.getCategoryID(),"none",null);
+            map.put(category,articles);
+        }
+        request.setAttribute("map",map);
+        ForwardUrl("/client/category.jsp",request,response);
+    }
+
     private void listTop5Articles(HttpServletRequest request, HttpServletResponse response) {
         var articleBO = new ArticleBO();
         var categoryBO=new CategoryBO();
@@ -68,6 +88,10 @@ public class ArticleClientSideController extends HttpServlet {
 
     private void detail(HttpServletRequest request, HttpServletResponse response) {
         String id = request.getParameter("articleID");
+        this.showDetail(id,request,response);
+    }
+
+    private void showDetail(String id,HttpServletRequest request, HttpServletResponse response){
         var articleBO = new ArticleBO();
         var commentBO = new CommentBO();
         var record = articleBO.getArticle(id);
@@ -85,13 +109,23 @@ public class ArticleClientSideController extends HttpServlet {
         String action = request.getParameter("action");
         if(action!=null){
             switch (action) {
-                case "submitInsert":
-                    //submitInsert(request,response);
+                case "submitComment":
+                    submitComment(request,response);
                     break;
             }
 
         }
     }
+
+    private void submitComment(HttpServletRequest request, HttpServletResponse response) {
+        var articleID = request.getParameter("articleID");
+        var username = request.getParameter("username");
+        var comment = request.getParameter("comment");
+
+        new CommentBO().insert(new Comment(username,articleID,comment));
+        this.showDetail(articleID,request,response);
+    }
+
     private void ForwardUrl(String url,HttpServletRequest request, HttpServletResponse response){
         RequestDispatcher rd = request.getServletContext().getRequestDispatcher(url);
         try {

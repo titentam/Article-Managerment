@@ -2,6 +2,7 @@ package model.dao;
 
 import db.DBConnection;
 import model.bean.Category;
+import model.bean.Comment;
 import model.bean.CommentView;
 
 import java.sql.Connection;
@@ -45,6 +46,20 @@ public class CommentDAO {
             PreparedStatement stmt = conn.prepareStatement(sql);
             stmt.setString(1, articleID);
             stmt.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public void insert(Comment comment){
+        String sql = "INSERT INTO comment(`Username`, `ArticleID`, `Content`) VALUES (?, ?, ?);";
+        try {
+            PreparedStatement stmt = conn.prepareStatement(sql);
+            stmt.setString(1,comment.getUsername());
+            stmt.setString(2,comment.getArticleID());
+            stmt.setString(3,comment.getContent());
+            int rs = stmt.executeUpdate();
+
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
