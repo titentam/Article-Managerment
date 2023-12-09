@@ -7,6 +7,7 @@ import model.bean.Category;
 import java.sql.*;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
 
 public class ArticleDAO {
     private Connection conn;
@@ -191,4 +192,82 @@ public class ArticleDAO {
             throw new RuntimeException(e);
         }
     }
+    public ArrayList<Article> getTop5ArticlesByTime() {
+        ArrayList<Article> top3Articles = new ArrayList<>();
+        String sql = "SELECT * FROM article ORDER BY Time DESC LIMIT 5";
+
+        try {
+            PreparedStatement stmt = conn.prepareStatement(sql);
+            ResultSet rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                Article article = new Article(
+                        rs.getString(1), rs.getString(2),
+                        rs.getString(3), rs.getBoolean(4),
+                        rs.getTimestamp(5), rs.getString(6),
+                        rs.getInt(7)
+                );
+                top3Articles.add(article);
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+        // Đảo ngược danh sách để có thứ tự từ mới đến cũ
+        Collections.reverse(top3Articles);
+
+        return top3Articles;
+    }
+    public ArrayList<Article> getArticlesByCategory(String categoryName) {
+        ArrayList<Article> articlesByCategory = new ArrayList<>();
+        String sql = "SELECT a.* FROM article a "
+                + "JOIN articlecategory ac ON a.ArticleID = ac.ArticleID "
+                + "JOIN category c ON ac.CategoryID = c.CategoryID "
+                + "WHERE c.Name = ?";
+
+        try {
+            PreparedStatement stmt = conn.prepareStatement(sql);
+            stmt.setString(1, categoryName);
+            ResultSet rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                Article article = new Article(
+                        rs.getString(1), rs.getString(2),
+                        rs.getString(3), rs.getBoolean(4),
+                        rs.getTimestamp(5), rs.getString(6),
+                        rs.getInt(7)
+                );
+                articlesByCategory.add(article);
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+        return articlesByCategory;
+    }
+    public ArrayList<Article> getTop3MostPopular() {
+        ArrayList<Article> top3MostPopular = new ArrayList<>();
+        String sql = "SELECT * FROM article ORDER BY Viewers DESC LIMIT 5";
+
+        try {
+            PreparedStatement stmt = conn.prepareStatement(sql);
+            ResultSet rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                Article article = new Article(
+                        rs.getString(1), rs.getString(2),
+                        rs.getString(3), rs.getBoolean(4),
+                        rs.getTimestamp(5), rs.getString(6),
+                        rs.getInt(7)
+                );
+                top3MostPopular.add(article);
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+        return top3MostPopular;
+    }
+
 }
+
