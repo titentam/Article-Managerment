@@ -1,7 +1,6 @@
 package model.bo;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 
 import model.bean.User;
 import model.dao.CommentDAO;
@@ -30,6 +29,14 @@ public class UserBO {
     
     public void updateUser(User user) {
     	userDAO.updateUser(user, null);
+    }
+    
+    public boolean updatePassword(String username, String oldPassword, String newPassword) {
+    	boolean isCorrectPassword = userDAO.checkPassword(username, oldPassword);
+    	if (isCorrectPassword) {
+    		userDAO.updatePassword(username, newPassword);
+    	}
+    	return isCorrectPassword;
     }
     
     public void deleteUser(String username) {

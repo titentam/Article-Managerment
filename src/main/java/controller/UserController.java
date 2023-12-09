@@ -6,15 +6,19 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import model.bean.Role;
 import model.bean.User;
 import model.bo.RoleBO;
 import model.bo.UserBO;
 
 import java.io.IOException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
-@WebServlet("/admin/manage-user")
+@WebServlet(urlPatterns = {"/admin/manage-user", "/client/account"})
+
 public class UserController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private final UserBO userBO = new UserBO();
@@ -26,7 +30,7 @@ public class UserController extends HttpServlet {
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String action = request.getParameter("action") != null ? request.getParameter("action") : "";
-
+		
 		switch (action) {
 		case "user-update":
 		case "user-delete":
@@ -37,6 +41,15 @@ public class UserController extends HttpServlet {
 			break;
 		case "submit-delete":
 			deleteUser(request, response);
+			break;
+		case "account-setting":
+			getUserDetail(request, response);
+			break;
+		case "update":
+			updateAccount(request, response);
+			break;
+		case "change-password":
+			updatePassword(request, response);
 			break;
 		default:
 			getListUser(request, response);
@@ -99,5 +112,63 @@ public class UserController extends HttpServlet {
 		request.setAttribute("username", username);
 		RequestDispatcher rd = getServletContext().getRequestDispatcher(url);
 		rd.forward(request, response);
+	}
+	
+	// Cho phía user
+	protected synchronized void getUserDetail(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		HttpSession session = request.getSession();
+		String username = (String) session.getAttribute("username");
+		
+		if (username != null) {
+			User user = userBO.getUserDetail(username);
+			request.setAttribute("user", user);
+			
+			String url = "/client/account-setting.jsp";
+			RequestDispatcher rd = getServletContext().getRequestDispatcher(url);
+			rd.forward(request, response);
+		} else {
+			String url = "/login";
+			RequestDispatcher rd = getServletContext().getRequestDispatcher(url);
+			rd.forward(request, response);
+		}
+	}
+	
+	protected synchronized void updateAccount(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		HttpSession session = request.getSession();
+		String username = (String) session.getAttribute("username");
+		String name = request.getParameter("name");
+		String email = request.getParameter("email");
+		String dobStr = request.getParameter("dob");
+		String genderStr = request.getParameter("gender");
+		
+		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+		int gender = Integer.parseInt(genderStr);
+		java.util.Date dob;
+		try {
+			dob = format.parse(dobStr);
+		} catch (ParseException e) {
+			dob = new java.util.Date(System.currentTimeMillis());
+		}
+		
+		User user = new User(username, null, name, email, dob, gender, null);
+		userBO.updateUser(user);
+		request.setAttribute("update-message", "Cập nhật thành công!");
+		getUserDetail(request, response);
+	}
+	
+	protected synchronized void updatePassword(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		HttpSession session = request.getSession();
+		String username = (String) session.getAttribute("username");
+		String oldPassword = request.getParameter("oldPassword");
+		String newPassword = request.getParameter("newPassword");
+		
+		boolean isCorrectPass = userBO.updatePassword(username, oldPassword, newPassword);
+		if (!isCorrectPass)
+			request.setAttribute("pass-message", "Mật khẩu không đúng!");
+		else {
+			request.setAttribute("pass-message", "Cập nhật thành công!");
+		}
+		
+		getUserDetail(request, response);
 	}
 }

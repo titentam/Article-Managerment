@@ -6,6 +6,8 @@
   To change this template use File | Settings | File Templates.
 --%>
 <!-- Preloader Start -->
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+         pageEncoding="UTF-8"%>
 <div id="preloader-active">
     <div class="preloader d-flex align-items-center justify-content-center">
         <div class="preloader-inner position-relative">
@@ -27,13 +29,13 @@
                         <div class="row d-flex justify-content-between align-items-center">
                             <div class="header-info-left">
                                 <ul>
-                                    <li class="title"><span class="flaticon-energy"></span> trending-title</li>
-                                    <li>Class property employ ancho red multi level mansion</li>
+                                    <li class="title"><span class="flaticon-energy"></span> bknews</li>
+                                    <li>Bài thực hành CNW</li>
                                 </ul>
                             </div>
                             <div class="header-info-right">
                                 <ul class="header-date">
-                                    <li><span class="flaticon-calendar"></span> +880166 253 232</li>
+                                    <li><span class="flaticon-calendar"></span> 0931211369</li>
                                 </ul>
                             </div>
                         </div>
@@ -69,31 +71,40 @@
                             <div class="main-menu d-none d-md-block">
                                 <nav>
                                     <ul id="navigation">
-                                        <li><a href="index.html">Home</a></li>
-                                        <li><a href="about.html">about</a></li>
-                                        <li><a href="categori.html">Category</a></li>
-                                        <li><a href="latest_news.html">Latest News</a></li>
-                                        <li><a href="#">Pages</a>
+                                        <li><a href="../article-detail.jsp">Home</a></li>
+                                        <li><a href="categori.html">Category</a>
                                             <ul class="submenu">
                                                 <li><a href="../blog.jsp">Blog</a></li>
                                                 <li><a href="blog_details.html">Blog Details</a></li>
                                                 <li><a href="elements.html">Element</a></li>
                                             </ul>
                                         </li>
-                                        <li><a href="contact.html">Contact</a></li>
                                     </ul>
                                 </nav>
                             </div>
                         </div>
                         <div class="col-xl-4 col-lg-4 col-md-4">
-                            <div class="header-right f-right d-none d-lg-block">
+                            <div class="header-right f-right d-none d-lg-block main-menu ">
                                 <!-- Heder social -->
+                                <%
+                                	String username = (String) session.getAttribute("username");
+                                %>
                                 <ul class="header-social">
-                                    <li><a href="https://www.fb.com/sai4ull"><i class="fab fa-facebook-f"></i></a></li>
-                                    <li><a href="#"><i class="fab fa-twitter"></i></a></li>
-                                    <li><a href="#"><i class="fab fa-instagram"></i></a></li>
-                                    <li> <a href="#"><i class="fab fa-youtube"></i></a></li>
+                                    <li><a href="categori.html">Tài khoản</a>
+                                        <% if (username == null) { %>
+                                        <ul class="submenu">
+                                        	<li><a href="">Đăng nhập</a></li>
+                                            <li><a href="blog_details.html">Đăng ký</a></li>
+                                        </ul>
+                                        <% } else { %>
+                                        <ul class="submenu">
+                                        	<li><a href="../client/account?action=account-setting">Tài khoản</a></li>
+                                            <li><a href="../logout">Đăng xuất</a></li>
+                                        </ul>
+                                        <% } %>
+                                    </li>
                                 </ul>
+                                
                                 <!-- Search Nav -->
                                 <div class="nav-search search-switch">
                                     <i class="fa fa-search"></i>

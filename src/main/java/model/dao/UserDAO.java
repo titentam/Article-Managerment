@@ -18,17 +18,17 @@ public class UserDAO {
 
 	public ArrayList<User> getAllUser(String categoryRole, String searchText) {
 		ArrayList<User> list = new ArrayList<User>();
-		
+
 		try {
 			String query = "select * from user inner join role where user.RoleID = role.RoleID and locked=0";
 			if (!categoryRole.equals("all")) {
 				query += " and user.RoleID = '" + categoryRole + "'";
 			}
 			if (searchText != null) {
-				query += " and (username like '%" + searchText 
-						+ "%' or user.name like '%" + searchText + "%' or email like '%" + searchText + "%')";
+				query += " and (username like '%" + searchText + "%' or user.name like '%" + searchText
+						+ "%' or email like '%" + searchText + "%')";
 			}
-			
+
 			PreparedStatement stmt = conn.prepareStatement(query);
 			ResultSet rs = stmt.executeQuery();
 			while (rs.next()) {
@@ -76,33 +76,62 @@ public class UserDAO {
 
 	public void updateUser(User user, String action) {
 		try {
-			String query;
-			if (action.equals("update-role"))
+			String query = null;
+			if (action == null)
+				query = "update user set name=?, email=?, dob=?, gender=? where username=?";
+			else if (action.equals("update-role"))
 				query = "update user set RoleID=? where username=?";
-			else
-				query = "update user set name=?, email=?, dob=?,gender=?, RoleID=? where username=?";
 
 			PreparedStatement stmt = conn.prepareStatement(query);
-			if (action.equals("update-role")) {
-				stmt.setString(1, user.getRoleID());
-				stmt.setString(2, user.getUsername());
-			} else if (action.equals("delete-user")) {
-				stmt.setString(1, user.getUsername());
-			} else {
+			if (action == null) {
 				stmt.setString(1, user.getName());
 				stmt.setString(2, user.getEmail());
-				stmt.setDate(3, (java.sql.Date) user.getDob());
+				stmt.setDate(3, new java.sql.Date(user.getDob().getTime()));
 				stmt.setInt(4, user.getGender());
-				stmt.setString(6, user.getRoleID());
-				stmt.setString(7, user.getUsername());
+				stmt.setString(5, user.getUsername());
+			} else if (action.equals("update-role")) {
+				stmt.setString(1, user.getRoleID());
+				stmt.setString(2, user.getUsername());
 			}
 			stmt.executeUpdate();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
+
+	public void updatePassword(String username, String newPassword) {
+		try {
+			String query = null;
+			query = "update user set password=? where username=?";
+
+			PreparedStatement stmt = conn.prepareStatement(query);
+			stmt.setString(1, newPassword);
+			stmt.setString(2, username);
+			stmt.executeUpdate();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
 	
-	public void deleteUser (String username) {
+	public boolean checkPassword(String username, String oldPassword) {
+		try {
+			String query = null;
+			query = "select * from user where username=? and password=?";
+
+			PreparedStatement stmt = conn.prepareStatement(query);
+			stmt.setString(1, username);
+			stmt.setString(2, oldPassword);
+			ResultSet rs = stmt.executeQuery();
+			while (rs.next()) {
+				return true;
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return false;
+	}
+
+	public void deleteUser(String username) {
 		try {
 			String query = "update user set Locked=1 where username=?";
 			PreparedStatement stmt = conn.prepareStatement(query);
