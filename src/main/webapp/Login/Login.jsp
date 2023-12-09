@@ -20,7 +20,8 @@
                         <div class="card shadow-lg">
                             <div class="card-body">
                                 <%
-                                    String loginMessage = (String) request.getAttribute("loginMessage");
+                                    String loginMessage = (String)session.getAttribute("errormessage");
+                                    session.removeAttribute("errormessage");
                                     if (loginMessage != null) {
                                 %>
                                 <div style="color: red; margin-bottom: 10px;">

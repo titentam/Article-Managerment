@@ -6,15 +6,11 @@
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <title>Articles Manager</title>
-
     <!-- Favicon -->
     <link rel="shortcut icon" href="assets/images/logo/favicon.png">
-
     <!-- page css -->
-
     <!-- Core css -->
     <link href="assets/css/app.min.css" rel="stylesheet">
-
 </head>
 
 <body>
@@ -355,7 +351,7 @@
 
     <!-- Core JS -->
     <script src="assets/js/app.min.js"></script>
-
+    </div>
 </body>
 
 </html>

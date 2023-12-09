@@ -21,14 +21,6 @@
 <%@include file="component/header.jsp"%>
 
 <main>
-    <%! public String arrayToString(ArrayList<Category> categories) {
-        StringBuilder builder = new StringBuilder();
-        for (Category category1 : categories) {
-            builder.append(category1.getName()).append(", ");
-        }
-        builder.deleteCharAt(builder.length() - 2);
-        return builder.toString();
-    }%>
     <!-- Trending Area Start -->
         <div style="margin-top: 7rem" class="container">
             <div class="trending-main">
