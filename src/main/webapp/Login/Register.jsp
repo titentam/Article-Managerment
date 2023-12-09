@@ -120,12 +120,22 @@
                                         <input name="confirm" type="password" class="form-control" id="confirmPassword" placeholder="Confirm Password">
                                     </div>
                                     <div id="errorDisplay" style="color: red; margin-bottom: 10px;"></div>
-                                    <div class="form-group">
+                                    <div class="form-group mb-0">
                                         <div class="d-flex align-items-center justify-content-between p-t-15">
-                                            <div class="checkbox">
+                                           <div>
+                                            	<div class="checkbox">
                                                 <input id="checkbox" type="checkbox">
                                                 <label for="checkbox"><span>I have read the <a href="">agreement</a></span></label>
-                                            </div>
+                                                </div>
+                                           </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group pt-0">
+                                        <div class="d-flex align-items-center justify-content-between p-t-15">
+                                            <span class="font-size-14 text-muted">
+                                                    You have an account?
+                                                    <a class="normal" href="Login.jsp"> Login</a>
+                                            </span>
                                             <button type="submit" class="btn btn-primary">Sign Up</button>
                                         </div>
                                     </div>

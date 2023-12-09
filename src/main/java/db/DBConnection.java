@@ -10,8 +10,6 @@ public class DBConnection {
     public static Connection getConn() {
 
         try {
-
-            //step:1 for connection - load the driver class
             Class.forName("com.mysql.cj.jdbc.Driver");
 
             //step:2- create a connection
