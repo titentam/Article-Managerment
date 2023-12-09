@@ -15,6 +15,8 @@ import model.bo.CommentBO;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 @WebServlet("/client/article")
 public class ArticleClientSideController extends HttpServlet {
@@ -27,12 +29,29 @@ public class ArticleClientSideController extends HttpServlet {
                 case "detail":
                     detail(request,response);
                     break;
+                case "category":
+                    category(request,response);
+                    break;
             }
         }
         else{
            listTop5Articles(request,response);
         }
     }
+
+    private void category(HttpServletRequest request, HttpServletResponse response) {
+        Map<Category,ArrayList<Article>> map = new HashMap<>();
+        var categoryBO = new CategoryBO();
+        var articleBO = new ArticleBO();
+        var categories = categoryBO.getList();
+        for (var category:categories) {
+            var articles = articleBO.getList(category.getCategoryID(),"none",null);
+            map.put(category,articles);
+        }
+        request.setAttribute("map",map);
+        ForwardUrl("/client/category.jsp",request,response);
+    }
+
     private void listTop5Articles(HttpServletRequest request, HttpServletResponse response) {
         var articleBO = new ArticleBO();
         var categoryBO=new CategoryBO();

@@ -29,6 +29,9 @@ public class ArticleBO {
     	ArrayList<Article> res = new ArrayList<>(list.subList(offset, Math.min(offset + pageSize, list.size())));
     	return new Object[] { res, numberOfPages };
     }
+    public ArrayList<Article> getList(String category, String sortBy, String searchText){
+        return dao.getList(category, sortBy, searchText);
+    }
     public ArrayList<String> getAuthors(String id){
         return dao.getAuthors(id);
     }
