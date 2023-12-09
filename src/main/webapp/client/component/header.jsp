@@ -69,18 +69,8 @@
                             <div class="main-menu d-none d-md-block">
                                 <nav>
                                     <ul id="navigation">
-                                        <li><a href="index.html">Home</a></li>
-                                        <li><a href="about.html">about</a></li>
-                                        <li><a href="../categori.jsp">Category</a></li>
-                                        <li><a href="latest_news.html">Latest News</a></li>
-                                        <li><a href="#">Pages</a>
-                                            <ul class="submenu">
-                                                <li><a href="../blog.jsp">Blog</a></li>
-                                                <li><a href="blog_details.html">Blog Details</a></li>
-                                                <li><a href="elements.html">Element</a></li>
-                                            </ul>
-                                        </li>
-                                        <li><a href="contact.html">Contact</a></li>
+                                        <li><a href="../client/article">Home</a></li>
+                                        <li><a href="../client/article?action=category">Category</a></li>
                                     </ul>
                                 </nav>
                             </div>

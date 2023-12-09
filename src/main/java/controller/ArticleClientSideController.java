@@ -73,15 +73,13 @@ public class ArticleClientSideController extends HttpServlet {
         request.setAttribute("top3MostPopular", top3MostPopular);
         request.setAttribute("listAuthorsTop3MostPopular", listAuthorsTop3MostPopular);
 
-        ArrayList<Category> allCategory=categoryBO.getList();
-        ArrayList<Article> getArticleByCategpry = articleBO.getArticlesByCategory(categoryName);
-        ArrayList<ArrayList<String>> listAuthorsArticleByCategory = new ArrayList<>();
-        for (var item : getArticleByCategpry) {
-            listAuthorsArticleByCategory.add(articleBO.getAuthors(item.getArticleID()));
+        Map<Category,ArrayList<Article>> map = new HashMap<>();
+        var categories = categoryBO.getList();
+        for (var category:categories) {
+            var articles = articleBO.getList(category.getCategoryID(),"none",null);
+            map.put(category,articles);
         }
-        request.setAttribute("listAuthorsArticleByCategory", listAuthorsArticleByCategory);
-        request.setAttribute("listCategory", allCategory);
-        request.setAttribute("getArticleByCategpry", getArticleByCategpry);
+        request.setAttribute("map",map);
         ForwardUrl("/client/index.jsp", request, response);
     }
 
