@@ -98,4 +98,11 @@ public class ArticleBO {
         // Trả về chuỗi con độ dài mong muốn
         return uuidString.substring(0, length);
     }
+    public ArrayList<Article> getTop5ArticlesByTime() {
+        return dao.getTop5ArticlesByTime();
+    }
+    public ArrayList<Article> getTop3MostPopular(){return dao.getTop3MostPopular();}
+    public ArrayList<Article> getArticlesByCategory(String categoryName){return dao.getArticlesByCategory(categoryName);}
+
+
 }

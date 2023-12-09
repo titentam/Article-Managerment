@@ -1,3 +1,8 @@
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page import="java.util.ArrayList" %>
+<%@ page import="model.bean.Article" %>
+<%@ page import="model.bean.Category" %>
+<%@ page import="java.util.Arrays" %>
 <!doctype html>
 <html class="no-js" lang="zxx">
 <head>
@@ -14,90 +19,74 @@
 <%@include file="component/header.jsp"%>
 
 <main>
+    <%! public String arrayToString(ArrayList<Category> categories) {
+        StringBuilder builder = new StringBuilder();
+        for (Category category1 : categories) {
+            builder.append(category1.getName()).append(", ");
+        }
+        builder.deleteCharAt(builder.length() - 2);
+        return builder.toString();
+    }%>
     <!-- Trending Area Start -->
-    <div class="trending-area fix pt-25 gray-bg">
+
         <div class="container">
             <div class="trending-main">
                 <div class="row">
                     <div class="col-lg-8">
-                        <!-- Trending Top -->
                         <div class="slider-active">
+                            <%
+                                ArrayList<Article> top5Articles = (ArrayList<Article>) request.getAttribute("top5Articles");
+                                var listAuthorsTop5 = (ArrayList<ArrayList<String>>)request.getAttribute("listAuthorsTop5");
+                                for (int i = 0; i < Math.min(3, top5Articles.size()); i++) {
+                                    Article article = top5Articles.get(i);
+                                    String  author=Arrays.toString(listAuthorsTop5.get(i).toArray()).replace("[", "").replace("]", "");
+                            %>
                             <!-- Single -->
                             <div class="single-slider">
                                 <div class="trending-top mb-30">
                                     <div class="trend-top-img">
-                                        <img src="assets/img/trending/trending_top2.jpg" alt="">
+                                          <img style="width:100%;"  src="../img/<%= article.getImage() %>" alt="">
                                         <div class="trend-top-cap">
-                                            <span class="bgr" data-animation="fadeInUp" data-delay=".2s" data-duration="1000ms">Business</span>
-                                            <h2><a href="latest_news.html" data-animation="fadeInUp" data-delay=".4s" data-duration="1000ms">Anna Lora Stuns In White At Her Australian Premiere</a></h2>
-                                            <p data-animation="fadeInUp" data-delay=".6s" data-duration="1000ms">by Alice cloe   -   Jun 19, 2020</p>
+                                            <span class="bgr" data-animation="fadeInUp" data-delay=".2s" data-duration="1000ms"><%= article.getCategories() %></span>
+                                            <h2><a href="../client/article?action=detail&articleID=<%=article.getArticleID()%>" data-animation="fadeInUp" data-delay=".4s" data-duration="1000ms"><%= article.getTitle() %></a></h2>
+                                            <p data-animation="fadeInUp" data-delay=".6s" data-duration="1000ms">by  <%=author %> - <%= article.getTime() %></p>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                            <!-- Single -->
-                            <div class="single-slider">
-                                <div class="trending-top mb-30">
-                                    <div class="trend-top-img">
-                                        <img src="assets/img/trending/trending_top02.jpg" alt="">
-                                        <div class="trend-top-cap">
-                                            <span class="bgr" data-animation="fadeInUp" data-delay=".2s" data-duration="1000ms">Business</span>
-                                            <h2><a href="latest_news.html" data-animation="fadeInUp" data-delay=".4s" data-duration="1000ms">Anna Lora Stuns In White At Her Australian Premiere</a></h2>
-                                            <p data-animation="fadeInUp" data-delay=".6s" data-duration="1000ms">by Alice cloe   -   Jun 19, 2020</p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <!-- Single -->
-                            <div class="single-slider">
-                                <div class="trending-top mb-30">
-                                    <div class="trend-top-img">
-                                        <img src="assets/img/trending/trending_top03.jpg" alt="">
-                                        <div class="trend-top-cap">
-                                            <span class="bgr" data-animation="fadeInUp" data-delay=".2s" data-duration="1000ms">Business</span>
-                                            <h2><a href="latest_news.html" data-animation="fadeInUp" data-delay=".4s" data-duration="1000ms">Anna Lora Stuns In White At Her Australian Premiere</a></h2>
-                                            <p data-animation="fadeInUp" data-delay=".6s" data-duration="1000ms">by Alice cloe   -   Jun 19, 2020</p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+                            <%
+                                }
+                            %>
                         </div>
                     </div>
                     <!-- Right content -->
                     <div class="col-lg-4">
-                            <!-- Trending Top -->
                         <div class="row">
+                            <%
+                                for (int i = 3; i < top5Articles.size(); i++) {
+                                    Article article = top5Articles.get(i);
+                                    String  author=Arrays.toString(listAuthorsTop5.get(i).toArray()).replace("[", "").replace("]", "");
+                            %>
                             <div class="col-lg-12 col-md-6 col-sm-6">
                                 <div class="trending-top mb-30">
                                     <div class="trend-top-img">
-                                        <img src="assets/img/trending/trending_top3.jpg" alt="">
+                                          <img style="width:100%;"  src="../img/<%= article.getImage() %>" alt="">
                                         <div class="trend-top-cap trend-top-cap2">
-                                            <span class="bgb">FASHION</span>
-                                            <h2><a href="latest_news.html">Secretart for Economic Air
-                                                plane that looks like</a></h2>
-                                            <p>by Alice cloe   -   Jun 19, 2020</p>
+                                            <span class="bgb"><%= article.getCategories() %></span>
+                                            <h2><a href="../client/article?action=detail&articleID=<%=article.getArticleID()%>"><%= article.getTitle() %></a></h2>
+                                            <p>by  <%=author %> - <%= article.getTime() %></p>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-lg-12 col-md-6 col-sm-6">
-                                <div class="trending-top mb-30">
-                                    <div class="trend-top-img">
-                                        <img src="assets/img/trending/trending_top4.jpg" alt="">
-                                        <div class="trend-top-cap trend-top-cap2">
-                                            <span class="bgg">TECH </span>
-                                            <h2><a href="latest_news.html">Secretart for Economic Air plane that looks like</a></h2>
-                                            <p>by Alice cloe   -   Jun 19, 2020</p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+                            <%
+                                }
+                            %>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
     <!-- Trending Area End -->
     <!-- Whats New Start -->
     <section class="whats-news-area pt-50 pb-20 gray-bg">
@@ -114,15 +103,21 @@
                         </div>
                         <div class="col-xl-8 col-md-9">
                             <div class="properties__button">
-                                <!--Nav Button  -->                                            
-                                <nav>                                                 
+                                <!--Nav Button  -->
+
+                                <nav>
+
                                     <div class="nav nav-tabs" id="nav-tab" role="tablist">
-                                        <a class="nav-item nav-link active" id="nav-home-tab" data-toggle="tab" href="#nav-home" role="tab" aria-controls="nav-home" aria-selected="true">Lifestyle</a>
-                                        <a class="nav-item nav-link" id="nav-profile-tab" data-toggle="tab" href="#nav-profile" role="tab" aria-controls="nav-profile" aria-selected="false">Travel</a>
-                                        <a class="nav-item nav-link" id="nav-contact-tab" data-toggle="tab" href="#nav-contact" role="tab" aria-controls="nav-contact" aria-selected="false">Fashion</a>
-                                        <a class="nav-item nav-link" id="nav-last-tab" data-toggle="tab" href="#nav-last" role="tab" aria-controls="nav-contact" aria-selected="false">Sports</a>
-                                        <a class="nav-item nav-link" id="nav-Sports" data-toggle="tab" href="#nav-nav-Sport" role="tab" aria-controls="nav-contact" aria-selected="false">Technology</a>
+                                        <%
+                                            ArrayList<Category> allCategory=(ArrayList<Category>)request.getAttribute("listCategory");
+                                            for (int j=0;j<Math.min(5, allCategory.size());j++){
+                                                Category category=allCategory.get(j);
+
+                                        %>
+                                        <a class="nav-item nav-link active" id="nav-home-tab" data-toggle="tab" href="../client/article?categoryName=<%=category.getName()%>" role="tab" aria-controls="nav-home" aria-selected="true"><%=category.getName()%></a>
+                                        <%}%>
                                     </div>
+
                                 </nav>
                                 <!--End Nav Button  -->
                             </div>
@@ -134,73 +129,48 @@
                             <!-- Nav Card -->
                             <div class="tab-content" id="nav-tabContent">
                                 <!-- card one -->
-                                <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">       
+                                <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
                                     <div class="row">
+                                        <%
+                                            ArrayList<Article> getArticleByCategory = (ArrayList<Article>) request.getAttribute("getArticleByCategpry");
+                                            var listAuthorsArticleByCategory = (ArrayList<ArrayList<String>>)request.getAttribute("listAuthorsArticleByCategory");
+
+                                        %>
                                         <!-- Left Details Caption -->
                                         <div class="col-xl-6 col-lg-12">
                                             <div class="whats-news-single mb-40 mb-40">
                                                 <div class="whates-img">
-                                                    <img src="assets/img/gallery/whats_news_details1.png" alt="">
+                                                      <img style="width:100%;"  src="../img/<%=getArticleByCategory.get(0).getImage()%>" alt="">
                                                 </div>
                                                 <div class="whates-caption">
-                                                    <h4><a href="latest_news.html">Secretart for Economic Air plane that looks like</a></h4>
-                                                    <span>by Alice cloe   -   Jun 19, 2020</span>
-                                                    <p>Struggling to sell one multi-million dollar home currently on the market won’t stop actress and singer Jennifer Lopez.</p>
+                                                    <h4><a href="../client/article?action=detail&articleID=<%=getArticleByCategory.get(0).getArticleID()%>"><%=getArticleByCategory.get(0).getTitle()%></a></h4>
+                                                    <span>by <%=Arrays.toString(listAuthorsArticleByCategory.get(0).toArray()).replace("[", "").replace("]", "")%>   -   <%=getArticleByCategory.get(0).getTime()%></span>
+
                                                 </div>
                                             </div>
                                         </div>
                                         <!-- Right single caption -->
                                         <div class="col-xl-6 col-lg-12">
                                             <div class="row">
+                                                <%
+                                                    for (int i = 1; i < Math.min(5, getArticleByCategory.size()); i++) {
+                                                        Article articleByCategory = getArticleByCategory.get(i);
+                                                        //String  author2=Arrays.toString(listAuthorsArticleByCategory.get(i).toArray()).replace("[", "").replace("]", "");
+                                                %>
                                                 <!-- single -->
                                                 <div class="col-xl-12 col-lg-6 col-md-6 col-sm-10">
                                                     <div class="whats-right-single mb-20">
                                                         <div class="whats-right-img">
-                                                            <img src="assets/img/gallery/whats_right_img1.png" alt="">
+                                                              <img style="width:100%;"  src="../img/<%=articleByCategory.getImage()%>" alt="">
                                                         </div>
                                                         <div class="whats-right-cap">
-                                                            <span class="colorb">FASHION</span>
-                                                            <h4><a href="latest_news.html">Portrait of group of friends ting eat. market in.</a></h4>
-                                                            <p>Jun 19, 2020</p> 
+                                                            <span class="colorb"><%=articleByCategory.getCategories()%></span>
+                                                            <h4><a href="../client/article?action=detail&articleID=<%=articleByCategory.getArticleID()%>"><%=articleByCategory.getTitle()%></a></h4>
+                                                            <p><%=articleByCategory.getTime()%></p>
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <div class="col-xl-12 col-lg-6 col-md-6 col-sm-10">
-                                                    <div class="whats-right-single mb-20">
-                                                        <div class="whats-right-img">
-                                                            <img src="assets/img/gallery/whats_right_img2.png" alt="">
-                                                        </div>
-                                                        <div class="whats-right-cap">
-                                                            <span class="colorb">FASHION</span>
-                                                            <h4><a href="latest_news.html">Portrait of group of friends ting eat. market in.</a></h4>
-                                                            <p>Jun 19, 2020</p> 
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="col-xl-12 col-lg-6 col-md-6 col-sm-10">
-                                                    <div class="whats-right-single mb-20">
-                                                        <div class="whats-right-img">
-                                                            <img src="assets/img/gallery/whats_right_img3.png" alt="">
-                                                        </div>
-                                                        <div class="whats-right-cap">
-                                                            <span class="colorg">FASHION</span>
-                                                            <h4><a href="latest_news.html">Portrait of group of friends ting eat. market in.</a></h4>
-                                                            <p>Jun 19, 2020</p> 
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="col-xl-12 col-lg-6 col-md-6 col-sm-10">
-                                                    <div class="whats-right-single mb-20">
-                                                        <div class="whats-right-img">
-                                                            <img src="assets/img/gallery/whats_right_img4.png" alt="">
-                                                        </div>
-                                                        <div class="whats-right-cap">
-                                                            <span class="colorr">FASHION</span>
-                                                            <h4><a href="latest_news.html">Portrait of group of friends ting eat. market in.</a></h4>
-                                                            <p>Jun 19, 2020</p> 
-                                                        </div>
-                                                    </div>
-                                                </div>
+                                                <%}%>
                                             </div>
                                         </div>
                                     </div>
@@ -212,7 +182,7 @@
                                         <div class="col-xl-6">
                                             <div class="whats-news-single mb-40">
                                                 <div class="whates-img">
-                                                    <img src="assets/img/gallery/whats_right_img2.png" alt="">
+                                                      <img style="width:100%;"  src="assets/img/gallery/whats_right_img2.png" alt="">
                                                 </div>
                                                 <div class="whates-caption">
                                                     <h4><a href="#">Secretart for Economic Air
@@ -229,48 +199,48 @@
                                                 <div class="col-xl-12 col-lg-6 col-md-6 col-sm-10">
                                                     <div class="whats-right-single mb-20">
                                                         <div class="whats-right-img">
-                                                            <img src="assets/img/gallery/whats_right_img1.png" alt="">
+                                                              <img style="width:100%;"   src="assets/img/gallery/whats_right_img1.png" alt="">
                                                         </div>
                                                         <div class="whats-right-cap">
                                                             <span class="colorb">FASHION</span>
                                                             <h4><a href="latest_news.html">Portrait of group of friends ting eat. market in.</a></h4>
-                                                            <p>Jun 19, 2020</p> 
+                                                            <p>Jun 19, 2020</p>
                                                         </div>
                                                     </div>
                                                 </div>
                                                 <div class="col-xl-12 col-lg-6 col-md-6 col-sm-10">
                                                     <div class="whats-right-single mb-20">
                                                         <div class="whats-right-img">
-                                                            <img src="assets/img/gallery/whats_right_img2.png" alt="">
+                                                              <img style="width:100%;"  src="assets/img/gallery/whats_right_img2.png" alt="">
                                                         </div>
                                                         <div class="whats-right-cap">
                                                             <span class="colorb">FASHION</span>
                                                             <h4><a href="latest_news.html">Portrait of group of friends ting eat. market in.</a></h4>
-                                                            <p>Jun 19, 2020</p> 
+                                                            <p>Jun 19, 2020</p>
                                                         </div>
                                                     </div>
                                                 </div>
                                                 <div class="col-xl-12 col-lg-6 col-md-6 col-sm-10">
                                                     <div class="whats-right-single mb-20">
                                                         <div class="whats-right-img">
-                                                            <img src="assets/img/gallery/whats_right_img3.png" alt="">
+                                                              <img style="width:100%;"  src="assets/img/gallery/whats_right_img3.png" alt="">
                                                         </div>
                                                         <div class="whats-right-cap">
                                                             <span class="colorg">FASHION</span>
                                                             <h4><a href="latest_news.html">Portrait of group of friends ting eat. market in.</a></h4>
-                                                            <p>Jun 19, 2020</p> 
+                                                            <p>Jun 19, 2020</p>
                                                         </div>
                                                     </div>
                                                 </div>
                                                 <div class="col-xl-12 col-lg-6 col-md-6 col-sm-10">
                                                     <div class="whats-right-single mb-20">
                                                         <div class="whats-right-img">
-                                                            <img src="assets/img/gallery/whats_right_img4.png" alt="">
+                                                              <img style="width:100%;"  src="assets/img/gallery/whats_right_img4.png" alt="">
                                                         </div>
                                                         <div class="whats-right-cap">
                                                             <span class="colorr">FASHION</span>
                                                             <h4><a href="latest_news.html">Portrait of group of friends ting eat. market in.</a></h4>
-                                                            <p>Jun 19, 2020</p> 
+                                                            <p>Jun 19, 2020</p>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -285,7 +255,7 @@
                                         <div class="col-xl-6">
                                             <div class="whats-news-single mb-40">
                                                 <div class="whates-img">
-                                                    <img src="assets/img/gallery/whats_right_img4.png" alt="">
+                                                      <img style="width:100%;"  src="assets/img/gallery/whats_right_img4.png" alt="">
                                                 </div>
                                                 <div class="whates-caption">
                                                     <h4><a href="#">Secretart for Economic Air
@@ -302,48 +272,48 @@
                                                 <div class="col-xl-12 col-lg-6 col-md-6 col-sm-10">
                                                     <div class="whats-right-single mb-20">
                                                         <div class="whats-right-img">
-                                                            <img src="assets/img/gallery/whats_right_img1.png" alt="">
+                                                              <img style="width:100%;"  src="assets/img/gallery/whats_right_img1.png" alt="">
                                                         </div>
                                                         <div class="whats-right-cap">
                                                             <span class="colorb">FASHION</span>
                                                             <h4><a href="latest_news.html">Portrait of group of friends ting eat. market in.</a></h4>
-                                                            <p>Jun 19, 2020</p> 
+                                                            <p>Jun 19, 2020</p>
                                                         </div>
                                                     </div>
                                                 </div>
                                                 <div class="col-xl-12 col-lg-6 col-md-6 col-sm-10">
                                                     <div class="whats-right-single mb-20">
                                                         <div class="whats-right-img">
-                                                            <img src="assets/img/gallery/whats_right_img2.png" alt="">
+                                                              <img style="width:100%;"  src=".assets/img/gallery/whats_right_img2.png" alt="">
                                                         </div>
                                                         <div class="whats-right-cap">
                                                             <span class="colorb">FASHION</span>
                                                             <h4><a href="latest_news.html">Portrait of group of friends ting eat. market in.</a></h4>
-                                                            <p>Jun 19, 2020</p> 
+                                                            <p>Jun 19, 2020</p>
                                                         </div>
                                                     </div>
                                                 </div>
                                                 <div class="col-xl-12 col-lg-6 col-md-6 col-sm-10">
                                                     <div class="whats-right-single mb-20">
                                                         <div class="whats-right-img">
-                                                            <img src="assets/img/gallery/whats_right_img3.png" alt="">
+                                                              <img style="width:100%;"  src="assets/img/gallery/whats_right_img3.png" alt="">
                                                         </div>
                                                         <div class="whats-right-cap">
                                                             <span class="colorg">FASHION</span>
                                                             <h4><a href="latest_news.html">Portrait of group of friends ting eat. market in.</a></h4>
-                                                            <p>Jun 19, 2020</p> 
+                                                            <p>Jun 19, 2020</p>
                                                         </div>
                                                     </div>
                                                 </div>
                                                 <div class="col-xl-12 col-lg-6 col-md-6 col-sm-10">
                                                     <div class="whats-right-single mb-20">
                                                         <div class="whats-right-img">
-                                                            <img src="assets/img/gallery/whats_right_img4.png" alt="">
+                                                              <img style="width:100%;"  src="assets/img/gallery/whats_right_img4.png" alt="">
                                                         </div>
                                                         <div class="whats-right-cap">
                                                             <span class="colorr">FASHION</span>
                                                             <h4><a href="latest_news.html">Portrait of group of friends ting eat. market in.</a></h4>
-                                                            <p>Jun 19, 2020</p> 
+                                                            <p>Jun 19, 2020</p>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -358,7 +328,7 @@
                                         <div class="col-xl-6">
                                             <div class="whats-news-single mb-40">
                                                 <div class="whates-img">
-                                                    <img src="assets/img/gallery/whats_right_img2.png" alt="">
+                                                      <img style="width:100%;"  src="assets/img/gallery/whats_right_img2.png" alt="">
                                                 </div>
                                                 <div class="whates-caption">
                                                     <h4><a href="#">Secretart for Economic Air
@@ -375,48 +345,48 @@
                                                 <div class="col-xl-12 col-lg-6 col-md-6 col-sm-10">
                                                     <div class="whats-right-single mb-20">
                                                         <div class="whats-right-img">
-                                                            <img src="assets/img/gallery/whats_right_img1.png" alt="">
+                                                              <img style="width:100%;"  src="assets/img/gallery/whats_right_img1.png" alt="">
                                                         </div>
                                                         <div class="whats-right-cap">
                                                             <span class="colorb">FASHION</span>
                                                             <h4><a href="latest_news.html">Portrait of group of friends ting eat. market in.</a></h4>
-                                                            <p>Jun 19, 2020</p> 
+                                                            <p>Jun 19, 2020</p>
                                                         </div>
                                                     </div>
                                                 </div>
                                                 <div class="col-xl-12 col-lg-6 col-md-6 col-sm-10">
                                                     <div class="whats-right-single mb-20">
                                                         <div class="whats-right-img">
-                                                            <img src="assets/img/gallery/whats_right_img2.png" alt="">
+                                                              <img style="width:100%;"  src="assets/img/gallery/whats_right_img2.png" alt="">
                                                         </div>
                                                         <div class="whats-right-cap">
                                                             <span class="colorb">FASHION</span>
                                                             <h4><a href="latest_news.html">Portrait of group of friends ting eat. market in.</a></h4>
-                                                            <p>Jun 19, 2020</p> 
+                                                            <p>Jun 19, 2020</p>
                                                         </div>
                                                     </div>
                                                 </div>
                                                 <div class="col-xl-12 col-lg-6 col-md-6 col-sm-10">
                                                     <div class="whats-right-single mb-20">
                                                         <div class="whats-right-img">
-                                                            <img src="assets/img/gallery/whats_right_img3.png" alt="">
+                                                              <img style="width:100%;"  src="assets/img/gallery/whats_right_img3.png" alt="">
                                                         </div>
                                                         <div class="whats-right-cap">
                                                             <span class="colorg">FASHION</span>
                                                             <h4><a href="latest_news.html">Portrait of group of friends ting eat. market in.</a></h4>
-                                                            <p>Jun 19, 2020</p> 
+                                                            <p>Jun 19, 2020</p>
                                                         </div>
                                                     </div>
                                                 </div>
                                                 <div class="col-xl-12 col-lg-6 col-md-6 col-sm-10">
                                                     <div class="whats-right-single mb-20">
                                                         <div class="whats-right-img">
-                                                            <img src="assets/img/gallery/whats_right_img4.png" alt="">
+                                                              <img style="width:100%;"  src="assets/img/gallery/whats_right_img4.png" alt="">
                                                         </div>
                                                         <div class="whats-right-cap">
                                                             <span class="colorr">FASHION</span>
                                                             <h4><a href="latest_news.html">Portrait of group of friends ting eat. market in.</a></h4>
-                                                            <p>Jun 19, 2020</p> 
+                                                            <p>Jun 19, 2020</p>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -431,7 +401,7 @@
                                         <div class="col-xl-6">
                                             <div class="whats-news-single mb-40">
                                                 <div class="whates-img">
-                                                    <img src="assets/img/gallery/whats_news_details1.png" alt="">
+                                                      <img style="width:100%;"  src="assets/img/gallery/whats_news_details1.png" alt="">
                                                 </div>
                                                 <div class="whates-caption">
                                                     <h4><a href="#">Secretart for Economic Air
@@ -448,48 +418,48 @@
                                                 <div class="col-xl-12 col-lg-6 col-md-6 col-sm-10">
                                                     <div class="whats-right-single mb-20">
                                                         <div class="whats-right-img">
-                                                            <img src="assets/img/gallery/whats_right_img1.png" alt="">
+                                                              <img style="width:100%;"  src="assets/img/gallery/whats_right_img1.png" alt="">
                                                         </div>
                                                         <div class="whats-right-cap">
                                                             <span class="colorb">FASHION</span>
                                                             <h4><a href="latest_news.html">Portrait of group of friends ting eat. market in.</a></h4>
-                                                            <p>Jun 19, 2020</p> 
+                                                            <p>Jun 19, 2020</p>
                                                         </div>
                                                     </div>
                                                 </div>
                                                 <div class="col-xl-12 col-lg-6 col-md-6 col-sm-10">
                                                     <div class="whats-right-single mb-20">
                                                         <div class="whats-right-img">
-                                                            <img src="assets/img/gallery/whats_right_img2.png" alt="">
+                                                              <img style="width:100%;"  src="assets/img/gallery/whats_right_img2.png" alt="">
                                                         </div>
                                                         <div class="whats-right-cap">
                                                             <span class="colorb">FASHION</span>
                                                             <h4><a href="latest_news.html">Portrait of group of friends ting eat. market in.</a></h4>
-                                                            <p>Jun 19, 2020</p> 
+                                                            <p>Jun 19, 2020</p>
                                                         </div>
                                                     </div>
                                                 </div>
                                                 <div class="col-xl-12 col-lg-6 col-md-6 col-sm-10">
                                                     <div class="whats-right-single mb-20">
                                                         <div class="whats-right-img">
-                                                            <img src="assets/img/gallery/whats_right_img3.png" alt="">
+                                                              <img style="width:100%;"  src="assets/img/gallery/whats_right_img3.png" alt="">
                                                         </div>
                                                         <div class="whats-right-cap">
                                                             <span class="colorg">FASHION</span>
                                                             <h4><a href="latest_news.html">Portrait of group of friends ting eat. market in.</a></h4>
-                                                            <p>Jun 19, 2020</p> 
+                                                            <p>Jun 19, 2020</p>
                                                         </div>
                                                     </div>
                                                 </div>
                                                 <div class="col-xl-12 col-lg-6 col-md-6 col-sm-10">
                                                     <div class="whats-right-single mb-20">
                                                         <div class="whats-right-img">
-                                                            <img src="assets/img/gallery/whats_right_img4.png" alt="">
+                                                              <img style="width:100%;"  src="assets/img/gallery/whats_right_img4.png" alt="">
                                                         </div>
                                                         <div class="whats-right-cap">
                                                             <span class="colorr">FASHION</span>
                                                             <h4><a href="latest_news.html">Portrait of group of friends ting eat. market in.</a></h4>
-                                                            <p>Jun 19, 2020</p> 
+                                                            <p>Jun 19, 2020</p>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -504,7 +474,7 @@
                 </div>
                 <!-- Banner -->
                 <div class="banner-one mt-20 mb-30">
-                    <img src="assets/img/gallery/body_card1.png" alt="">
+                      <img style="width:100%;"  src="assets/img/gallery/body_card1.png" alt="">
                 </div>
                 </div>
                 <div class="col-lg-4">
@@ -515,11 +485,11 @@
                                 <div class="follow-social">
                                     <a href="#"><img src="assets/img/news/icon-fb.png" alt=""></a>
                                 </div>
-                                <div class="follow-count">  
+                                <div class="follow-count">
                                     <span>8,045</span>
                                     <p>Fans</p>
                                 </div>
-                            </div> 
+                            </div>
                             <div class="follow-us d-flex align-items-center">
                                 <div class="follow-social">
                                     <a href="#"><img src="assets/img/news/icon-tw.png" alt=""></a>
@@ -555,36 +525,44 @@
                         <div class="small-tittle mb-20">
                             <h4>Most Recent</h4>
                         </div>
+                        <%
+                            ArrayList<Article> topArticles = (ArrayList<Article>) request.getAttribute("top5Articles");
+                            var listAuthorsTop = (ArrayList<ArrayList<String>>)request.getAttribute("listAuthorsTop5");
+                                int i=0;
+                                Article article = topArticles.get(i);
+                                String  author=Arrays.toString(listAuthorsTop.get(i).toArray()).replace("[", "").replace("]", "");
+                        %>
                         <!-- Details -->
                         <div class="most-recent mb-40">
                             <div class="most-recent-img">
-                                <img src="assets/img/gallery/most_recent.png" alt="">
+                                  <img  style="width:100%;" src="../img/<%=article.getImage()%>" alt="">
                                 <div class="most-recent-cap">
-                                    <span class="bgbeg">Vogue</span>
-                                    <h4><a href="latest_news.html">What to Wear: 9+ Cute Work <br>
-                                        Outfits to Wear This.</a></h4>
-                                    <p>Jhon  |  2 hours ago</p>
+                                    <span class="bgbeg"><%=article.getCategories()%></span>
+                                    <h4><a href="../client/article?action=detail&articleID=<%=article.getArticleID()%>"><%=article.getTitle()%> </a></h4>
+                                    <p> <%=author %> - <%= article.getTime() %></p>
                                 </div>
                             </div>
                         </div>
+                        <%i++;%>
                         <!-- Single -->
                         <div class="most-recent-single">
                             <div class="most-recent-images">
-                                <img src="assets/img/gallery/most_recent1.png" alt="">
+                                  <img  style="width:100%;" src="../img/<%=article.getImage()%>" alt="">
                             </div>
                             <div class="most-recent-capt">
-                                <h4><a href="latest_news.html">Scarlett’s disappointment at latest accolade</a></h4>
-                                <p>Jhon  |  2 hours ago</p>
+                                <h4><a href="../client/article?action=detail&articleID=<%=article.getArticleID()%>"><%=article.getTitle()%></a></h4>
+                                <p> <%=author %> - <%= article.getTime() %></p>
                             </div>
                         </div>
+                        <%i++;%>
                         <!-- Single -->
                         <div class="most-recent-single">
                             <div class="most-recent-images">
-                                <img src="assets/img/gallery/most_recent2.png" alt="">
+                                  <img style="width:100%;" src="../img/<%=article.getImage()%>" alt="">
                             </div>
                             <div class="most-recent-capt">
-                                <h4><a href="latest_news.html">Most Beautiful Things to Do in Sidney with Your BF</a></h4>
-                                <p>Jhon  |  3 hours ago</p>
+                                <h4><a href="../client/article?action=detail&articleID=<%=article.getArticleID()%>"><%=article.getTitle()%></a></h4>
+                                <p> <%=author %> - <%= article.getTime() %></p>
                             </div>
                         </div>
                     </div>
@@ -601,7 +579,7 @@
                     <!-- Banner -->
                     <div class="col-lg-3">
                         <div class="home-banner2 d-none d-lg-block">
-                            <img src="assets/img/gallery/body_card2.png" alt="">
+                              <img  style="width:100%;" src="assets/img/gallery/body_card2.png" alt="">
                         </div>
                     </div>
                     <div class="col-lg-9">
@@ -619,273 +597,24 @@
                                 <div class="col-lg-12">
                                     <div class="weekly2-news-active d-flex">
                                         <!-- Single -->
+                                        <%
+                                        ArrayList<Article> mostPopular = (ArrayList<Article>) request.getAttribute("top3MostPopular");
+                                                var listAuthorsPopular = (ArrayList<ArrayList<String>>)request.getAttribute("listAuthorsTop3MostPopular");
+                                                for (int j = 0; i <  top5Articles.size(); i++) {
+                                                Article articlemostPopular = mostPopular.get(i);
+                                                String  AuthorsPopular=Arrays.toString(listAuthorsPopular.get(i).toArray()).replace("[", "").replace("]", "");
+
+                                        %>
                                         <div class="weekly2-single">
                                             <div class="weekly2-img">
-                                                <img src="assets/img/gallery/weeklyNews1.png" alt="">
+                                                  <img style="width:100%;" src="../img/<%=articlemostPopular.getImage()%>" alt="">
                                             </div>
                                             <div class="weekly2-caption">
-                                                <h4><a href="#">Scarlett’s disappointment at latest accolade</a></h4>
-                                                <p>Jhon  |  2 hours ago</p>
-                                            </div>
-                                        </div> 
-                                        <!-- Single -->
-                                        <div class="weekly2-single">
-                                            <div class="weekly2-img">
-                                                <img src="assets/img/gallery/weeklyNews2.png" alt="">
-                                            </div>
-                                            <div class="weekly2-caption">
-                                                <h4><a href="#">Scarlett’s disappointment at latest accolade</a></h4>
-                                                <p>Jhon  |  2 hours ago</p>
-                                            </div>
-                                        </div> 
-                                        <!-- Single -->
-                                        <div class="weekly2-single">
-                                            <div class="weekly2-img">
-                                                <img src="assets/img/gallery/weeklyNews3.png" alt="">
-                                            </div>
-                                            <div class="weekly2-caption">
-                                                <h4><a href="#">Scarlett’s disappointment at latest accolade</a></h4>
-                                                <p>Jhon  |  2 hours ago</p>
-                                            </div>
-                                        </div> 
-                                        <!-- Single -->
-                                        <div class="weekly2-single">
-                                            <div class="weekly2-img">
-                                                <img src="assets/img/gallery/weeklyNews2.png" alt="">
-                                            </div>
-                                            <div class="weekly2-caption">
-                                                <h4><a href="#">Scarlett’s disappointment at latest accolade</a></h4>
-                                                <p>Jhon  |  2 hours ago</p>
-                                            </div>
-                                        </div> 
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>           
-    <!-- End Weekly-News -->
-    <!--  Recent Articles start -->
-    <div class="recent-articles pt-80 pb-80">
-        <div class="container">
-            <div class="recent-wrapper">
-                <!-- section Tittle -->
-                <div class="row">
-                    <div class="col-lg-12">
-                        <div class="section-tittle mb-30">
-                            <h3>Trending  News</h3>
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-12">
-                        <div class="recent-active dot-style d-flex dot-style">
-                            <!-- Single -->
-                            <div class="single-recent">
-                                <div class="what-img">
-                                    <img src="assets/img/gallery/tranding1.png" alt="">
-                                </div>
-                                <div class="what-cap">
-                                    <h4><a href="#" > <h4><a href="latest_news.html">What to Expect From the 2020 Oscar Nomin ations</a></h4></a></h4>
-                                    <P>Jun 19, 2020</P>
-                                    <a class="popup-video btn-icon" href="https://www.youtube.com/watch?v=1aP-TXUpNoU"><span class="flaticon-play-button"></span></a>
-                                    
-                                </div>
-                            </div>
-                            <!-- Single -->
-                            <div class="single-recent">
-                                <div class="what-img">
-                                    <img src="assets/img/gallery/tranding2.png" alt="">
-                                </div>
-                                <div class="what-cap">
-                                    <h4><a href="latest_news.html">What to Expect From the 2020 Oscar Nomin ations</a></h4>
-                                    <P>Jun 19, 2020</P>
-                                    <a class="popup-video" href="https://www.youtube.com/watch?v=1aP-TXUpNoU"><span class="flaticon-play-button"></span></a>
-                                </div>
-                            </div>
-                            <!-- Single -->
-                            <div class="single-recent">
-                                <div class="what-img">
-                                    <img src="assets/img/gallery/tranding1.png" alt="">
-                                </div>
-                                <div class="what-cap">
-                                    <h4><a href="latest_news.html"> <h4><a href="latest_news.html">What to Expect From the 2020 Oscar Nomin ations</a></h4></a></h4>
-                                    <P>Jun 19, 2020</P>
-                                    <a class="popup-video" href="https://www.youtube.com/watch?v=1aP-TXUpNoU"><span class="flaticon-play-button"></span></a>
-                                </div>
-                            </div>
-                            <!-- Single -->
-                            <div class="single-recent">
-                                <div class="what-img">
-                                    <img src="assets/img/gallery/tranding2.png" alt="">
-                                </div>
-                                <div class="what-cap">
-                                    <h4><a href="latest_news.html">What to Expect From the 2020 Oscar Nomin ations</a></h4>
-                                    <P>Jun 19, 2020</P>
-                                    <a class="popup-video" href="https://www.youtube.com/watch?v=1aP-TXUpNoU"><span class="flaticon-play-button"></span></a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>           
-    <!--Recent Articles End -->
-    <!-- Start Video Area -->
-    <div class="youtube-area video-padding d-none d-sm-block">
-        <div class="container">
-            <div class="row">
-                <div class="col-12">
-                    <div class="video-items-active">
-                        <div class="video-items text-center">
-                            <video controls>
-                                <source src="assets/video/news2.mp4" type="video/mp4">
-                                Your browser does not support the video tag.
-                            </video>
-                        </div>
-                        <div class="video-items text-center">
-                            <video controls>
-                                <source src="assets/video/news1.mp4" type="video/mp4">
-                                Your browser does not support the video tag.
-                            </video>
-                        </div>
-                        <div class="video-items text-center">
-                            <video controls>
-                                <source src="assets/video/news3.mp4" type="video/mp4">
-                                Your browser does not support the video tag.
-                            </video>
-                        </div>
-                        <div class="video-items text-center">
-                            <video controls>
-                                <source src="assets/video/news1.mp4" type="video/mp4">
-                                Your browser does not support the video tag.
-                            </video>
-                        </div>
-                        <div class="video-items text-center">
-                            <video controls>
-                                <source src="assets/video/news3.mp4" type="video/mp4">
-                                Your browser does not support the video tag.
-                            </video>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="video-info">
-                <div class="row">
-                    <div class="col-12">
-                        <div class="testmonial-nav text-center">
-                            <div class="single-video">
-                                <video controls>
-                                    <source src="assets/video/news2.mp4" type="video/mp4">
-                                    Your browser does not support the video tag.
-                                </video>
-                                <div class="video-intro">
-                                        <h4>Old Spondon News - 2020 </h4>
-                                </div>
-                            </div>
-                            <div class="single-video">
-                                <video controls>
-                                    <source src="assets/video/news1.mp4" type="video/mp4">
-                                    Your browser does not support the video tag.
-                                </video>
-                                <div class="video-intro">
-                                    <h4>Banglades News Video </h4>
-                                </div>
-                            </div>
-                            <div class="single-video">
-                                <video controls>
-                                    <source src="assets/video/news3.mp4" type="video/mp4">
-                                    Your browser does not support the video tag.
-                                </video>
-                                <div class="video-intro">
-                                    <h4>Latest Video - 2020 </h4>
-                                </div>
-                            </div>
-                            <div class="single-video">
-                                <video controls>
-                                    <source src="assets/video/news1.mp4" type="video/mp4">
-                                    Your browser does not support the video tag.
-                                </video>
-                                <div class="video-intro">
-                                    <h4>Spondon News -2019 </h4>
-                                </div>
-                            </div>
-                            <div class="single-video">
-                                <video controls>
-                                    <source src="assets/video/news3.mp4" type="video/mp4">
-                                    Your browser does not support the video tag.
-                                </video>
-                                <div class="video-intro">
-                                    <h4>Latest Video - 2020</h4>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div> 
-    <!-- End Start Video area-->
-    <!--   Weekly3-News start -->
-    <div class="weekly3-news-area pt-80 pb-130">
-        <div class="container">
-            <div class="weekly3-wrapper">
-                <div class="row">
-                    <div class="col-lg-12">
-                        <div class="slider-wrapper">
-                            <!-- Slider -->
-                            <div class="row">
-                                <div class="col-lg-12">
-                                    <div class="weekly3-news-active dot-style d-flex">
-                                        <div class="weekly3-single">
-                                            <div class="weekly3-img">
-                                                <img src="assets/img/gallery/weekly2News1.png" alt="">
-                                            </div>
-                                            <div class="weekly3-caption">
-                                                <h4><a href="latest_news.html">What to Expect From the 2020 Oscar Nomin ations</a></h4>
-                                                <p>19 Jan 2020</p>
-                                            </div>
-                                        </div> 
-                                        <div class="weekly3-single">
-                                            <div class="weekly3-img">
-                                                <img src="assets/img/gallery/weekly2News2.png" alt="">
-                                            </div>
-                                            <div class="weekly3-caption">
-                                                <h4><a href="latest_news.html">What to Expect From the 2020 Oscar Nomin ations</a></h4>
-                                                <p>19 Jan 2020</p>
-                                            </div>
-                                        </div> 
-                                        <div class="weekly3-single">
-                                            <div class="weekly3-img">
-                                                <img src="assets/img/gallery/weekly2News3.png" alt="">
-                                            </div>
-                                            <div class="weekly3-caption">
-                                                <h4><a href="latest_news.html">What to Expect From the 2020 Oscar Nomin ations</a></h4>
-                                                <p>19 Jan 2020</p>
+                                                <h4><a href="../client/article?action=detail&articleID=<%=articlemostPopular.getArticleID()%>"><%=articlemostPopular.getTitle()%></a></h4>
+                                                <p><%=AuthorsPopular %> - <%= articlemostPopular.getTime() %></p>
                                             </div>
                                         </div>
-                                        <div class="weekly3-single">
-                                            <div class="weekly3-img">
-                                                <img src="assets/img/gallery/weekly2News4.png" alt="">
-                                            </div>
-                                            <div class="weekly3-caption">
-                                                <h4><a href="latest_news.html">What to Expect From the 2020 Oscar Nomin ations</a></h4>
-                                                <p>19 Jan 2020</p>
-                                            </div>
-                                        </div> 
-                                        <div class="weekly3-single">
-                                            <div class="weekly3-img">
-                                                <img src="assets/img/gallery/weekly2News2.png" alt="">
-                                            </div>
-                                            <div class="weekly3-caption">
-                                                <h4><a href="latest_news.html">What to Expect From the 2020 Oscar Nomin ations</a></h4>
-                                                <p>19 Jan 2020</p>
-                                            </div>
-                                        </div> 
+                                        <%}%>
                                     </div>
                                 </div>
                             </div>
@@ -894,15 +623,16 @@
                 </div>
             </div>
         </div>
-    </div>           
+    </div>
     <!-- End Weekly-News -->
+
     <!-- banner-last Start -->
     <div class="banner-area gray-bg pt-90 pb-90">
         <div class="container">
             <div class="row justify-content-center">
                 <div class="col-lg-10 col-md-10">
                     <div class="banner-one">
-                        <img src="assets/img/gallery/body_card3.png" alt="">
+                          <img style="width:100%;"  src="assets/img/gallery/body_card3.png" alt="">
                     </div>
                 </div>
             </div>
@@ -916,6 +646,6 @@
 <!-- JS here -->
 <%@include file="component/alljs.jsp"%>
 
-    
+
 </body>
 </html>

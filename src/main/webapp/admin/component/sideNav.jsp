@@ -15,7 +15,7 @@
                 </a>
                 <ul class="dropdown-menu">
                     <li class="active">
-                        <a href="article-list.jsp">Danh sách</a>
+                        <a href="../admin/article">Danh sách</a>
                     </li>
                     <li>
                         <a href="index-crm.html">Loại báo</a>
