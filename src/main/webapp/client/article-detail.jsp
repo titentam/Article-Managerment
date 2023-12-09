@@ -105,9 +105,12 @@
                             <img src="assets/img/news/news_card.jpg" alt="">
                         </div>
                     </div>
+                    <%if(session.getAttribute("username")!=null){%>
                     <div class="comment-form" style="width: 100%">
                         <h4>Leave a Reply</h4>
-                        <form class="form-contact comment_form" action="#" id="commentForm">
+                        <form class="form-contact comment_form" action="./article?action=submitComment" id="commentForm" method="post">
+                            <input type="hidden" name="articleID" value="<%=record.getArticleID()%>">
+                            <input type="hidden" name="username" value="<%=session.getAttribute("username")%>">
                             <div class="row">
                                 <div class="col-12">
                                     <div class="form-group">
@@ -120,6 +123,7 @@
                             </div>
                         </form>
                     </div>
+                    <%}%>
                     <div class="comments-area" style="width: 100%">
                         <h4>Bình luận (<%=comments.size()%>)</h4>
                         <% for (var comment: comments) {%>

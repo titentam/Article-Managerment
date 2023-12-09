@@ -29,10 +29,10 @@ public class LoginController extends HttpServlet {
             RequestDispatcher rd = request.getRequestDispatcher("index.jsp");
             rd.forward(request, response);
         } else {
-            //response.sendRedirect("Login/Login.jsp");
-            request.setAttribute("loginMessage", "Invalid username or password");
-            RequestDispatcher rd = request.getRequestDispatcher("Login/Login.jsp");
-            rd.forward(request, response);
+            HttpSession session = request.getSession();
+            session.setAttribute("errormessage", "Invalid username or password");
+            response.sendRedirect("Login/Login.jsp");
+
         }
     }
     
@@ -50,7 +50,7 @@ public class LoginController extends HttpServlet {
            }
            
            path += "/Login/Login.jsp";
-   			response.sendRedirect(path);
+   		   response.sendRedirect(path);
        }
     }
 

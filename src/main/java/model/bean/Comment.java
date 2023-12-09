@@ -18,6 +18,11 @@ public class Comment {
         this.time = time;
         this.content = content;
     }
+    public Comment(String username, String articleID,String content) {
+        this.username = username;
+        this.articleID = articleID;
+        this.content = content;
+    }
 
     public int getCommentID() {
         return commentID;

@@ -1,10 +1,3 @@
-<%--
-  Created by IntelliJ IDEA.
-  User: A Ti
-  Date: 12/2/2023
-  Time: 5:02 PM
-  To change this template use File | Settings | File Templates.
---%>
 <!-- Preloader Start -->
 <%@ page language="java" contentType="text/html; charset=UTF-8"
          pageEncoding="UTF-8"%>

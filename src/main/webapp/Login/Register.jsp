@@ -18,30 +18,44 @@
     <script>
         function validateForm() {
             var name = document.getElementById("name").value;
-            var email = document.getElementById("email").value;
-            var dob = document.getElementById("dob").value;
-            var gender = document.getElementById("gender").value;
-            var userName = document.getElementById("userName").value;
             var password = document.getElementById("password").value;
             var confirmPassword = document.getElementById("confirmPassword").value;
             var errorDisplay = document.getElementById("errorDisplay");
-
             if (name === "" || email === "" || dob === "" || gender === "" || userName === "" || password === "" || confirmPassword === "") {
                 errorDisplay.innerHTML = "All fields must be filled out";
                 return false;
             }
-            if (userName.length > 10) {
-                errorDisplay.innerHTML = "Username must not exceed 10 characters";
+            if (name.length > 10||name.length<6) {
+                errorDisplay.innerHTML = "Username must from 6 to 10 characters";
                 return false;
             }
             if (password !== confirmPassword) {
                 errorDisplay.innerHTML = "Password and Confirm Password do not match";
                 return false;
             }
+            // Check name
+            if (/[\d~`!@#$%\^&*+=\-\[\]\\';,/{}|\\":<>\?]/.test(name)) {
+                errorDisplay.innerHTML = "Name should not contain numbers or special characters";
+                return false;
+            }
+
+            // Check password criteria
+            if (password.length < 8 || !/[A-Z]/.test(password) || !/[a-z]/.test(password) || !/[!@#\$%\^&\*(),.?":{}|<>]/.test(password)) {
+                errorDisplay.innerHTML = "Password must be at least 8 characters long and contain at least one uppercase letter, one lowercase letter, and one special character";
+                return false;
+            }
+
+            // Check if passwords match
+            if (password !== confirmPassword) {
+                errorDisplay.innerHTML = "Password and Confirm Password do not match";
+                return false;
+            }
+
             errorDisplay.innerHTML = "";
 
             return true;
         }
+
     </script>
 </head>
 
@@ -54,6 +68,17 @@
                     <div class="col-md-7 col-lg-5 m-h-auto">
                         <div class="card shadow-lg">
                             <div class="card-body">
+                                <%
+                                    String errormessage = (String)session.getAttribute("errormessage");
+                                    session.removeAttribute("errormessage");
+                                    if (errormessage != null) {
+                                %>
+                                <div style="color: red; margin-bottom: 10px;">
+                                    <%= errormessage %>
+                                </div>
+                                <%
+                                    }
+                                %>
                                 <div class="d-flex align-items-center justify-content-between m-b-30">
                                     <img class="img-fluid" alt="" src="../admin/assets/images/logo/logo.png">
                                     <h2 class="m-b-0">Sign Up</h2>
