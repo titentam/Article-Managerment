@@ -2,20 +2,31 @@ package controller;
 
 import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.MultipartConfig;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.Part;
 import model.bean.Article;
 import model.bo.ArticleBO;
 import model.bo.CategoryBO;
 import model.bo.CommentBO;
 
 import java.awt.image.CropImageFilter;
+import java.io.File;
 import java.io.IOException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 @WebServlet("/admin/article")
+@MultipartConfig(
+        fileSizeThreshold = 1024 * 1024 * 1, // 1 MB
+        maxFileSize = 1024 * 1024 * 10,      // 10 MB
+        maxRequestSize = 1024 * 1024 * 100   // 100 MB
+)
 public class ArticleController extends HttpServlet {
     private static final long serialVersionUID = 1L;
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -30,7 +41,7 @@ public class ArticleController extends HttpServlet {
                     insert(request,response);
                     break;
                 case "update":
-//                    update(request,response);
+                    update(request,response);
                     break;
             }
         }
@@ -95,23 +106,21 @@ public class ArticleController extends HttpServlet {
         request.setAttribute("action", "submitInsert");
         ForwardUrl("/admin/article-form.jsp",request,response);
     }
-//    private void update(HttpServletRequest request, HttpServletResponse response) {
-//        String id = request.getParameter("articleID");
-//
-//        var categoryBO = new CategoryBO();
-//        var articleBO = new ArticleBO();
-//        var categories = categoryBO.getList();
-//        var article = articleBO.getArticle(id);
-//
-//        request.setAttribute("categories", categories);
-//        request.setAttribute("function", "Thêm");
-//        request.setAttribute("action", "submitUpdate");
-//        request.setAttribute("article", article);
-//        request.setAttribute("categoryOld", articleBO.getCategory(id));
-//
-//        ForwardUrl("/admin/article-form.jsp",request,response);
-//    }
+    private void update(HttpServletRequest request, HttpServletResponse response) {
+        String id = request.getParameter("articleID");
 
+        var categoryBO = new CategoryBO();
+        var articleBO = new ArticleBO();
+        var categories = categoryBO.getList();
+        var article = articleBO.getArticle(id);
+
+        request.setAttribute("categories", categories);
+        request.setAttribute("function", "Cập nhật");
+        request.setAttribute("action", "submitUpdate");
+        request.setAttribute("article", article);
+
+        ForwardUrl("/admin/article-form.jsp",request,response);
+    }
     private void detail(HttpServletRequest request, HttpServletResponse response) {
         String id = request.getParameter("articleID");
         var articleBO = new ArticleBO();
@@ -129,23 +138,44 @@ public class ArticleController extends HttpServlet {
     private void submitInsert(HttpServletRequest request, HttpServletResponse response) {
         String title = request.getParameter("title");
         String content = request.getParameter("content");
-        String category = request.getParameter("category");
+        String[] categories = request.getParameterValues("category[]");
+        String fileName = processImageFile(request,response);
         var articleBO = new ArticleBO();
-        articleBO.insert(title,content,category);
+        articleBO.insert(title,content,fileName,categories);
 
         this.ShowList(request,response);
 
+    }
+
+    private String processImageFile(HttpServletRequest request, HttpServletResponse response){
+        /* Receive file uploaded to the Servlet from the HTML5 form */
+        try {
+            Part filePart = request.getPart("thumbnail");
+            String fileName = filePart.getSubmittedFileName();
+            if(fileName.isEmpty()) return "default.jpg";
+
+            String tmp = request.getServletContext().getRealPath("/");
+
+            Path path = Paths.get(tmp).getParent().getParent();
+            String uploadDirectory = path.toString() +"\\src\\main\\webapp\\img\\" ;
+
+            filePart.write(uploadDirectory + fileName);
+            return fileName;
+        } catch (IOException | ServletException e) {
+            throw new RuntimeException(e);
+        }
     }
     private void submitUpdate(HttpServletRequest request, HttpServletResponse response) {
         String id = request.getParameter("articleID");
         String title = request.getParameter("title");
         String content = request.getParameter("content");
-        String category = request.getParameter("category");
-        String categoryOld = request.getParameter("categoryOld");
-        var articleBO = new ArticleBO();
-        articleBO.update(new Article(id,title,content),category,categoryOld);
+        String[] categories = request.getParameterValues("category[]");
+        String fileName = processImageFile(request,response);
 
-        this.ShowList(request,response);
+        var articleBO = new ArticleBO();
+        articleBO.update(new Article(id, title, content,fileName), new ArrayList<>(Arrays.asList(categories)));
+
+        this.ShowList(request, response);
     }
     
     private void submitLock(HttpServletRequest request, HttpServletResponse response) {

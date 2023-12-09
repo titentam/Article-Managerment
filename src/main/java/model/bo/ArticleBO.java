@@ -33,25 +33,42 @@ public class ArticleBO {
         return dao.getAuthors(id);
     }
     public Article getArticle(String id){
-        Article article = dao.getArticle(id);
-		ArrayList<Category> categories = new CategoryDAO().getListCategory(article.getArticleID());
-		article.setCategories(categories);
-		return article;
+        var article = dao.getArticle(id);
+        var categories = new CategoryDAO().getListCategory(article.getArticleID());
+        article.setCategories(categories);
+        return article;
     }
 
-    public void insert(String title, String content, String categoryID){
+    public void insert(String title, String content,String fileName, String[] categories){
         String id = generateID(10);
-        var record = new Article(id,title,content);
+        var record = new Article(id,title,content,fileName);
+
         dao.insert(record);
-        new CategoryDAO().insertCategory(id,categoryID);
+        for (var categoryID:categories) {
+            new CategoryDAO().insertCategory(id,categoryID);
+        }
     }
-    public void update(Article article, String categoryID, String categoryOld){
+    public void update(Article article, ArrayList<String> categoriesNew){
         dao.update(article);
-        new CategoryDAO().updateCategory(article.getArticleID(),categoryID,categoryOld);
+        var id = article.getArticleID();
+        var categoriesOld =dao.getCategories(id);
+
+        for (var categoryID:categoriesNew) {
+            if(!categoriesOld.contains(categoryID)){
+                new CategoryDAO().insertCategory(id,categoryID);
+            }
+        }
+        for (var categoryID:categoriesOld) {
+            if(!categoriesNew.contains(categoryID)){
+                dao.deleteCategory(id,categoryID);
+                new CategoryDAO().deleteCategory(id,categoryID);
+            }
+        }
     }
     
     public void updateLock(String articleID, boolean locked){
         dao.updateLock(articleID, locked);
+
     }
 
     public void deleteArticle (String articleID) {

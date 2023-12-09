@@ -167,7 +167,7 @@
                                 <div class="d-flex m-b-30 justify-content-between align-items-end">
                                     <div class="d-flex align-items-center">
                                     	<div class="avatar avatar-cyan avatar-img">
-                                        <img src="assets/images/avatars/thumb-6.jpg" alt="">
+                                        <img src="assets/images/avatars/thumb-6.jpg" alt="Lỗi">
                                     </div>
                                     <div class="m-l-15">
                                     	<div class="d-flex align-items-center font-size-14">
@@ -205,7 +205,7 @@
                                             <%=time%>
                                     </p>
                                 </div>
-                                <img alt="" class="img-fluid w-100 rounded-lg" src="assets/images/others/img-8.jpg">
+                                <img alt="" class="img-fluid w-100 rounded-lg" src="../img/<%=record.getImage()%>">
                                 <div class="m-t-30">
                                     <p><%=record.getContent()%></p>
                                 </div>
