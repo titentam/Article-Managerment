@@ -8,6 +8,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import model.bean.Article;
 import model.bean.Category;
+import model.bean.Comment;
 import model.bo.ArticleBO;
 import model.bo.CategoryBO;
 import model.bo.CommentBO;
@@ -68,6 +69,10 @@ public class ArticleClientSideController extends HttpServlet {
 
     private void detail(HttpServletRequest request, HttpServletResponse response) {
         String id = request.getParameter("articleID");
+        this.showDetail(id,request,response);
+    }
+
+    private void showDetail(String id,HttpServletRequest request, HttpServletResponse response){
         var articleBO = new ArticleBO();
         var commentBO = new CommentBO();
         var record = articleBO.getArticle(id);
@@ -85,13 +90,23 @@ public class ArticleClientSideController extends HttpServlet {
         String action = request.getParameter("action");
         if(action!=null){
             switch (action) {
-                case "submitInsert":
-                    //submitInsert(request,response);
+                case "submitComment":
+                    submitComment(request,response);
                     break;
             }
 
         }
     }
+
+    private void submitComment(HttpServletRequest request, HttpServletResponse response) {
+        var articleID = request.getParameter("articleID");
+        var username = request.getParameter("username");
+        var comment = request.getParameter("comment");
+
+        new CommentBO().insert(new Comment(username,articleID,comment));
+        this.showDetail(articleID,request,response);
+    }
+
     private void ForwardUrl(String url,HttpServletRequest request, HttpServletResponse response){
         RequestDispatcher rd = request.getServletContext().getRequestDispatcher(url);
         try {
