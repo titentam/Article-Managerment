@@ -79,8 +79,6 @@ public class UserDAO {
 			String query;
 			if (action.equals("update-role"))
 				query = "update user set RoleID=? where username=?";
-			else if (action.equals("delete-user"))
-				query = "update user set Locked=1 where username=?";
 			else
 				query = "update user set name=?, email=?, dob=?,gender=?, RoleID=? where username=?";
 
@@ -98,6 +96,17 @@ public class UserDAO {
 				stmt.setString(6, user.getRoleID());
 				stmt.setString(7, user.getUsername());
 			}
+			stmt.executeUpdate();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public void deleteUser (String username) {
+		try {
+			String query = "update user set Locked=1 where username=?";
+			PreparedStatement stmt = conn.prepareStatement(query);
+			stmt.setString(1, username);
 			stmt.executeUpdate();
 		} catch (Exception e) {
 			e.printStackTrace();

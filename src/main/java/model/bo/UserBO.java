@@ -4,10 +4,11 @@ import java.util.ArrayList;
 import java.util.Iterator;
 
 import model.bean.User;
+import model.dao.CommentDAO;
 import model.dao.UserDAO;
 
 public class UserBO {
-    private final UserDAO userDAO =new UserDAO();
+    private final UserDAO userDAO = new UserDAO();
     public Object[] getAllUser(String categoryRole, String searchText, int page, int pageSize) {
     	ArrayList<User> list = userDAO.getAllUser(categoryRole, searchText);
     	int offset = (page - 1) * pageSize;
@@ -32,8 +33,8 @@ public class UserBO {
     }
     
     public void deleteUser(String username) {
-    	User user = new User();
-    	user.setUsername(username);
-    	userDAO.updateUser(user, "delete-user");
+    	CommentDAO commentDAO = new CommentDAO();
+    	commentDAO.deleteCommentOfUser(username);
+    	userDAO.deleteUser(username);
     }
 }

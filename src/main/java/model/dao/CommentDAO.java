@@ -49,4 +49,15 @@ public class CommentDAO {
             throw new RuntimeException(e);
         }
     }
+    
+    public void deleteCommentOfUser(String username){
+        String sql = "Delete from comment where (`Username` = ?);";
+        try {
+            PreparedStatement stmt = conn.prepareStatement(sql);
+            stmt.setString(1, username);
+            stmt.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
 }

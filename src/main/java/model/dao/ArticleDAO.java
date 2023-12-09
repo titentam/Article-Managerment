@@ -20,9 +20,9 @@ public class ArticleDAO {
         	if (searchText != null) {
         		sql = "SELECT DISTINCT article.ArticleID, Title, Content, article.Locked, Time, Viewers "
         		+ "FROM article "
-        		+ "INNER JOIN articlecategory ON article.ArticleID = articlecategory.ArticleID "
-   				+ "INNER JOIN authorarticle ON article.ArticleID = authorarticle.ArticleID "     				
-        		+ "INNER JOIN user ON user.Username = authorarticle.Username "
+        		+ "LEFT JOIN articlecategory ON article.ArticleID = articlecategory.ArticleID "
+   				+ "LEFT JOIN authorarticle ON article.ArticleID = authorarticle.ArticleID "     				
+        		+ "LEFT JOIN user ON user.Username = authorarticle.Username "
         		+ "WHERE (article.Title LIKE '%" + searchText + "%' OR user.Name LIKE '%" + searchText + "%')";
         	} else {
         		sql = "SELECT DISTINCT article.ArticleID, Title, Content, article.Locked, Time, Viewers  "
@@ -35,6 +35,7 @@ public class ArticleDAO {
         	if (!category.equals("all")) {
         		sql += " AND CategoryID = '" + category + "'";
         	}
+        	System.out.println(sql);
         	
         	switch (sortBy) {
 			case "none":
