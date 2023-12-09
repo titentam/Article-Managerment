@@ -1,110 +1,139 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Enlink - Admin Dashboard Template</title>
 
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+    <!-- Favicon -->
+    <link rel="shortcut icon" href="../admin/assets/images/logo/favicon.png">
 
+    <!-- page css -->
 
-    <!-- Website Font style -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.1/css/font-awesome.min.css">
-    <link rel="stylesheet" href="register.css">
+    <!-- Core css -->
+    <link href="../admin/assets/css/app.min.css" rel="stylesheet">
+    <script>
+        function validateForm() {
+            var name = document.getElementById("name").value;
+            var email = document.getElementById("email").value;
+            var dob = document.getElementById("dob").value;
+            var gender = document.getElementById("gender").value;
+            var userName = document.getElementById("userName").value;
+            var password = document.getElementById("password").value;
+            var confirmPassword = document.getElementById("confirmPassword").value;
+            var errorDisplay = document.getElementById("errorDisplay");
 
-    <!-- Google Fonts -->
-    <link href='https://fonts.googleapis.com/css?family=Passion+One' rel='stylesheet' type='text/css'>
-    <link href='https://fonts.googleapis.com/css?family=Oxygen' rel='stylesheet' type='text/css'>
+            if (name === "" || email === "" || dob === "" || gender === "" || userName === "" || password === "" || confirmPassword === "") {
+                errorDisplay.innerHTML = "All fields must be filled out";
+                return false;
+            }
+            if (userName.length > 10) {
+                errorDisplay.innerHTML = "Username must not exceed 10 characters";
+                return false;
+            }
+            if (password !== confirmPassword) {
+                errorDisplay.innerHTML = "Password and Confirm Password do not match";
+                return false;
+            }
+            errorDisplay.innerHTML = "";
 
-    <title>Admin</title>
+            return true;
+        }
+    </script>
 </head>
+
 <body>
-<div class="container">
-    <div class="row main">
-        <div class="main-login main-center">
-            <h5>Register User</h5>
-            <form class="" method="post" action="../register">
-
-                <div class="form-group">
-                    <label for="name" class="cols-sm-2 control-label">Your Name</label>
-                    <div class="cols-sm-10">
-                        <div class="input-group">
-                            <span class="input-group-addon"><i class="fa fa-user fa" aria-hidden="true"></i></span>
-                            <input type="text" class="form-control" name="name" id="name"  placeholder="Enter your Name"/>
+<div class="app">
+    <div class="container-fluid p-h-0 p-v-20 bg full-height d-flex" style="background-image: url('../admin/assets/images/others/login-3.png')">
+        <div class="d-flex flex-column justify-content-between w-100">
+            <div class="container d-flex h-100">
+                <div class="row align-items-center w-100">
+                    <div class="col-md-7 col-lg-5 m-h-auto">
+                        <div class="card shadow-lg">
+                            <div class="card-body">
+                                <div class="d-flex align-items-center justify-content-between m-b-30">
+                                    <img class="img-fluid" alt="" src="../admin/assets/images/logo/logo.png">
+                                    <h2 class="m-b-0">Sign Up</h2>
+                                </div>
+                                <form method="post" action="../register" onsubmit="return validateForm()">
+                                    <div class="form-group">
+                                        <label class="font-weight-semibold" for="userName">YourName:</label>
+                                        <input name="name" type="text" class="form-control" id="name" placeholder="Username">
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="font-weight-semibold" for="email">Email:</label>
+                                        <input name="email" type="email" class="form-control" id="email" placeholder="Email">
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="font-weight-semibold" for="userName">Your Date of birth:</label>
+                                        <input name="dob" type="date" class="form-control" id="dob" placeholder="Username">
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="font-weight-semibold" for="userName">Gender:</label>
+                                        <div class="cols-sm-10">
+                                            <div class="input-group">
+                                                <select class="form-control" name="gender" id="gender">
+                                                    <option value="male">Male</option>
+                                                    <option value="female">Female</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="font-weight-semibold" for="userName">Username:</label>
+                                        <input name="username" type="text" class="form-control" id="userName" placeholder="Username">
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="font-weight-semibold" for="password">Password:</label>
+                                        <input name="password" type="password" class="form-control" id="password" placeholder="Password">
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="font-weight-semibold" for="confirmPassword">Confirm Password:</label>
+                                        <input name="confirm" type="password" class="form-control" id="confirmPassword" placeholder="Confirm Password">
+                                    </div>
+                                    <div id="errorDisplay" style="color: red; margin-bottom: 10px;"></div>
+                                    <div class="form-group">
+                                        <div class="d-flex align-items-center justify-content-between p-t-15">
+                                            <div class="checkbox">
+                                                <input id="checkbox" type="checkbox">
+                                                <label for="checkbox"><span>I have read the <a href="">agreement</a></span></label>
+                                            </div>
+                                            <button type="submit" class="btn btn-primary">Sign Up</button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
                         </div>
                     </div>
                 </div>
-
-                <div class="form-group">
-                    <label for="email" class="cols-sm-2 control-label">Your Email</label>
-                    <div class="cols-sm-10">
-                        <div class="input-group">
-                            <span class="input-group-addon"><i class="fa fa-envelope fa" aria-hidden="true"></i></span>
-                            <input type="text" class="form-control" name="email" id="email"  placeholder="Enter your Email"/>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <label for="username" class="cols-sm-2 control-label">Username</label>
-                    <div class="cols-sm-10">
-                        <div class="input-group">
-                            <span class="input-group-addon"><i class="fa fa-users fa" aria-hidden="true"></i></span>
-                            <input type="text" class="form-control" name="username" id="username"  placeholder="Enter your Username"/>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <label for="password" class="cols-sm-2 control-label">Password</label>
-                    <div class="cols-sm-10">
-                        <div class="input-group">
-                            <span class="input-group-addon"><i class="fa fa-lock fa-lg" aria-hidden="true"></i></span>
-                            <input type="password" class="form-control" name="password" id="password"  placeholder="Enter your Password"/>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <label for="confirm" class="cols-sm-2 control-label">Confirm Password</label>
-                    <div class="cols-sm-10">
-                        <div class="input-group">
-                            <span class="input-group-addon"><i class="fa fa-lock fa-lg" aria-hidden="true"></i></span>
-                            <input type="password" class="form-control" name="confirm" id="confirm"  placeholder="Confirm your Password"/>
-                        </div>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label for="dob" class="cols-sm-2 control-label">Your Date of Birth</label>
-                    <div class="cols-sm-10">
-                        <div class="input-group">
-                            <span class="input-group-addon"><i class="fa fa-lock fa-lg" aria-hidden="true"></i></span>
-                            <input type="date" class="form-control" name="dob" id="dob"  />
-                        </div>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label for="gender" class="cols-sm-2 control-label">Gender</label>
-                    <div class="cols-sm-10">
-                        <div class="input-group">
-                            <span class="input-group-addon"><i class="fa fa-lock fa-lg" aria-hidden="true"></i></span>
-                            <select class="form-control" name="gender" id="gender">
-                                <option value="male">Male</option>
-                                <option value="female">Female</option>
-                            </select>
-                        </div>
-                    </div>
-                </div>
-                <div class="form-group ">
-                    <button  type="submit" id="register-btn" class="btn btn-primary btn-lg btn-block login-button">Register</button>
-                </div>
-
-            </form>
+            </div>
+            <div class="d-none d-md-flex p-h-40 justify-content-between">
+                <span class="">© 2019 ThemeNate</span>
+                <ul class="list-inline">
+                    <li class="list-inline-item">
+                        <a class="text-dark text-link" href="">Legal</a>
+                    </li>
+                    <li class="list-inline-item">
+                        <a class="text-dark text-link" href="">Privacy</a>
+                    </li>
+                </ul>
+            </div>
         </div>
     </div>
 </div>
 
-<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-<!-- Include all compiled plugins (below), or include individual files as needed -->
+
+<!-- Core Vendors JS -->
+<script src="../admin/assets/js/vendors.min.js"></script>
+
+<!-- page js -->
+
+<!-- Core JS -->
+<script src="../admin/assets/js/app.min.js"></script>
+
 </body>
+
 </html>
