@@ -16,7 +16,7 @@ public class CategoryBO {
         return dao.getList();
     }
     public void insert(String name){
-        dao.insert(new Category(generateID(10),name));
+        dao.insert(new Category("C" + generateID(5),name));
     }
     public void update(String id, String name){
         dao.update(new Category(id,name));
