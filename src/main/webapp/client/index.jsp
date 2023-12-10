@@ -206,8 +206,8 @@
                             <h4>Most Recent</h4>
                         </div>
                         <%
-                            ArrayList<Article> topArticles = (ArrayList<Article>) request.getAttribute("top5Articles");
-                            var listAuthorsTop = (ArrayList<ArrayList<String>>)request.getAttribute("listAuthorsTop5");
+                            ArrayList<Article> topArticles = (ArrayList<Article>) request.getAttribute("top3MostPopular");
+                            var listAuthorsTop = (ArrayList<ArrayList<String>>)request.getAttribute("listAuthorsTop3MostPopular");
                             int i=0;
                             Article article = topArticles.get(i);
                             String  author=Arrays.toString(listAuthorsTop.get(i).toArray()).replace("[", "").replace("]", "");
