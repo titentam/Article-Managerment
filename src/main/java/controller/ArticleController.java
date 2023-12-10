@@ -4,14 +4,13 @@ import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.MultipartConfig;
 import jakarta.servlet.annotation.WebServlet;
-import jakarta.servlet.http.HttpServlet;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.Part;
+import jakarta.servlet.http.*;
 import model.bean.Article;
+import model.bean.User;
 import model.bo.ArticleBO;
 import model.bo.CategoryBO;
 import model.bo.CommentBO;
+import model.bo.UserBO;
 
 import java.awt.image.CropImageFilter;
 import java.io.File;
@@ -30,23 +29,28 @@ import java.util.Arrays;
 public class ArticleController extends HttpServlet {
     private static final long serialVersionUID = 1L;
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
-        String action = request.getParameter("action");
-        if(action!=null){
-            switch (action) {
-                case "detail":
-                    detail(request,response);
-                    break;
-                case "insert":
-                    insert(request,response);
-                    break;
-                case "update":
-                    update(request,response);
-                    break;
-            }
+        var user = checkLogin(request,response);
+        if(user==null){
+            sendDirect(request,response);
         }
         else{
-            this.ShowList(request,response);
+            String action = request.getParameter("action");
+            if(action!=null){
+                switch (action) {
+                    case "detail":
+                        detail(request,response);
+                        break;
+                    case "insert":
+                        insert(request,response);
+                        break;
+                    case "update":
+                        update(request,response);
+                        break;
+                }
+            }
+            else{
+                this.ShowList(request,response);
+            }
         }
     }
 
@@ -77,7 +81,7 @@ public class ArticleController extends HttpServlet {
 		String searchText = request.getParameter("search-text");
 		int page = request.getParameter("page") != null ? Integer.parseInt(request.getParameter("page")) : 1;
     	
-		int pageSize = 2;
+		int pageSize = 5;
     	var articleBO = new ArticleBO();
         var categoryBO = new CategoryBO();
         var result = articleBO.getList(category, sortBy, searchText, page, pageSize);
@@ -191,6 +195,29 @@ public class ArticleController extends HttpServlet {
         articleBO.deleteArticle(articleID);
 
         this.ShowList(request,response);
+    }
+    private User checkLogin(HttpServletRequest request, HttpServletResponse response){
+        HttpSession session = request.getSession();
+
+        var username = session.getAttribute("username");
+        if(username!=null){
+           var user =  new UserBO().getUserDetail(username.toString());
+           if(user.getRoleID().equals("R1")){
+               session.setAttribute("user",user);
+               return user;
+           }
+
+        }
+        return null;
+    }
+
+    private void sendDirect(HttpServletRequest request, HttpServletResponse response){
+        String path = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + request.getContextPath();
+        try {
+            response.sendRedirect(path+"/login");
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
     
     private void ForwardUrl(String url,HttpServletRequest request, HttpServletResponse response){

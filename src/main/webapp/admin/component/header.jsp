@@ -1,3 +1,6 @@
+<%@ page import="model.bean.User" %><%
+    var user = (User)session.getAttribute("user");
+%>
 <div class="header">
     <div class="logo logo-dark">
         <a href="index.html">
@@ -107,39 +110,12 @@
                                 <img src="assets/images/avatars/thumb-3.jpg" alt="">
                             </div>
                             <div class="m-l-10">
-                                <p class="m-b-0 text-dark font-weight-semibold">Marshall Nichols</p>
-                                <p class="m-b-0 opacity-07">UI/UX Desinger</p>
+                                <p class="m-b-0 text-dark font-weight-semibold"><%=user.getName()%></p>
+                                <p class="m-b-0 opacity-07"><%=user.getEmail()%></p>
                             </div>
                         </div>
                     </div>
-                    <a href="javascript:void(0);" class="dropdown-item d-block p-h-15 p-v-10">
-                        <div class="d-flex align-items-center justify-content-between">
-                            <div>
-                                <i class="anticon opacity-04 font-size-16 anticon-user"></i>
-                                <span class="m-l-10">Edit Profile</span>
-                            </div>
-                            <i class="anticon font-size-10 anticon-right"></i>
-                        </div>
-                    </a>
-                    <a href="javascript:void(0);" class="dropdown-item d-block p-h-15 p-v-10">
-                        <div class="d-flex align-items-center justify-content-between">
-                            <div>
-                                <i class="anticon opacity-04 font-size-16 anticon-lock"></i>
-                                <span class="m-l-10">Account Setting</span>
-                            </div>
-                            <i class="anticon font-size-10 anticon-right"></i>
-                        </div>
-                    </a>
-                    <a href="javascript:void(0);" class="dropdown-item d-block p-h-15 p-v-10">
-                        <div class="d-flex align-items-center justify-content-between">
-                            <div>
-                                <i class="anticon opacity-04 font-size-16 anticon-project"></i>
-                                <span class="m-l-10">Projects</span>
-                            </div>
-                            <i class="anticon font-size-10 anticon-right"></i>
-                        </div>
-                    </a>
-                    <a href="javascript:void(0);" class="dropdown-item d-block p-h-15 p-v-10">
+                    <a href="../logout" class="dropdown-item d-block p-h-15 p-v-10">
                         <div class="d-flex align-items-center justify-content-between">
                             <div>
                                 <i class="anticon opacity-04 font-size-16 anticon-logout"></i>

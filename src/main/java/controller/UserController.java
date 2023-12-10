@@ -25,7 +25,13 @@ public class UserController extends HttpServlet {
     public UserController() { }
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		doPost(request, response);
+		var user = checkLogin(request,response);
+		if(user==null){
+			sendDirect(request,response);
+		}else{
+			doPost(request, response);
+		}
+
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -170,5 +176,25 @@ public class UserController extends HttpServlet {
 		}
 		
 		getUserDetail(request, response);
+	}
+	private User checkLogin(HttpServletRequest request, HttpServletResponse response){
+		HttpSession session = request.getSession();
+
+		var username = session.getAttribute("username");
+		if(username!=null){
+			var user =  new UserBO().getUserDetail(username.toString());
+			if(user.getRoleID().equals("R1"))
+				return user;
+		}
+		return null;
+	}
+
+	private void sendDirect(HttpServletRequest request, HttpServletResponse response){
+		String path = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + request.getContextPath();
+		try {
+			response.sendRedirect(path+"/login");
+		} catch (IOException e) {
+			throw new RuntimeException(e);
+		}
 	}
 }

@@ -40,7 +40,7 @@
                         <!-- Logo -->
                         <div class="col-xl-3 col-lg-3 col-md-3 d-none d-md-block">
                             <div class="logo">
-                                <a href="index.html"><img src="assets/img/logo/logo.png" alt=""></a>
+                                <a href="./article"><img src="assets/img/logo/logo.png" alt=""></a>
                             </div>
                         </div>
                         <div class="col-xl-9 col-lg-9 col-md-9">
@@ -57,19 +57,14 @@
                         <div class="col-xl-6 col-lg-6 col-md-12 header-flex">
                             <!-- sticky -->
                             <div class="sticky-logo">
-                                <a href="index.html"><img src="assets/img/logo/logo.png" alt=""></a>
+                                <a href="./article"><img src="assets/img/logo/logo.png" alt=""></a>
                             </div>
                             <!-- Main-menu -->
                             <div class="main-menu d-none d-md-block">
                                 <nav>
                                     <ul id="navigation">
-                                        <li><a href="../article-detail.jsp">Home</a></li>
-                                        <li><a href="categori.html">Category</a>
-                                            <ul class="submenu">
-                                                <li><a href="../blog.jsp">Blog</a></li>
-                                                <li><a href="blog_details.html">Blog Details</a></li>
-                                                <li><a href="elements.html">Element</a></li>
-                                            </ul>
+                                        <li><a href="./article">Home</a></li>
+                                        <li><a href="./article?action=category">Category</a>
                                         </li>
                                     </ul>
                                 </nav>
@@ -85,8 +80,8 @@
                                     <li><a href="categori.html">Tài khoản</a>
                                         <% if (username == null) { %>
                                         <ul class="submenu">
-                                        	<li><a href="">Đăng nhập</a></li>
-                                            <li><a href="blog_details.html">Đăng ký</a></li>
+                                        	<li><a href="../login">Đăng nhập</a></li>
+                                            <li><a href="../register">Đăng ký</a></li>
                                         </ul>
                                         <% } else { %>
                                         <ul class="submenu">

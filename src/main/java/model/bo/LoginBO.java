@@ -8,4 +8,7 @@ public class LoginBO {
         // Additional business logic can be added here if needed
         return LoginDAO.isValidUser(username, password);
     }
+    public String getRoleID(String username, String password){
+        return LoginDAO.getRoleID(username, password);
+    }
 }
