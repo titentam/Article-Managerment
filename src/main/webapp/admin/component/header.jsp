@@ -1,5 +1,5 @@
 <%@ page import="model.bean.User" %><%
-    var user = (User)session.getAttribute("user");
+    var user1 = (User)session.getAttribute("user");
 %>
 <div class="header">
     <div class="logo logo-dark">
@@ -110,8 +110,8 @@
                                 <img src="assets/images/avatars/thumb-3.jpg" alt="">
                             </div>
                             <div class="m-l-10">
-                                <p class="m-b-0 text-dark font-weight-semibold"><%=user.getName()%></p>
-                                <p class="m-b-0 opacity-07"><%=user.getEmail()%></p>
+                                <p class="m-b-0 text-dark font-weight-semibold"><%=user1.getName()%></p>
+                                <p class="m-b-0 opacity-07"><%=user1.getEmail()%></p>
                             </div>
                         </div>
                     </div>

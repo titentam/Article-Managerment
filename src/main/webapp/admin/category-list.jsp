@@ -7,7 +7,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title>Enlink - Admin Dashboard Template</title>
+    <title>Category</title>
 
     <!-- Favicon -->
     <link rel="shortcut icon" href="assets/images/logo/favicon.png">
@@ -17,7 +17,6 @@
 
     <!-- Core css -->
     <link href="assets/css/app.min.css" rel="stylesheet">
-
 </head>
 
 <body>
@@ -53,23 +52,24 @@
                         <div class="card-body">
                             <div class="row m-b-30">
                                 <div class="col-lg-4 text-right" style="margin-left: 65%;">
-                                    <form action="./category?action=submitInsert" class="row" method="post">
+                                    <form name="add" action="./category?action=submitInsert" class="row" method="post">
                                         <input name="name" type="text" class="form-control col-8" placeholder="Nhập tên danh mục mới">
-                                        <button type="submit" class="btn btn-primary col-4">
+                                        <button type="button" class="btn btn-primary col-4" onclick="submitForm()">
                                             <i class="anticon anticon-file-excel m-r-5"></i>
                                             <span>Thêm</span>
                                         </button>
                                     </form>
-
+									<div id="error" class="text-danger text-left m-t-5"></div>
                                 </div>
                             </div>
                             <div class="table-responsive">
                                 <table class="table table-hover">
-                                    <thead>
+                                    <thead style="background: lightskyblue">
                                     <tr>
                                         <th>ID</th>
-                                        <th>Tên</th>
-                                        <th></th>
+                                        <th>Tên thể loại</th>
+                                        <th>Cập nhật</th>
+                                        <th class="text-center">Xác nhận cập nhật</th>
                                     </tr>
                                     </thead>
                                     <tbody>
@@ -82,12 +82,15 @@
                                                 <%=category.getCategoryID()%>
                                             </td>
                                             <td>
+                                                <%=category.getName() %>
+                                            </td>
+                                            <td>
                                                 <div class="d-flex align-items-center">
-                                                    <input class="m-b-0" type="text" name="name" value="<%=category.getName()%>">
+                                                    <input class="form-control border-grey m-b-0" type="text" name="name" value="<%=category.getName()%>">
                                                 </div>
                                             </td>
-                                            <td class="text-right">
-                                                <button type="submit" class="btn btn-icon btn-hover btn-sm btn-rounded pull-right">
+                                            <td class="text-center">
+                                                <button type="submit" class="btn btn-icon btn-hover btn-sm btn-rounded">
                                                     <i class="anticon anticon-edit"></i>
                                                 </button>
                                             </td>
@@ -128,5 +131,24 @@
     <script src="assets/js/app.min.js"></script>
 
 </body>
-
+<script type="text/javascript">
+	var name_input = document.querySelector('input[name="name"]');
+	var error_span = document.querySelector('#error');
+	function submitForm () {
+		event.preventDefault();
+		if (name_input.value.trim() === "") {
+			error_span.innerHTML = 'Vui lòng nhập thể loại!';
+		} else {
+			<% for (int i = 0; i < categories.size(); i++) { %>
+				if (name_input.value.trim() == '<%=categories.get(i).getName() %>') {
+					error_span.innerHTML = "Thể loại đã tồn tại!";
+					return;
+				}
+			<% } %>
+			name_input.value = name_input.value.trim();
+			error_span.innerHTML = "";
+			document.forms['add'].submit();
+		}
+	}
+</script>
 </html>

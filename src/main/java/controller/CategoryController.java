@@ -2,21 +2,13 @@ package controller;
 
 import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletException;
-import jakarta.servlet.annotation.MultipartConfig;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.*;
-import model.bean.Article;
 import model.bean.User;
-import model.bo.ArticleBO;
 import model.bo.CategoryBO;
-import model.bo.CommentBO;
 import model.bo.UserBO;
 
 import java.io.IOException;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.Arrays;
 
 @WebServlet("/admin/category")
 public class CategoryController extends HttpServlet {
@@ -24,7 +16,7 @@ public class CategoryController extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         var user = checkLogin(request,response);
         if(user==null){
-            sendDirect(request,response);
+            sendDirect("/login", request,response);
         }
         else{
             this.ShowList(request,response);
@@ -57,14 +49,15 @@ public class CategoryController extends HttpServlet {
     private void submitInsert(HttpServletRequest request, HttpServletResponse response) {
         String name = request.getParameter("name");
         new CategoryBO().insert(name);
-        this.ShowList(request,response);
+        sendDirect("/admin/category", request, response);
     }
 
     private void submitUpdate(HttpServletRequest request, HttpServletResponse response) {
         String id = request.getParameter("categoryID");
         String name = request.getParameter("name");
         new CategoryBO().update(id,name);
-        this.ShowList(request,response);
+        
+        sendDirect("/admin/category", request, response);
     }
     private User checkLogin(HttpServletRequest request, HttpServletResponse response){
         HttpSession session = request.getSession();
@@ -81,10 +74,10 @@ public class CategoryController extends HttpServlet {
         return null;
     }
 
-    private void sendDirect(HttpServletRequest request, HttpServletResponse response){
+    private void sendDirect(String url, HttpServletRequest request, HttpServletResponse response){
         String path = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + request.getContextPath();
         try {
-            response.sendRedirect(path+"/login");
+            response.sendRedirect(path + url);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

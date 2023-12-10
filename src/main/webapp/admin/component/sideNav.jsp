@@ -24,6 +24,22 @@
             <li class="nav-item dropdown">
                 <a class="dropdown-toggle" href="javascript:void(0);">
                                 <span class="icon-holder">
+                                    <i class="anticon anticon-ordered-list"></i>
+                                </span>
+                    <span class="title">Quản lí thể loại</span>
+                    <span class="arrow">
+                                    <i class="arrow-icon"></i>
+                                </span>
+                </a>
+                <ul class="dropdown-menu">
+                    <li>
+                        <a href="../admin/category">Danh sách thể loại</a>
+                    </li>
+                </ul>
+            </li>
+            <li class="nav-item dropdown">
+                <a class="dropdown-toggle" href="javascript:void(0);">
+                                <span class="icon-holder">
                                     <i class="anticon anticon-user"></i>
                                 </span>
                     <span class="title">Quản lí người dùng</span>
