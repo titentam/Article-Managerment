@@ -1,6 +1,5 @@
 <!-- Preloader Start -->
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-         pageEncoding="UTF-8"%>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <div id="preloader-active">
     <div class="preloader d-flex align-items-center justify-content-center">
         <div class="preloader-inner position-relative">
@@ -55,7 +54,7 @@
             <div class="header-bottom header-sticky">
                 <div class="container">
                     <div class="row align-items-center">
-                        <div class="col-xl-8 col-lg-8 col-md-12 header-flex">
+                        <div class="col-xl-6 col-lg-6 col-md-12 header-flex">
                             <!-- sticky -->
                             <div class="sticky-logo">
                                 <a href="index.html"><img src="assets/img/logo/logo.png" alt=""></a>
@@ -76,7 +75,7 @@
                                 </nav>
                             </div>
                         </div>
-                        <div class="col-xl-4 col-lg-4 col-md-4">
+                        <div class="col-xl-6 col-lg-6 col-md-6">
                             <div class="header-right f-right d-none d-lg-block main-menu ">
                                 <!-- Heder social -->
                                 <%
@@ -97,11 +96,13 @@
                                         <% } %>
                                     </li>
                                 </ul>
-                                
-                                <!-- Search Nav -->
-                                <div class="nav-search search-switch">
-                                    <i class="fa fa-search"></i>
-                                </div>
+                            </div>
+                            <!-- Search Nav -->
+                            <div class="nav-search d-flex align-items-center">
+                                	<input type="text" name="search-text" class="form-control" placeholder='Nhập bài báo, tác giả, ...'
+                                            onfocus="this.placeholder = ''"
+                                            onblur="this.placeholder = 'Nhập bài báo, tác giả, ...'">
+                                    <a href="#" onclick="searchHandler()"><i class="fa fa-search"></i></a>
                             </div>
                         </div>
                         <!-- Mobile Menu -->
@@ -115,3 +116,11 @@
     </div>
     <!-- Header End -->
 </header>
+<script>
+	function searchHandler() {
+		event.preventDefault();
+		var search_text = document.querySelector('input[name=\'search-text\']').value;
+		var currentHref = "../client/article?action=list-article&search-text=" + search_text;
+		window.location.href = currentHref;
+	}
+</script>

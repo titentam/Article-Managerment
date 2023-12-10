@@ -32,11 +32,41 @@ public class ArticleClientSideController extends HttpServlet {
                 case "category":
                     category(request,response);
                     break;
+                case "list-article":
+                	showList(request,response);
+                    break;
             }
         }
         else{
            listTop5Articles(request,response);
         }
+    }
+    private void showList(HttpServletRequest request, HttpServletResponse response){
+		String searchText = request.getParameter("search-text");
+		String category = request.getParameter("category") != null ? request.getParameter("category") : "all";
+		int page = request.getParameter("page") != null ? Integer.parseInt(request.getParameter("page")) : 1;
+    	
+		int pageSize = 2;
+    	var articleBO = new ArticleBO();
+        var categoryBO = new CategoryBO();
+        var result = articleBO.getList(category, "none", searchText, page, pageSize);
+        var numOfPage = (int) result[1];
+        var categories = categoryBO.getList();
+        
+        var listArticle = (ArrayList<Article>) result[0];
+        ArrayList<ArrayList<String>> listAuthors = new ArrayList<>();
+        for (var item : listArticle) {
+            listAuthors.add(articleBO.getAuthors(item.getArticleID()));
+        }
+        ArrayList<Article> top5Articles = articleBO.getTop5ArticlesByTime();
+
+        request.setAttribute("categories", categories);
+        request.setAttribute("listArticle", listArticle);
+        request.setAttribute("listAuthors", listAuthors);
+        request.setAttribute("numOfPage", numOfPage);
+		request.setAttribute("currentPage", page);
+		request.setAttribute("top5Articles", top5Articles);
+        ForwardUrl("/client/blog.jsp",request,response);
     }
 
     private void category(HttpServletRequest request, HttpServletResponse response) {

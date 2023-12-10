@@ -102,10 +102,24 @@ public class ArticleBO {
         return uuidString.substring(0, length);
     }
     public ArrayList<Article> getTop5ArticlesByTime() {
-        return dao.getTop5ArticlesByTime();
+    	ArrayList<Article> list = dao.getTop5ArticlesByTime();
+    	for (Article article : list) {
+			ArrayList<Category> categories = new CategoryDAO().getListCategory(article.getArticleID());
+			article.setCategories(categories);
+		}
+        return list;
     }
-    public ArrayList<Article> getTop3MostPopular(){return dao.getTop3MostPopular();}
-    public ArrayList<Article> getArticlesByCategory(String categoryName){return dao.getArticlesByCategory(categoryName);}
+    public ArrayList<Article> getTop3MostPopular(){
+    	ArrayList<Article> list = dao.getTop3MostPopular();
+    	for (Article article : list) {
+			ArrayList<Category> categories = new CategoryDAO().getListCategory(article.getArticleID());
+			article.setCategories(categories);
+		}
+        return list;
+    }
+    public ArrayList<Article> getArticlesByCategory(String categoryName){
+    	return dao.getArticlesByCategory(categoryName);
+    }
 
 
 }

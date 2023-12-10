@@ -36,7 +36,6 @@ public class ArticleDAO {
         	if (!category.equals("all")) {
         		sql += " AND CategoryID = '" + category + "'";
         	}
-        	System.out.println(sql);
         	
         	switch (sortBy) {
 			case "none":
@@ -116,7 +115,6 @@ public class ArticleDAO {
             PreparedStatement stmt = conn.prepareStatement(sql);
             stmt.setString(1,id);
             ResultSet rs = stmt.executeQuery();
-            System.out.println(stmt);
             while(rs.next()){
                 res.add(rs.getString(1));
             }

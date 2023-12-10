@@ -4,15 +4,18 @@
 <%@ page import="java.util.Arrays" %>
 <%@ page import="java.text.SimpleDateFormat" %>
 <%@ page import="model.bean.CommentView" %>
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-         pageEncoding="UTF-8"%>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <!DOCTYPE html>
 <html lang="en">
-
+<%
+    var record = (Article)request.getAttribute("record");
+    var authors = (ArrayList<String>)request.getAttribute("authors");
+    var comments = (ArrayList<CommentView>)request.getAttribute("comments");
+%>
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title>Enlink - Admin Dashboard Template</title>
+    <title><%=record.getTitle() %></title>
 
     <!-- Favicon -->
     <link rel="shortcut icon" href="assets/images/logo/favicon.png">
@@ -34,11 +37,6 @@
 		return builder.toString();
 }%>
 	
-<%
-    var record = (Article)request.getAttribute("record");
-    var authors = (ArrayList<String>)request.getAttribute("authors");
-    var comments = (ArrayList<CommentView>)request.getAttribute("comments");
-%>
     <div class="app">
         <div class="layout">
             <!-- Header START -->

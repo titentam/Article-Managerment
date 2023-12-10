@@ -44,7 +44,10 @@
 		for (Category category1 : categories) {
 			builder.append(category1.getName()).append(", ");
 		}
-		builder.deleteCharAt(builder.length() - 2);
+		if (builder.length() > 0)
+			builder.deleteCharAt(builder.length() - 2);
+		else 
+			builder.append("Không có");
 		return builder.toString();
 	}%>
 	
