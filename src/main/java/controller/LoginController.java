@@ -11,7 +11,7 @@ import model.bo.LoginBO;
 
 import java.io.IOException;
 
-@WebServlet(urlPatterns = {"/login", "/logout"})
+@WebServlet(urlPatterns = {"/login"})
 public class LoginController extends HttpServlet {
     private static final long serialVersionUID = 1L;
     private final LoginBO LoginBO = new LoginBO();
@@ -20,14 +20,20 @@ public class LoginController extends HttpServlet {
             throws ServletException, IOException {
         String username = request.getParameter("username");
         String password = request.getParameter("password");
-        boolean isValid = (boolean)LoginBO.isValidUser(username, password)[0];
-        if (isValid) {
-            int role= (int)LoginBO.isValidUser(username, password)[1];
+        var roleID = LoginBO.getRoleID(username,password);
+        if (roleID!=null) {
+            String path = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + request.getContextPath();
             HttpSession session = request.getSession();
             session.setAttribute("username", username);
-            session.setAttribute("role", role);
-            RequestDispatcher rd = request.getRequestDispatcher("index.jsp");
-            rd.forward(request, response);
+            session.setAttribute("role", roleID);
+            if(roleID.equals("R1")) // admin
+            {
+                response.sendRedirect(path+ "/admin/article");
+            }
+            else{
+                response.sendRedirect(path+ "/client/article");
+            }
+
         } else {
             HttpSession session = request.getSession();
             session.setAttribute("errormessage", "Invalid username or password");
@@ -37,21 +43,18 @@ public class LoginController extends HttpServlet {
     }
     
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-    	String requestURI = request.getRequestURI();
-    	String path = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + request.getContextPath();
-    	
-    	if (requestURI.equals("/WebAM/login")) {
-    		path += "/Login/Login.jsp";
-    		response.sendRedirect(path);
-       } else if (requestURI.equals("/WebAM/logout")) {
-           HttpSession session = request.getSession();
-           if (session != null) {
-               session.invalidate();
-           }
-           
-           path += "/Login/Login.jsp";
-   		   response.sendRedirect(path);
-       }
+        String path = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + request.getContextPath();
+
+        path += "/Login/Login.jsp";
+        response.sendRedirect(path);
+    }
+    private void ForwardUrl(String url,HttpServletRequest request, HttpServletResponse response){
+        RequestDispatcher rd = request.getServletContext().getRequestDispatcher(url);
+        try {
+            rd.forward(request, response);
+        } catch (ServletException | IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
 }

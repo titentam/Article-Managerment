@@ -3,8 +3,7 @@
 <%@ page import="java.util.Arrays" %>
 <%@ page import="java.text.SimpleDateFormat" %>
 <%@ page import="model.bean.Category" %>
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-         pageEncoding="UTF-8"%>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <!DOCTYPE html>
 <html lang="en">
 

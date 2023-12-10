@@ -5,6 +5,7 @@ import db.DBConnection;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 
 public class LoginDAO {
     private final Connection conn;
@@ -29,5 +30,22 @@ public class LoginDAO {
             e.printStackTrace();
         }
         return new Object[]{isValid, roleID};
+    }
+    public String getRoleID(String username, String password){
+        String query = "select RoleID from user where Username = ? and Password = ?";
+        PreparedStatement stmt = null;
+        String roleID = null;
+        try {
+            stmt = conn.prepareStatement(query);
+            stmt.setString(1,username);
+            stmt.setString(2,password);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()){
+                roleID = rs.getString(1);
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return roleID;
     }
 }
