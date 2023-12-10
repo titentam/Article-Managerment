@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title>Enlink - Admin Dashboard Template</title>
+    <title>Đăng nhập</title>
     <!-- Favicon -->
     <link rel="shortcut icon" href="../admin/assets/images/logo/favicon.png">
     <!-- page css -->
@@ -25,7 +25,7 @@
                                 %>
          
                                 <div class="d-flex align-items-center justify-content-between m-b-30">
-                                    <img class="img-fluid" alt="" src="../admin/assets/images/logo/logo.png">
+                                    <img class="img-fluid" alt="" src="../client/assets/img/logo/logo.png">
                                     <h2 class="m-b-0">Sign In</h2>
                                 </div>
                                 <form action="../login" method="post">

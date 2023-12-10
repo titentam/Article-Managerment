@@ -1,7 +1,7 @@
 <div class="header">
     <div class="logo logo-dark">
         <a href="index.html">
-            <img src="assets/images/logo/logo.png" alt="Logo">
+            <img src="../client/assets/img/logo/logo.png" alt="Logo">
             <img class="logo-fold" src="assets/images/logo/logo-fold.png" alt="Logo">
         </a>
     </div>
