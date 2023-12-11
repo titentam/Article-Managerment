@@ -1,3 +1,4 @@
+<%@page import="java.util.Date"%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ page import="java.util.ArrayList" %>
 <%@ page import="model.bean.Article" %>
@@ -10,7 +11,7 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
-    <title>News  HTML-5 Template </title>
+    <title>Trang chủ </title>
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <%@include file="component/allcss.jsp"%>
@@ -19,7 +20,25 @@
 <body>
 
 <%@include file="component/header.jsp"%>
-
+<%!public String formatDateString(Date date) {
+    	SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
+		return format.format(date);
+	}%>
+<%! public String arrayToString(ArrayList<Category> categories) { 
+		StringBuilder builder = new StringBuilder();
+		builder.append("Danh mục: ");
+		if (categories != null) {
+			for (Category category1 : categories) {
+				builder.append(category1.getName()).append(", ");
+			}
+		}
+		if (builder.length() > "Danh mục: ".length()) {
+			builder.deleteCharAt(builder.length() - 2);
+		} else 
+			builder.append("Danh mục: Không xác định");
+		return builder.toString();
+	}%>
+	
 <main>
     <!-- Trending Area Start -->
         <div style="margin-top: 7rem" class="container">
@@ -32,17 +51,19 @@
                                 var listAuthorsTop5 = (ArrayList<ArrayList<String>>)request.getAttribute("listAuthorsTop5");
                                 for (int i = 0; i < Math.min(3, top5Articles.size()); i++) {
                                     Article article = top5Articles.get(i);
-                                    String  author=Arrays.toString(listAuthorsTop5.get(i).toArray()).replace("[", "").replace("]", "");
+                                    String  author = listAuthorsTop5.get(i).size() > 0 
+                                    		? Arrays.toString(listAuthorsTop5.get(i).toArray()).replace("[", "").replace("]", "")
+                                    		: " Không xác định";
                             %>
                             <!-- Single -->
                             <div class="single-slider">
                                 <div class="trending-top mb-30">
                                     <div class="trend-top-img">
-                                          <img style="width:100%;"  src="../img/<%= article.getImage() %>" alt="">
+                                          <img style="width:100%; height: 450px;"  src="../img/<%= article.getImage() %>" alt="">
                                         <div class="trend-top-cap">
-                                            <span class="bgr" data-animation="fadeInUp" data-delay=".2s" data-duration="1000ms"><%= article.getCategories() %></span>
+                                            <span class="bgbeg p-1 pl-3 pr-3 rounded text-white" data-animation="fadeInUp" data-delay=".2s" data-duration="1000ms"><%=arrayToString(article.getCategories()) %></span>
                                             <h2><a href="../client/article?action=detail&articleID=<%=article.getArticleID()%>" data-animation="fadeInUp" data-delay=".4s" data-duration="1000ms"><%= article.getTitle() %></a></h2>
-                                            <p data-animation="fadeInUp" data-delay=".6s" data-duration="1000ms">by  <%=author %> - <%= article.getTime() %></p>
+                                            <p data-animation="fadeInUp" data-delay=".6s" data-duration="1000ms"> <%=author %> - <%= formatDateString(article.getTime()) %></p>
                                         </div>
                                     </div>
                                 </div>
@@ -58,16 +79,18 @@
                             <%
                                 for (int i = 3; i < top5Articles.size(); i++) {
                                     Article article = top5Articles.get(i);
-                                    String  author=Arrays.toString(listAuthorsTop5.get(i).toArray()).replace("[", "").replace("]", "");
+                                    String  author = listAuthorsTop5.get(i).size() > 0 
+                                    		? Arrays.toString(listAuthorsTop5.get(i).toArray()).replace("[", "").replace("]", "")
+                                    		: " Không xác định";
                             %>
                             <div class="col-lg-12 col-md-6 col-sm-6">
                                 <div class="trending-top mb-30">
                                     <div class="trend-top-img">
-                                          <img style="width:100%;"  src="../img/<%= article.getImage() %>" alt="">
+                                          <img style="width:100%; height: 200px"  src="../img/<%= article.getImage() %>" alt="">
                                         <div class="trend-top-cap trend-top-cap2">
-                                            <span class="bgb"><%= article.getCategories() %></span>
+                                            <span class="bgb p-1 pl-3 pr-3 rounded text-white"><%=arrayToString(article.getCategories()) %></span>
                                             <h2><a href="../client/article?action=detail&articleID=<%=article.getArticleID()%>"><%= article.getTitle() %></a></h2>
-                                            <p>by  <%=author %> - <%= article.getTime() %></p>
+                                            <p><%=author %> - <%= formatDateString(article.getTime()) %></p>
                                         </div>
                                     </div>
                                 </div>
@@ -129,20 +152,15 @@
                                             <div class="col-xl-6 col-lg-6 col-md-6">
                                                 <div class="whats-news-single mb-40 mb-40">
                                                     <div class="whates-img">
-                                                        <img src="../img/<%= article.getImage() %>" alt="">
+                                                        <img style="height: 200px" src="../img/<%= article.getImage() %>" alt="">
                                                     </div>
                                                     <div class="whates-caption whates-caption2">
                                                         <h4><a href="./article?action=detail&articleID=<%=article.getArticleID()%>">
                                                             <%=article.getTitle()%>
                                                         </a></h4>
                                                         <span>
-                                                                <%
-                                                                    SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy MM:HH");
-                                                                    String time = dateFormat.format(article.getTime());
-                                                                %>
-                                                                <%=time%>
+                                                        <%=formatDateString(article.getTime())%>
                                                             </span>
-                                                        <p>Nội dung</p>
                                                     </div>
                                                 </div>
                                             </div>
@@ -158,100 +176,45 @@
                     </div>
                 </div>
                 <div class="col-lg-4">
-                    <!-- Flow Socail -->
-                    <div class="single-follow mb-45">
-                        <div class="single-box">
-                            <div class="follow-us d-flex align-items-center">
-                                <div class="follow-social">
-                                    <a href="#"><img src="assets/img/news/icon-fb.png" alt=""></a>
-                                </div>
-                                <div class="follow-count">
-                                    <span>8,045</span>
-                                    <p>Fans</p>
-                                </div>
-                            </div>
-                            <div class="follow-us d-flex align-items-center">
-                                <div class="follow-social">
-                                    <a href="#"><img src="assets/img/news/icon-tw.png" alt=""></a>
-                                </div>
-                                <div class="follow-count">
-                                    <span>8,045</span>
-                                    <p>Fans</p>
-                                </div>
-                            </div>
-                            <div class="follow-us d-flex align-items-center">
-                                <div class="follow-social">
-                                    <a href="#"><img src="assets/img/news/icon-ins.png" alt=""></a>
-                                </div>
-                                <div class="follow-count">
-                                    <span>8,045</span>
-                                    <p>Fans</p>
-                                </div>
-                            </div>
-                            <div class="follow-us d-flex align-items-center">
-                                <div class="follow-social">
-                                    <a href="#"><img src="assets/img/news/icon-yo.png" alt=""></a>
-                                </div>
-                                <div class="follow-count">
-                                    <span>8,045</span>
-                                    <p>Fans</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
                     <!-- Most Recent Area -->
                     <div class="most-recent-area">
                         <!-- Section Tittle -->
                         <div class="small-tittle mb-20">
-                            <h4>Most Recent</h4>
+                            <h4>Mới nhất</h4>
                         </div>
                         <%
-                            ArrayList<Article> topArticles = (ArrayList<Article>) request.getAttribute("top3MostPopular");
-                            var listAuthorsTop = (ArrayList<ArrayList<String>>)request.getAttribute("listAuthorsTop3MostPopular");
-                            int i=0;
-                            Article article = topArticles.get(i);
-                            String  author=Arrays.toString(listAuthorsTop.get(i).toArray()).replace("[", "").replace("]", "");
+                            ArrayList<Article> topArticles = (ArrayList<Article>) request.getAttribute("top5Articles");
+                            var listAuthorsTop = (ArrayList<ArrayList<String>>)request.getAttribute("listAuthorsTop5");
+                            Article article = topArticles.get(0);
+                            String  author = listAuthorsTop5.get(0).size() > 0 
+                            		? Arrays.toString(listAuthorsTop5.get(0).toArray()).replace("[", "").replace("]", "")
+                            		: " Không xác định";
                         %>
                         <!-- Details -->
                         <div class="most-recent mb-40">
-                            <div class="most-recent-img">
-                                <img  style="width:100%;" src="../img/<%=article.getImage()%>" alt="">
+                            <div class="most-recent-img rounded">
+                                <img  style="width:100%; height: 200px" src="../img/<%=article.getImage()%>" alt="">
                                 <div class="most-recent-cap">
-                                    <span class="bgbeg"><%=article.getCategories()%></span>
+                                    <span class="bgbeg"><%=arrayToString(article.getCategories())%></span>
                                     <h4><a href="../client/article?action=detail&articleID=<%=article.getArticleID()%>"><%=article.getTitle()%> </a></h4>
-                                    <p> <%=author %> - <%= article.getTime() %></p>
+                                    <p> <%=author %> - <%= formatDateString(article.getTime()) %></p>
                                 </div>
                             </div>
                         </div>
-                        <%i++;%>
                         <!-- Single -->
+                        <% for (int k = 1; k < 3; k++) { %>
                         <div class="most-recent-single">
-                            <div class="most-recent-images">
-                                <img  style="width:100%;" src="../img/<%=article.getImage()%>" alt="">
+                            <div class="most-recent-images" style="width: 60%">
+                                <img  style="width:100%; height: 150px" src="../img/<%=topArticles.get(k).getImage()%>" alt="">
                             </div>
                             <div class="most-recent-capt">
-                                <h4><a href="../client/article?action=detail&articleID=<%=article.getArticleID()%>"><%=article.getTitle()%></a></h4>
-                                <p> <%=author %> - <%= article.getTime() %></p>
+                                <h4><a href="../client/article?action=detail&articleID=<%=topArticles.get(k).getArticleID()%>"><%=topArticles.get(k).getTitle()%></a></h4>
+                                <p><%= formatDateString(topArticles.get(k).getTime()) %></p>
                             </div>
                         </div>
-                        <%i++;%>
-                        <!-- Single -->
-                        <div class="most-recent-single">
-                            <div class="most-recent-images">
-                                <img style="width:100%;" src="../img/<%=article.getImage()%>" alt="">
-                            </div>
-                            <div class="most-recent-capt">
-                                <h4><a href="../client/article?action=detail&articleID=<%=article.getArticleID()%>"><%=article.getTitle()%></a></h4>
-                                <p> <%=author %> - <%= article.getTime() %></p>
-                            </div>
-                        </div>
+                        <% } %>
                     </div>
                 </div>
-                <!-- Banner -->
-                <div class="banner-one mt-20 mb-30">
-                      <img style="width:100%;"  src="assets/img/gallery/body_card1.png" alt="">
-                </div>
-
             </div>
         </div>
     </section>
@@ -273,7 +236,7 @@
                             <div class="row">
                                 <div class="col-lg-12">
                                     <div class="small-tittle mb-30">
-                                        <h4>Most Popular</h4>
+                                        <h4>Phổ biến</h4>
                                     </div>
                                 </div>
                             </div>
@@ -285,18 +248,19 @@
                                         <%
                                         ArrayList<Article> mostPopular = (ArrayList<Article>) request.getAttribute("top3MostPopular");
                                                 var listAuthorsPopular = (ArrayList<ArrayList<String>>)request.getAttribute("listAuthorsTop3MostPopular");
-                                                for (int j = 0; i <  top5Articles.size(); i++) {
-                                                Article articlemostPopular = mostPopular.get(i);
-                                                String  AuthorsPopular=Arrays.toString(listAuthorsPopular.get(i).toArray()).replace("[", "").replace("]", "");
-
+                                                for (int j = 0; j <  top5Articles.size(); j++) {
+                                                Article articlemostPopular = mostPopular.get(j);
+                                                String  AuthorsPopular = listAuthorsTop5.get(j).size() > 0 
+                                                		? Arrays.toString(listAuthorsTop5.get(j).toArray()).replace("[", "").replace("]", "")
+                                                		: " Không xác định";
                                         %>
                                         <div class="weekly2-single">
                                             <div class="weekly2-img">
-                                                  <img style="width:100%;" src="../img/<%=articlemostPopular.getImage()%>" alt="">
+                                                  <img style="width:100%; height: 150px" src="../img/<%=articlemostPopular.getImage()%>" alt="">
                                             </div>
                                             <div class="weekly2-caption">
                                                 <h4><a href="../client/article?action=detail&articleID=<%=articlemostPopular.getArticleID()%>"><%=articlemostPopular.getTitle()%></a></h4>
-                                                <p><%=AuthorsPopular %> - <%= articlemostPopular.getTime() %></p>
+                                                <p><%=AuthorsPopular %> - <%= formatDateString(articlemostPopular.getTime()) %></p>
                                             </div>
                                         </div>
                                         <%}%>
@@ -310,20 +274,6 @@
         </div>
     </div>
     <!-- End Weekly-News -->
-
-    <!-- banner-last Start -->
-    <div class="banner-area gray-bg pt-90 pb-90">
-        <div class="container">
-            <div class="row justify-content-center">
-                <div class="col-lg-10 col-md-10">
-                    <div class="banner-one">
-                          <img style="width:100%;"  src="assets/img/gallery/body_card3.png" alt="">
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- banner-last End -->
 </main>
 
 <%@include file="component/footer.jsp"%>

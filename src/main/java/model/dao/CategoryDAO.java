@@ -33,6 +33,23 @@ public class CategoryDAO {
 
         return list;
     }
+
+    public Category getCategory(String id){
+        Category category = null;
+        try {
+            String sql = "select * from Category where CategoryID = ?";
+            PreparedStatement stmt = conn.prepareStatement(sql);
+            stmt.setString(1, id);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()){
+                category = new Category(rs.getString(1),rs.getString(2));
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+        return category;
+    }
     public ArrayList<Category> getListCategory(String articleID){
     	ArrayList<Category> list = new ArrayList<Category>();
         try {
@@ -53,6 +70,32 @@ public class CategoryDAO {
             throw new RuntimeException(e);
         }
         return list;
+    }
+    public void insert(Category category){
+        String sql = "Insert into category(`CategoryID`, `Name`) values(?,?)";
+
+        try {
+            PreparedStatement stmt = conn.prepareStatement(sql);
+            stmt.setString(1,category.getCategoryID());
+            stmt.setString(2,category.getName());
+            int rs = stmt.executeUpdate();
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+    public void update(Category category){
+        String sql = "UPDATE category SET `Name` = ? WHERE (`CategoryID` = ?);";
+
+        try {
+            PreparedStatement stmt = conn.prepareStatement(sql);
+            stmt.setString(2,category.getCategoryID());
+            stmt.setString(1,category.getName());
+            int rs = stmt.executeUpdate();
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
     
     public void insertCategory(String articleID, String categoryID){

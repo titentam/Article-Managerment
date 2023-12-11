@@ -2,8 +2,7 @@
 <%@ page import="java.util.ArrayList" %>
 <%@ page import="model.bean.CommentView" %>
 <%@ page import="java.text.SimpleDateFormat" %>
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-         pageEncoding="UTF-8"%>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <!doctype html>
 <html class="no-js" lang="zxx">
 <head>

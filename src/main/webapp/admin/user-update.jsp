@@ -1,8 +1,7 @@
 <%@page import="model.bean.Role"%>
 <%@page import="java.util.ArrayList"%>
 <%@page import="model.bean.User"%>
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8"%>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -50,7 +49,7 @@
 						<h2 class="header-title">Cập nhật người dùng</h2>
 						<div class="header-sub-title">
 							<nav class="breadcrumb breadcrumb-dash">
-								<a href="#" class="breadcrumb-item"><i
+								<a class="breadcrumb-item"><i
 									class="anticon anticon-home m-r-5"></i>Trang chủ</a> <a
 									class="breadcrumb-item" href="../admin/manage-user?action=list-user">Quản lí người dùng</a> <span
 									class="breadcrumb-item active"><%=user.getUsername() %></span>
@@ -84,8 +83,7 @@
 										</div>
 									</div>
 									<hr class="m-v-25">
-									<form action="../admin/manage-user?action=submit-update" method="post">
-										<input type="hidden" name="username" value="<%=user.getUsername() %>">
+									<form action="../admin/manage-user?action=submit-update&username=<%=user.getUsername() %>" method="post">
 										<div class="form-row">
 											<div class="form-group col-md-6">
 												<label class="font-weight-semibold" for="email">Họ tên:</label>

@@ -21,9 +21,9 @@ public class ArticleDAO {
         	if (searchText != null) {
         		sql = "SELECT DISTINCT * "
         		+ "FROM article "
-        		+ "INNER JOIN articlecategory ON article.ArticleID = articlecategory.ArticleID "
-   				+ "INNER JOIN authorarticle ON article.ArticleID = authorarticle.ArticleID "     				
-        		+ "INNER JOIN user ON user.Username = authorarticle.Username "
+        		+ "LEFT JOIN articlecategory ON article.ArticleID = articlecategory.ArticleID "
+   				+ "LEFT JOIN authorarticle ON article.ArticleID = authorarticle.ArticleID "     				
+        		+ "LEFT JOIN user ON user.Username = authorarticle.Username "
         		+ "WHERE (article.Title LIKE '%" + searchText + "%' OR user.Name LIKE '%" + searchText + "%')";
         	} else {
         		sql = "SELECT DISTINCT * "
@@ -115,7 +115,6 @@ public class ArticleDAO {
             PreparedStatement stmt = conn.prepareStatement(sql);
             stmt.setString(1,id);
             ResultSet rs = stmt.executeQuery();
-            System.out.println(stmt);
             while(rs.next()){
                 res.add(rs.getString(1));
             }

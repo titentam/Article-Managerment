@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title>Enlink - Admin Dashboard Template</title>
+    <title>Đăng nhập</title>
     <!-- Favicon -->
     <link rel="shortcut icon" href="../admin/assets/images/logo/favicon.png">
     <!-- page css -->
@@ -20,26 +20,23 @@
                         <div class="card shadow-lg">
                             <div class="card-body">
                                 <%
-                                    String loginMessage = (String)session.getAttribute("errormessage");
+                                    String loginMessage = session.getAttribute("errormessage") != null ? (String)session.getAttribute("errormessage") : "";
                                     session.removeAttribute("errormessage");
-                                    if (loginMessage != null) {
                                 %>
-                                <div style="color: red; margin-bottom: 10px;">
-                                    <%= loginMessage %>
-                                </div>
-                                <%
-                                    }
-                                %>
+         
                                 <div class="d-flex align-items-center justify-content-between m-b-30">
-                                    <img class="img-fluid" alt="" src="../admin/assets/images/logo/logo.png">
+                                    <img class="img-fluid" alt="" src="../client/assets/img/logo/logo.png">
                                     <h2 class="m-b-0">Sign In</h2>
                                 </div>
                                 <form action="../login" method="post">
+                                	<div class="text-center text-danger mb-2">
+                                    	<%= loginMessage %>
+                                	</div>
                                     <div class="form-group">
                                         <label class="font-weight-semibold" for="userName">Username:</label>
                                         <div class="input-affix">
                                             <i class="prefix-icon anticon anticon-user"></i>
-                                            <input name="username" type="text" class="form-control" id="userName" placeholder="Username">
+                                            <input name="username" type="text" class="form-control" id="userName" placeholder="Username" required="required">
                                         </div>
                                     </div>
                                     <div class="form-group">
@@ -47,14 +44,14 @@
                                         <a class="float-right font-size-13 text-muted" href="">Forget Password?</a>
                                         <div class="input-affix m-b-10">
                                             <i class="prefix-icon anticon anticon-lock"></i>
-                                            <input name="password" type="password" class="form-control" id="password" placeholder="Password">
+                                            <input name="password" type="password" class="form-control" id="password" placeholder="Password" required="required">
                                         </div>
                                     </div>
                                     <div class="form-group">
                                         <div class="d-flex align-items-center justify-content-between">
                                                 <span class="font-size-13 text-muted">
                                                     Don't have an account?
-                                                    <a class="small" href="Register.jsp"> Signup</a>
+                                                    <a class="normal" href="Register.jsp"> Signup</a>
                                                 </span>
                                             <button type="submit" class="btn btn-primary">Sign In</button>
                                         </div>

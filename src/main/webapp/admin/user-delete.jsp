@@ -1,8 +1,7 @@
 <%@page import="model.bean.Role"%>
 <%@page import="java.util.ArrayList"%>
 <%@page import="model.bean.User"%>
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8"%>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -37,7 +36,10 @@
 			<!-- Side Nav START -->
 			<%@include file="component/sideNav.jsp"%>
 			<!-- Side Nav END -->
-
+			<%
+			User userDeleted = (User) request.getAttribute("user");
+			ArrayList<Role> listRole = (ArrayList<Role>) request.getAttribute("listRole");
+			%>
 			<!-- Page Container START -->
 			<div class="page-container">
 				<!-- Content Wrapper START -->
@@ -49,15 +51,12 @@
 								<a href="#" class="breadcrumb-item"><i
 									class="anticon anticon-home m-r-5"></i>Trang chủ</a> <a
 									class="breadcrumb-item" href="../admin/manage-user?action=list-user">Quản lí người dùng</a> 
-									<span class="breadcrumb-item active">mymymy</span>
+									<span class="breadcrumb-item active"><%=userDeleted.getUsername() %></span>
 							</nav>
 						</div>
 					</div>
 					<div class="container">
-						<% 
-							User user = (User)request.getAttribute("user"); 
-							ArrayList<Role> listRole = (ArrayList<Role>) request.getAttribute("listRole"); 
-						%>
+						
 						<div class="tab-pane fade show active">
 							<div class="card">
 								<div class="card-header">
@@ -71,10 +70,10 @@
 										</div>
 										<div class="m-l-20 m-r-20">
 											<h5 class="m-b-0 font-size-20">Xóa người dùng</h5>
-											<p class="text-center m-b-0 font-size-16 text-primary"><%=user.getUsername() %></p>
-											<% if (user.getLocked() == 0) { %>
+											<p class="text-center m-b-0 font-size-16 text-primary"><%=userDeleted.getUsername() %></p>
+											<% if (userDeleted.getLocked() == 0) { %>
 												<p class="text-center m-b-0 font-size-16 text-success font-italic">
-												<%=user.getRoleName() %>
+												<%=userDeleted.getRoleName() %>
 												</p>
                                         	<% } else { %>
                                         		<p class="text-center m-b-0 font-size-16 text-danger font-italic">
@@ -89,26 +88,26 @@
 											<div class="form-group col-md-6">
 												<label class="font-weight-semibold" for="email">Họ tên:</label>
 												<input type="text" class="form-control" id="name"
-													placeholder="email" value="<%=user.getName() %>" readonly>
+													placeholder="email" value="<%=userDeleted.getName() %>" readonly>
 											</div>
 																					
 											<div class="form-group col-md-6">
 												<label class="font-weight-semibold" for="userName">Tên người dùng:</label> 
 												<input type="text" class="form-control" 
-													placeholder="User Name" value="<%=user.getUsername() %>" readonly>
+													placeholder="User Name" value="<%=userDeleted.getUsername() %>" readonly>
 											</div>
 										</div>
 										<div class="form-row">
 											<div class="form-group col-md-6">
 												<label class="font-weight-semibold" for="email">Email:</label>
 												<input type="text" class="form-control" id="email"
-													placeholder="email" value="<%=user.getEmail() %>" readonly>
+													placeholder="email" value="<%=userDeleted.getEmail() %>" readonly>
 											</div>
 											
 											<div class="form-group col-md-6">
 												<label class="font-weight-semibold" for="dob">Ngày sinh:</label> 
 													<input type="date" class="form-control" id="dob"
-													placeholder="Date of Birth" value="<%=user.getDob() %>" readonly>
+													placeholder="Date of Birth" value="<%=userDeleted.getDob() %>" readonly>
 											</div>
 										</div>
 										
@@ -116,7 +115,7 @@
 											<div class="form-group col-md-6">
 												<label class="font-weight-semibold" for="gender">Giới tính:</label>
 												<select id="language" class="form-control" disabled="disabled">
-													<% if (user.getGender() == 0) { %>
+													<% if (userDeleted.getGender() == 0) { %>
 														<option value="1">Nam</option>
 													<% } else { %>
 														<option value="0">Nữ</option>
@@ -128,7 +127,7 @@
 											<label class="font-weight-semibold" for="language">Chức vụ: </label>
 											<select name="roleID" id="role" class="form-control" disabled="disabled">
 											<% for (Role role : listRole) { %>
-												<% if (user.getRoleID().equals(role.getRoleID())) {%>
+												<% if (userDeleted.getRoleID().equals(role.getRoleID())) {%>
 													<option value="<%=role.getRoleID() %>" selected><%=role.getName() %></option>
 												<% } else { %>
 													<option value="<%=role.getRoleID() %>"><%=role.getName() %></option>
@@ -138,7 +137,7 @@
 											</div>
 										</div>
 										<div class="text-center">
-                                        	<% if (user.getLocked() == 0) { %>
+                                        	<% if (userDeleted.getLocked() == 0) { %>
                                         		<button class="pl-5 pr-5 btn btn-danger text-white" data-toggle="modal" 
                                         			data-target="#exampleModalLock">Khóa tài khoản</button>
 
@@ -159,7 +158,7 @@
                                                                 <button type="button" class="btn btn-default" data-dismiss="modal">Hủy</button>
                                                                 <form action="../admin/manage-user?action=submit-delete" method="post">
                                                                 	<button type="submit" class="btn btn-primary">Xác nhận</button>
-                                                                	<input type="hidden" name="username" value="<%=user.getUsername() %>">
+                                                                	<input type="hidden" name="username" value="<%=userDeleted.getUsername() %>">
                                                                 </form>
                                                             </div>
                                                         </div>

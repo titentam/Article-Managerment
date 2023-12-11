@@ -3,8 +3,7 @@
 <%@ page import="java.util.Arrays" %>
 <%@ page import="java.text.SimpleDateFormat" %>
 <%@ page import="model.bean.Category" %>
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-         pageEncoding="UTF-8"%>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -44,7 +43,10 @@
 		for (Category category1 : categories) {
 			builder.append(category1.getName()).append(", ");
 		}
-		builder.deleteCharAt(builder.length() - 2);
+		if (builder.length() > 0)
+			builder.deleteCharAt(builder.length() - 2);
+		else 
+			builder.append("Không có");
 		return builder.toString();
 	}%>
 	

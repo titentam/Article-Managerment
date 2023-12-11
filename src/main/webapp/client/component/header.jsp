@@ -1,17 +1,11 @@
-<%--
-  Created by IntelliJ IDEA.
-  User: A Ti
-  Date: 12/2/2023
-  Time: 5:02 PM
-  To change this template use File | Settings | File Templates.
---%>
 <!-- Preloader Start -->
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <div id="preloader-active">
     <div class="preloader d-flex align-items-center justify-content-center">
         <div class="preloader-inner position-relative">
             <div class="preloader-circle"></div>
             <div class="preloader-img pere-text">
-                <img src="assets/img/logo/logo.png" alt="">
+                <img src="../admin/assets/images/logo/logo.png" alt="">
             </div>
         </div>
     </div>
@@ -27,13 +21,13 @@
                         <div class="row d-flex justify-content-between align-items-center">
                             <div class="header-info-left">
                                 <ul>
-                                    <li class="title"><span class="flaticon-energy"></span> trending-title</li>
-                                    <li>Class property employ ancho red multi level mansion</li>
+                                    <li class="title"><span class="flaticon-energy"></span> bknews</li>
+                                    <li>Bài thực hành CNW</li>
                                 </ul>
                             </div>
                             <div class="header-info-right">
                                 <ul class="header-date">
-                                    <li><span class="flaticon-calendar"></span> +880166 253 232</li>
+                                    <li><span class="flaticon-calendar"></span> 0931211369</li>
                                 </ul>
                             </div>
                         </div>
@@ -46,7 +40,7 @@
                         <!-- Logo -->
                         <div class="col-xl-3 col-lg-3 col-md-3 d-none d-md-block">
                             <div class="logo">
-                                <a href="index.html"><img src="assets/img/logo/logo.png" alt=""></a>
+                                <a href="./article"><img src="assets/img/logo/logo.png" alt=""></a>
                             </div>
                         </div>
                         <div class="col-xl-9 col-lg-9 col-md-9">
@@ -60,34 +54,50 @@
             <div class="header-bottom header-sticky">
                 <div class="container">
                     <div class="row align-items-center">
-                        <div class="col-xl-8 col-lg-8 col-md-12 header-flex">
+                        <div class="col-xl-6 col-lg-6 col-md-12 header-flex">
                             <!-- sticky -->
                             <div class="sticky-logo">
-                                <a href="index.html"><img src="assets/img/logo/logo.png" alt=""></a>
+                                <a href="./article"><img src="assets/img/logo/logo.png" alt=""></a>
                             </div>
                             <!-- Main-menu -->
                             <div class="main-menu d-none d-md-block">
                                 <nav>
                                     <ul id="navigation">
-                                        <li><a href="../client/article">Home</a></li>
-                                        <li><a href="../client/article?action=category">Category</a></li>
+                                        <li><a href="./article">Home</a></li>
+                                        <li><a href="./article?action=category">Category</a>
+                                        </li>
                                     </ul>
                                 </nav>
                             </div>
                         </div>
-                        <div class="col-xl-4 col-lg-4 col-md-4">
-                            <div class="header-right f-right d-none d-lg-block">
+                        <div class="col-xl-6 col-lg-6 col-md-6">
+                            <div class="header-right f-right d-none d-lg-block main-menu ">
                                 <!-- Heder social -->
+                                <%
+                                	String username = (String) session.getAttribute("username");
+                                %>
                                 <ul class="header-social">
-                                    <li><a href="https://www.fb.com/sai4ull"><i class="fab fa-facebook-f"></i></a></li>
-                                    <li><a href="#"><i class="fab fa-twitter"></i></a></li>
-                                    <li><a href="#"><i class="fab fa-instagram"></i></a></li>
-                                    <li> <a href="#"><i class="fab fa-youtube"></i></a></li>
+                                    <li><a href="categori.html">Tài khoản</a>
+                                        <% if (username == null) { %>
+                                        <ul class="submenu">
+                                        	<li><a href="../login">Đăng nhập</a></li>
+                                            <li><a href="../register">Đăng ký</a></li>
+                                        </ul>
+                                        <% } else { %>
+                                        <ul class="submenu">
+                                        	<li><a href="../client/account?action=account-setting">Tài khoản</a></li>
+                                            <li><a href="../logout">Đăng xuất</a></li>
+                                        </ul>
+                                        <% } %>
+                                    </li>
                                 </ul>
-                                <!-- Search Nav -->
-                                <div class="nav-search search-switch">
-                                    <i class="fa fa-search"></i>
-                                </div>
+                            </div>
+                            <!-- Search Nav -->
+                            <div class="nav-search d-flex align-items-center">
+                                	<input type="text" name="search-text" class="form-control" placeholder='Nhập bài báo, tác giả, ...'
+                                            onfocus="this.placeholder = ''"
+                                            onblur="this.placeholder = 'Nhập bài báo, tác giả, ...'">
+                                    <a href="#" onclick="searchHandler()"><i class="fa fa-search"></i></a>
                             </div>
                         </div>
                         <!-- Mobile Menu -->
@@ -101,3 +111,11 @@
     </div>
     <!-- Header End -->
 </header>
+<script>
+	function searchHandler() {
+		event.preventDefault();
+		var search_text = document.querySelector('input[name=\'search-text\']').value;
+		var currentHref = "../client/article?action=list-article&search-text=" + search_text;
+		window.location.href = currentHref;
+	}
+</script>
