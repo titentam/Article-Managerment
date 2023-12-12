@@ -1,17 +1,29 @@
 package controller;
 
+import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import model.bo.RegisterBO;
 
+import java.io.IOException;
 import java.sql.Date;
 
-@WebServlet("/register")
+@WebServlet(urlPatterns = {"/register"})
 public class RegisterController extends HttpServlet {
     private static final long serialVersionUID = 1L;
     private final RegisterBO RegisterBO =new RegisterBO();
-    public  void doPost(jakarta.servlet.http.HttpServletRequest request, jakarta.servlet.http.HttpServletResponse response)
+
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        String path = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + request.getContextPath();
+
+        path += "/Login/Register.jsp";
+        response.sendRedirect(path);
+    }
+
+    public void doPost(jakarta.servlet.http.HttpServletRequest request, jakarta.servlet.http.HttpServletResponse response)
             throws jakarta.servlet.ServletException, java.io.IOException {
         try {
             String username = request.getParameter("username");
