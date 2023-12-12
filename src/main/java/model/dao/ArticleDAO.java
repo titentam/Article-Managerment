@@ -152,6 +152,17 @@ public class ArticleDAO {
             throw new RuntimeException(e);
         }
     }
+    public void updateViewers(String id){
+        String sql = "UPDATE article SET Viewers = Viewers + 1 WHERE (`ArticleID` = ?);";
+        try {
+            PreparedStatement stmt = conn.prepareStatement(sql);
+            stmt.setString(1,id);
+            stmt.executeUpdate();
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
     
     // Thuc hien buoc xoa cac bang chua articleID la khoa ngoai trong ArticleBO
     public void deleteArticle(String articleID){

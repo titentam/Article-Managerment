@@ -73,6 +73,10 @@ public class ArticleBO {
         dao.updateLock(articleID, locked);
 
     }
+    public void updateViewers(String articleID){
+        dao.updateViewers(articleID);
+
+    }
 
     public void deleteArticle (String articleID) {
     	AuthorArticleDAO articleCategoryDAO = new AuthorArticleDAO();

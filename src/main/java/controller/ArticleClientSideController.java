@@ -116,6 +116,7 @@ public class ArticleClientSideController extends HttpServlet {
 
     private void detail(HttpServletRequest request, HttpServletResponse response) {
         String id = request.getParameter("articleID");
+        new ArticleBO().updateViewers(id);
         this.showDetail(id,request,response);
     }
 
