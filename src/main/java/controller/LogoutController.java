@@ -28,7 +28,7 @@ public class LogoutController extends HttpServlet {
         if (session != null) {
             session.invalidate();
         }
-        path += "/Login/Login.jsp";
+        path += "/client/article";
         response.sendRedirect(path);
 
     }
