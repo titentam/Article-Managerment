@@ -31,7 +31,6 @@ public class UserController extends HttpServlet {
 		}else{
 			doPost(request, response);
 		}
-
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -182,9 +181,8 @@ public class UserController extends HttpServlet {
 
 		var username = session.getAttribute("username");
 		if(username!=null){
-			var user =  new UserBO().getUserDetail(username.toString());
-			if(user.getRoleID().equals("R1"))
-				return user;
+			return new UserBO().getUserDetail(username.toString());
+
 		}
 		return null;
 	}
